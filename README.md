@@ -510,7 +510,7 @@ We welcome contributions! Please see our contributing guidelines for more inform
 
 ## Changelog
 
-### v2.0.0
+### v1.2.0
 - Added custom error classes for better error handling
 - Added automatic retry logic with exponential backoff
 - Added pagination helpers for easy iteration
