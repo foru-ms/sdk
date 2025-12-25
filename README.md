@@ -525,7 +525,7 @@ We welcome contributions! Please see our contributing guidelines for more inform
 ## Support
 
 - Support: https://foru.ms/support
-- Documentation: https://docs.foru.ms
+- Documentation: https://foru.ms/docs
 - Issues: https://github.com/foru-ms/sdk/issues
 
 ## Changelog
