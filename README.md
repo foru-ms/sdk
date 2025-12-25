@@ -183,8 +183,10 @@ Check the `/examples` directory for detailed examples:
 *   `me()`: Get specific details of the currently authenticated user.
 *   `forgotPassword(email: string)`: Initiate password reset flow.
 *   `resetPassword(payload: { password: string; oldPassword?: string; email?: string; token?: string })`: Reset password using token or old password.
+*   `getSecurity()`: Get account security information for the authenticated user. Returns IP addresses, registration date, last seen timestamp, and verification status. **Requires authentication token.**
 
 ### Threads (`client.threads`)
+
 
 *   `list(params: { limit?: number; filter?: 'newest' | 'oldest'; tagId?: string; cursor?: string })`: List threads.
 *   `create(payload: CreateThreadPayload)`: Create a new thread.
@@ -341,6 +343,7 @@ import {
   RegisterPayload,
   User,
   LoginResponse,
+  SecurityInfo,
   
   // Thread Types
   Thread,

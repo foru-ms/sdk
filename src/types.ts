@@ -128,6 +128,17 @@ export interface LoginResponse {
     token: string;
 }
 
+export interface SecurityInfo {
+    userId: string;
+    username: string;
+    registrationIp: string;
+    registrationDate: string;
+    lastIp: string;
+    lastSeenAt: string;
+    isOnline: boolean;
+    emailVerified: boolean;
+}
+
 export type ThreadFilter = 'newest' | 'oldest';
 export type InteractionType = 'created' | 'liked' | 'disliked' | 'upvoted' | 'downvoted' | 'subscribed';
 

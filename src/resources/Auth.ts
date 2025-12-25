@@ -61,4 +61,18 @@ export class AuthResource {
             body: JSON.stringify(body),
         });
     }
+
+    /**
+     * Get account security information for the authenticated user.
+     * This includes IP addresses, registration date, last seen timestamp, and verification status.
+     * Requires authentication token.
+     * 
+     * @returns Promise<SecurityInfo> Security information including IPs and account activity
+     * @throws {ApiError} If not authenticated or user not found
+     */
+    async getSecurity(): Promise<import('../types').SecurityInfo> {
+        return this.client.request<import('../types').SecurityInfo>('/auth/security', {
+            method: 'GET',
+        });
+    }
 }

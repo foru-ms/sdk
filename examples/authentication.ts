@@ -54,12 +54,24 @@ async function main() {
         });
         console.log('Password reset successful');
 
-        // Example 5: Check Authentication Status
+        // Example 5: Get Account Security Information
+        console.log('\n=== Account Security Info ===');
+        const securityInfo = await client.auth.getSecurity();
+        console.log('User ID:', securityInfo.userId);
+        console.log('Username:', securityInfo.username);
+        console.log('Registration IP:', securityInfo.registrationIp);
+        console.log('Registration Date:', new Date(securityInfo.registrationDate).toLocaleDateString());
+        console.log('Last IP:', securityInfo.lastIp);
+        console.log('Last Seen:', new Date(securityInfo.lastSeenAt).toLocaleString());
+        console.log('Is Online:', securityInfo.isOnline);
+        console.log('Email Verified:', securityInfo.emailVerified);
+
+        // Example 6: Check Authentication Status
         console.log('\n=== Authentication Status ===');
         console.log('Is authenticated:', client.isAuthenticated());
         console.log('Current token:', client.token);
 
-        // Example 6: Logout (clear token)
+        // Example 7: Logout (clear token)
         console.log('\n=== Logout ===');
         client.clearToken();
         console.log('Token cleared');
