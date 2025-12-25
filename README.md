@@ -6,13 +6,13 @@ This SDK is fully typed and provides a comprehensive interface to the Foru.ms AP
 
 ## Features
 
-✨ **Fully Typed** - Complete TypeScript support with detailed type definitions  
-🔄 **Auto Retry** - Automatic retry logic for rate limits and server errors  
-📄 **Easy Pagination** - Built-in helpers for cursor-based pagination  
-🚨 **Rich Error Classes** - Specific error types for better error handling  
-🔐 **Webhook Verification** - Built-in signature verification for webhooks  
-📊 **Rate Limit Tracking** - Automatic tracking of API rate limits  
-📚 **Comprehensive Examples** - Detailed examples for common use cases
+**Fully Typed** - Complete TypeScript support with detailed type definitions  
+**Auto Retry** - Automatic retry logic for rate limits and server errors  
+**Easy Pagination** - Built-in helpers for cursor-based pagination  
+**Rich Error Classes** - Specific error types for better error handling  
+**Webhook Verification** - Built-in signature verification for webhooks  
+**Rate Limit Tracking** - Automatic tracking of API rate limits  
+**Comprehensive Examples** - Detailed examples for common use cases
 
 ## Installation
 
@@ -504,9 +504,9 @@ We welcome contributions! Please see our contributing guidelines for more inform
 
 ## Support
 
-- 📧 Email: support@foru.ms
-- 📚 Documentation: https://docs.foru.ms
-- 🐛 Issues: https://github.com/foru-ms/sdk/issues
+- Support: https://foru.ms/support
+- Documentation: https://docs.foru.ms
+- Issues: https://github.com/foru-ms/sdk/issues
 
 ## Changelog
 
@@ -518,7 +518,11 @@ We welcome contributions! Please see our contributing guidelines for more inform
 - Added 22 new endpoints
 - Enhanced documentation and examples
 
-### v1.x
+### v1.1.0
+- Added 22 new endpoints
+- Enhanced documentation and examples
+
+### v1.0.0
 - Initial SDK release with core functionality
 
 ## License
