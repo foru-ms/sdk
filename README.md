@@ -518,11 +518,11 @@ We welcome contributions! Please see our contributing guidelines for more inform
 - Added automatic retry logic with exponential backoff
 - Added pagination helpers for easy iteration
 - Added webhook signature verification
-- Added 22 new endpoints
+- Added new endpoints
 - Enhanced documentation and examples
 
 ### v1.1.0
-- Added 22 new endpoints
+- Added new endpoints
 - Enhanced documentation and examples
 
 ### v1.0.0
