@@ -59,6 +59,16 @@ export class PrivateMessagesResource {
         });
     }
 
+    async update(id: string, payload: {
+        read?: boolean;
+        extendedData?: Record<string, any>;
+    }): Promise<PrivateMessage> {
+        return this.client.request<PrivateMessage>(`/private-message/${id}`, {
+            method: 'PATCH',
+            body: JSON.stringify(payload),
+        });
+    }
+
     async delete(id: string): Promise<PrivateMessage & { deleted: boolean }> {
         return this.client.request<PrivateMessage & { deleted: boolean }>(`/private-message/${id}`, {
             method: 'DELETE',

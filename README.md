@@ -48,10 +48,20 @@ client.setToken('user_jwt_token');
 *   `getPosts(id: string, params: { cursor?: string; filter?: 'newest' | 'oldest' })`: Get posts in a thread.
 *   `like(id: string, userId: string, extendedData?: any)`: Like a thread.
 *   `unlike(id: string, userId: string)`: Unlike a thread.
+*   `getLikes(id: string, params?: { cursor?: string })`: Get users who liked a thread.
 *   `dislike(id: string, userId: string, extendedData?: any)`: Dislike a thread.
 *   `undislike(id: string, userId: string)`: Remove dislike from a thread.
+*   `getDislikes(id: string, params?: { cursor?: string })`: Get users who disliked a thread.
 *   `subscribe(id: string, userId: string)`: Subscribe to a thread.
 *   `unsubscribe(id: string, userId: string)`: Unsubscribe from a thread.
+*   `getSubscribers(id: string, params?: { cursor?: string })`: Get users subscribed to a thread.
+*   `upvote(id: string, userId: string, extendedData?: any)`: Upvote a thread.
+*   `unupvote(id: string, userId: string)`: Remove upvote from a thread.
+*   `getUpvotes(id: string, params?: { cursor?: string })`: Get users who upvoted a thread.
+*   `downvote(id: string, userId: string, extendedData?: any)`: Downvote a thread.
+*   `undownvote(id: string, userId: string)`: Remove downvote from a thread.
+*   `getDownvotes(id: string, params?: { cursor?: string })`: Get users who downvoted a thread.
+*   `getPoll(id: string, userId?: string)`: Get poll results.
 *   `vote(id: string, userId: string, optionId: string)`: Vote in a thread poll.
 *   `voteUpdate(id: string, userId: string, optionId: string)`: Change vote.
 *   `unvote(id: string, userId: string)`: Remove vote.
@@ -66,12 +76,16 @@ client.setToken('user_jwt_token');
 *   `getChildren(id: string, params: { cursor?: string; filter?: 'newest' | 'oldest' })`: Get child posts (nested replies).
 *   `like(id: string, userId: string, extendedData?: any)`: Like a post.
 *   `unlike(id: string, userId: string)`: Unlike a post.
+*   `getLikes(id: string, params?: { cursor?: string })`: Get users who liked a post.
 *   `dislike(id: string, userId: string, extendedData?: any)`: Dislike a post.
 *   `undislike(id: string, userId: string)`: Remove dislike.
+*   `getDislikes(id: string, params?: { cursor?: string })`: Get users who disliked a post.
 *   `upvote(id: string, userId: string, extendedData?: any)`: Upvote a post.
 *   `unupvote(id: string, userId: string)`: Remove upvote.
+*   `getUpvotes(id: string, params?: { cursor?: string })`: Get users who upvoted a post.
 *   `downvote(id: string, userId: string, extendedData?: any)`: Downvote a post.
 *   `undownvote(id: string, userId: string)`: Remove downvote.
+*   `getDownvotes(id: string, params?: { cursor?: string })`: Get users who downvoted a post.
 
 ### Users (`client.users`)
 
@@ -80,6 +94,8 @@ client.setToken('user_jwt_token');
 *   `create(payload: { username: string; email: string; password: string; displayName?: string; emailVerified?: boolean; roles?: string[]; bio?: string; signature?: string; url?: string; extendedData?: Record<string, any> })`: Create a user (Admin).
 *   `update(id: string, payload: { username?: string; email?: string; password?: string; displayName?: string; emailVerified?: boolean; roles?: string[]; bio?: string; signature?: string; url?: string; extendedData?: Record<string, any> })`: Update a user.
 *   `delete(id: string)`: Delete a user.
+*   `getThreads(id: string, params?: { query?: string; cursor?: string; filter?: 'newest' | 'oldest' })`: Get all threads created by a user.
+*   `getPosts(id: string, params?: { query?: string; cursor?: string; filter?: 'newest' | 'oldest' })`: Get all posts created by a user.
 *   `getFollowers(id: string, params?: { query?: string; cursor?: string; filter?: 'newest' | 'oldest' })`: Get user's followers.
 *   `getFollowing(id: string, params?: { query?: string; cursor?: string; filter?: 'newest' | 'oldest' })`: Get who a user follows.
 *   `follow(id: string, followerId: string, extendedData?: any)`: Follow a user.
@@ -93,8 +109,10 @@ client.setToken('user_jwt_token');
 *   `retrieve(id: string, params?: { userId?: string })`: Get a tag.
 *   `update(id: string, payload: { name?: string; description?: string; color?: string; extendedData?: Record<string, any> })`: Update a tag.
 *   `delete(id: string)`: Delete a tag.
+*   `getThreads(id: string, params?: { query?: string; cursor?: string; filter?: 'newest' | 'oldest' })`: Get all threads with a specific tag.
 *   `subscribe(id: string, userId: string)`: Subscribe to a tag.
 *   `unsubscribe(id: string, userId: string)`: Unsubscribe from a tag.
+*   `getSubscribers(id: string, params?: { cursor?: string })`: Get users subscribed to a tag.
 *   `listSubscribed(params: { userId: string; query?: string; cursor?: string })`: List tags a user is subscribed to.
 
 
@@ -129,6 +147,7 @@ client.setToken('user_jwt_token');
 *   `list()`: Get all configured integrations.
 *   `create(payload: { type: 'SLACK' | 'DISCORD' | 'SALESFORCE' | 'HUBSPOT' | 'OKTA' | 'AUTH0'; name: string; config: any })`: Configure an integration (Slack, Discord, etc.).
 *   `retrieve(id: string)`: Get integration details.
+*   `update(id: string, payload: { name?: string; config?: any; active?: boolean })`: Update an integration.
 *   `delete(id: string)`: Remove an integration.
 
 ### Private Messages (`client.privateMessages`)
@@ -137,6 +156,7 @@ client.setToken('user_jwt_token');
 *   `create(payload: { title?: string; body: string; recipientId: string; senderId?: string; extendedData?: Record<string, any> })`: Send a direct message.
 *   `retrieve(id: string)`: Get a message thread.
 *   `reply(id: string, payload: { body: string; senderId: string; recipientId: string; extendedData?: Record<string, any> })`: Reply to a message.
+*   `update(id: string, payload: { read?: boolean; extendedData?: Record<string, any> })`: Update a message (e.g., mark as read).
 *   `delete(id: string)`: Delete a message.
 
 ### Reports (`client.reports`)
@@ -161,6 +181,8 @@ client.setToken('user_jwt_token');
 
 *   `list()`: List SSO providers.
 *   `create(payload: { provider: 'OKTA' | 'AUTH0' | 'SAML'; domain: string; config: any })`: Configure SSO.
+*   `retrieve(id: string)`: Get SSO provider details.
+*   `update(id: string, payload: { domain?: string; config?: any; active?: boolean })`: Update SSO configuration.
 *   `delete(id: string)`: Remove SSO provider.
 
 ## Types

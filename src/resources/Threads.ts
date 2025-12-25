@@ -85,6 +85,20 @@ export class ThreadsResource {
         });
     }
 
+    async getLikes(id: string, params?: {
+        cursor?: string;
+    }): Promise<any> {
+        const searchParams = new URLSearchParams();
+        if (params) {
+            Object.entries(params).forEach(([key, value]) => {
+                if (value !== undefined) {
+                    searchParams.append(key, value as string);
+                }
+            });
+        }
+        return this.client.request(`/thread/${id}/likes?${searchParams.toString()}`, { method: 'GET' });
+    }
+
     async dislike(id: string, userId?: string, extendedData?: any): Promise<any> {
         return this.client.request(`/thread/${id}/dislikes`, {
             method: 'POST',
@@ -98,6 +112,20 @@ export class ThreadsResource {
         });
     }
 
+    async getDislikes(id: string, params?: {
+        cursor?: string;
+    }): Promise<any> {
+        const searchParams = new URLSearchParams();
+        if (params) {
+            Object.entries(params).forEach(([key, value]) => {
+                if (value !== undefined) {
+                    searchParams.append(key, value as string);
+                }
+            });
+        }
+        return this.client.request(`/thread/${id}/dislikes?${searchParams.toString()}`, { method: 'GET' });
+    }
+
     async subscribe(id: string, userId: string, extendedData?: any): Promise<any> {
         return this.client.request(`/thread/${id}/subscribers`, {
             method: 'POST',
@@ -109,6 +137,87 @@ export class ThreadsResource {
         return this.client.request(`/thread/${id}/subscribers?userId=${userId}`, {
             method: 'DELETE',
         });
+    }
+
+    async getSubscribers(id: string, params?: {
+        cursor?: string;
+    }): Promise<any> {
+        const searchParams = new URLSearchParams();
+        if (params) {
+            Object.entries(params).forEach(([key, value]) => {
+                if (value !== undefined) {
+                    searchParams.append(key, value as string);
+                }
+            });
+        }
+        return this.client.request(`/thread/${id}/subscribers?${searchParams.toString()}`, { method: 'GET' });
+    }
+
+    async upvote(id: string, userId?: string, extendedData?: any): Promise<any> {
+        return this.client.request(`/thread/${id}/upvotes`, {
+            method: 'POST',
+            body: JSON.stringify({ userId, extendedData }),
+        });
+    }
+
+    async unupvote(id: string, userId: string): Promise<any> {
+        return this.client.request(`/thread/${id}/upvotes?userId=${userId}`, {
+            method: 'DELETE',
+        });
+    }
+
+    async getUpvotes(id: string, params?: {
+        cursor?: string;
+    }): Promise<any> {
+        const searchParams = new URLSearchParams();
+        if (params) {
+            Object.entries(params).forEach(([key, value]) => {
+                if (value !== undefined) {
+                    searchParams.append(key, value as string);
+                }
+            });
+        }
+        return this.client.request(`/thread/${id}/upvotes?${searchParams.toString()}`, { method: 'GET' });
+    }
+
+    async downvote(id: string, userId?: string, extendedData?: any): Promise<any> {
+        return this.client.request(`/thread/${id}/downvotes`, {
+            method: 'POST',
+            body: JSON.stringify({ userId, extendedData }),
+        });
+    }
+
+    async undownvote(id: string, userId: string): Promise<any> {
+        return this.client.request(`/thread/${id}/downvotes?userId=${userId}`, {
+            method: 'DELETE',
+        });
+    }
+
+    async getDownvotes(id: string, params?: {
+        cursor?: string;
+    }): Promise<any> {
+        const searchParams = new URLSearchParams();
+        if (params) {
+            Object.entries(params).forEach(([key, value]) => {
+                if (value !== undefined) {
+                    searchParams.append(key, value as string);
+                }
+            });
+        }
+        return this.client.request(`/thread/${id}/downvotes?${searchParams.toString()}`, { method: 'GET' });
+    }
+
+    async getPoll(threadId: string, userId?: string): Promise<any> {
+        const searchParams = new URLSearchParams();
+        if (userId) {
+            searchParams.append('userId', userId);
+        }
+
+        const query = searchParams.toString();
+        return this.client.request(
+            `/thread/${threadId}/poll${query ? `?${query}` : ''}`,
+            { method: 'GET' }
+        );
     }
 
     async vote(id: string, optionId: string, userId: string): Promise<any> {

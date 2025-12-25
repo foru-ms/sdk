@@ -84,6 +84,20 @@ export class PostsResource {
         });
     }
 
+    async getLikes(id: string, params?: {
+        cursor?: string;
+    }): Promise<any> {
+        const searchParams = new URLSearchParams();
+        if (params) {
+            Object.entries(params).forEach(([key, value]) => {
+                if (value !== undefined) {
+                    searchParams.append(key, value as string);
+                }
+            });
+        }
+        return this.client.request(`/post/${id}/likes?${searchParams.toString()}`, { method: 'GET' });
+    }
+
     async dislike(id: string, userId?: string, extendedData?: any): Promise<any> {
         return this.client.request(`/post/${id}/dislikes`, {
             method: 'POST',
@@ -95,6 +109,20 @@ export class PostsResource {
         return this.client.request(`/post/${id}/dislikes?userId=${userId}`, {
             method: 'DELETE',
         });
+    }
+
+    async getDislikes(id: string, params?: {
+        cursor?: string;
+    }): Promise<any> {
+        const searchParams = new URLSearchParams();
+        if (params) {
+            Object.entries(params).forEach(([key, value]) => {
+                if (value !== undefined) {
+                    searchParams.append(key, value as string);
+                }
+            });
+        }
+        return this.client.request(`/post/${id}/dislikes?${searchParams.toString()}`, { method: 'GET' });
     }
 
     async upvote(id: string, userId?: string, extendedData?: any): Promise<any> {
@@ -110,6 +138,20 @@ export class PostsResource {
         });
     }
 
+    async getUpvotes(id: string, params?: {
+        cursor?: string;
+    }): Promise<any> {
+        const searchParams = new URLSearchParams();
+        if (params) {
+            Object.entries(params).forEach(([key, value]) => {
+                if (value !== undefined) {
+                    searchParams.append(key, value as string);
+                }
+            });
+        }
+        return this.client.request(`/post/${id}/upvotes?${searchParams.toString()}`, { method: 'GET' });
+    }
+
     async downvote(id: string, userId?: string, extendedData?: any): Promise<any> {
         return this.client.request(`/post/${id}/downvotes`, {
             method: 'POST',
@@ -121,5 +163,19 @@ export class PostsResource {
         return this.client.request(`/post/${id}/downvotes?userId=${userId}`, {
             method: 'DELETE',
         });
+    }
+
+    async getDownvotes(id: string, params?: {
+        cursor?: string;
+    }): Promise<any> {
+        const searchParams = new URLSearchParams();
+        if (params) {
+            Object.entries(params).forEach(([key, value]) => {
+                if (value !== undefined) {
+                    searchParams.append(key, value as string);
+                }
+            });
+        }
+        return this.client.request(`/post/${id}/downvotes?${searchParams.toString()}`, { method: 'GET' });
     }
 }

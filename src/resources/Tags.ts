@@ -64,6 +64,24 @@ export class TagsResource {
         });
     }
 
+    async getThreads(id: string, params?: {
+        query?: string;
+        cursor?: string;
+        filter?: 'newest' | 'oldest';
+    }): Promise<import('../types').ThreadListResponse> {
+        const searchParams = new URLSearchParams();
+        if (params) {
+            Object.entries(params).forEach(([key, value]) => {
+                if (value !== undefined) {
+                    searchParams.append(key, value as string);
+                }
+            });
+        }
+        return this.client.request<import('../types').ThreadListResponse>(`/tag/${id}/threads?${searchParams.toString()}`, {
+            method: 'GET',
+        });
+    }
+
     async subscribe(id: string, userId: string): Promise<any> {
         return this.client.request(`/tag/${id}/subscribers`, {
             method: 'POST',
@@ -75,6 +93,20 @@ export class TagsResource {
         return this.client.request(`/tag/${id}/subscribers?userId=${userId}`, {
             method: 'DELETE',
         });
+    }
+
+    async getSubscribers(id: string, params?: {
+        cursor?: string;
+    }): Promise<any> {
+        const searchParams = new URLSearchParams();
+        if (params) {
+            Object.entries(params).forEach(([key, value]) => {
+                if (value !== undefined) {
+                    searchParams.append(key, value as string);
+                }
+            });
+        }
+        return this.client.request(`/tag/${id}/subscribers?${searchParams.toString()}`, { method: 'GET' });
     }
 
     async listSubscribed(params: {

@@ -25,6 +25,23 @@ export class SSOResource {
         });
     }
 
+    async retrieve(id: string): Promise<{ ssoProvider: SSOProvider }> {
+        return this.client.request<{ ssoProvider: SSOProvider }>(`/sso/${id}`, {
+            method: 'GET',
+        });
+    }
+
+    async update(id: string, payload: {
+        domain?: string;
+        config?: any;
+        active?: boolean;
+    }): Promise<{ ssoProvider: SSOProvider }> {
+        return this.client.request<{ ssoProvider: SSOProvider }>(`/sso/${id}`, {
+            method: 'PATCH',
+            body: JSON.stringify(payload),
+        });
+    }
+
     async delete(id: string): Promise<{ success: boolean }> {
         return this.client.request<{ success: boolean }>(`/sso/${id}`, {
             method: 'DELETE',

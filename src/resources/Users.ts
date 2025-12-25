@@ -75,6 +75,42 @@ export class UsersResource {
         });
     }
 
+    async getThreads(id: string, params?: {
+        query?: string;
+        cursor?: string;
+        filter?: 'newest' | 'oldest';
+    }): Promise<import('../types').ThreadListResponse> {
+        const searchParams = new URLSearchParams();
+        if (params) {
+            Object.entries(params).forEach(([key, value]) => {
+                if (value !== undefined) {
+                    searchParams.append(key, value as string);
+                }
+            });
+        }
+        return this.client.request<import('../types').ThreadListResponse>(`/user/${id}/threads?${searchParams.toString()}`, {
+            method: 'GET',
+        });
+    }
+
+    async getPosts(id: string, params?: {
+        query?: string;
+        cursor?: string;
+        filter?: 'newest' | 'oldest';
+    }): Promise<import('../types').PostListResponse> {
+        const searchParams = new URLSearchParams();
+        if (params) {
+            Object.entries(params).forEach(([key, value]) => {
+                if (value !== undefined) {
+                    searchParams.append(key, value as string);
+                }
+            });
+        }
+        return this.client.request<import('../types').PostListResponse>(`/user/${id}/posts?${searchParams.toString()}`, {
+            method: 'GET',
+        });
+    }
+
     async getFollowers(id: string, params?: {
         query?: string;
         cursor?: string;

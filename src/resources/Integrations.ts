@@ -31,6 +31,17 @@ export class IntegrationsResource {
         });
     }
 
+    async update(id: string, payload: {
+        name?: string;
+        config?: any;
+        active?: boolean;
+    }): Promise<{ integration: Integration }> {
+        return this.client.request<{ integration: Integration }>(`/integrations/${id}`, {
+            method: 'PATCH',
+            body: JSON.stringify(payload),
+        });
+    }
+
     async delete(id: string): Promise<{ success: boolean }> {
         return this.client.request<{ success: boolean }>(`/integrations/${id}`, {
             method: 'DELETE',
