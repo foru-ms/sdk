@@ -15,6 +15,7 @@ export class ThreadsResource {
         type?: InteractionType;
         cursor?: string;
         userId?: string;
+        limit?: number;
     }): Promise<ThreadListResponse> {
         const searchParams = new URLSearchParams();
         if (params) {
@@ -60,6 +61,7 @@ export class ThreadsResource {
         query?: string;
         cursor?: string;
         filter?: 'newest' | 'oldest';
+        limit?: number;
     }): Promise<any> {
         const searchParams = new URLSearchParams();
         if (params) {
@@ -87,6 +89,7 @@ export class ThreadsResource {
 
     async getLikes(id: string, params?: {
         cursor?: string;
+        limit?: number;
     }): Promise<any> {
         const searchParams = new URLSearchParams();
         if (params) {
@@ -114,6 +117,7 @@ export class ThreadsResource {
 
     async getDislikes(id: string, params?: {
         cursor?: string;
+        limit?: number;
     }): Promise<any> {
         const searchParams = new URLSearchParams();
         if (params) {
@@ -141,6 +145,7 @@ export class ThreadsResource {
 
     async getSubscribers(id: string, params?: {
         cursor?: string;
+        limit?: number;
     }): Promise<any> {
         const searchParams = new URLSearchParams();
         if (params) {
@@ -168,6 +173,7 @@ export class ThreadsResource {
 
     async getUpvotes(id: string, params?: {
         cursor?: string;
+        limit?: number;
     }): Promise<any> {
         const searchParams = new URLSearchParams();
         if (params) {
@@ -195,6 +201,7 @@ export class ThreadsResource {
 
     async getDownvotes(id: string, params?: {
         cursor?: string;
+        limit?: number;
     }): Promise<any> {
         const searchParams = new URLSearchParams();
         if (params) {

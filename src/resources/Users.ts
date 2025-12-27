@@ -12,6 +12,7 @@ export class UsersResource {
         query?: string;
         filter?: 'newest' | 'oldest';
         cursor?: string;
+        limit?: number;
     }): Promise<UserListResponse> {
         const searchParams = new URLSearchParams();
         if (params) {
@@ -79,6 +80,7 @@ export class UsersResource {
         query?: string;
         cursor?: string;
         filter?: 'newest' | 'oldest';
+        limit?: number;
     }): Promise<import('../types').ThreadListResponse> {
         const searchParams = new URLSearchParams();
         if (params) {
@@ -97,6 +99,7 @@ export class UsersResource {
         query?: string;
         cursor?: string;
         filter?: 'newest' | 'oldest';
+        limit?: number;
     }): Promise<import('../types').PostListResponse> {
         const searchParams = new URLSearchParams();
         if (params) {
@@ -115,6 +118,7 @@ export class UsersResource {
         query?: string;
         cursor?: string;
         filter?: 'newest' | 'oldest';
+        limit?: number;
     }): Promise<{ followers: User[]; nextUserCursor?: string; count: number }> {
         const searchParams = new URLSearchParams();
         if (params) {
@@ -146,6 +150,7 @@ export class UsersResource {
         query?: string;
         cursor?: string;
         filter?: 'newest' | 'oldest';
+        limit?: number;
     }): Promise<{ following: any[]; nextUserCursor?: string; count: number }> {
         const searchParams = new URLSearchParams();
         if (params) {

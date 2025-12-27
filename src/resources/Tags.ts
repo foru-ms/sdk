@@ -11,6 +11,7 @@ export class TagsResource {
     async list(params?: {
         query?: string;
         cursor?: string;
+        limit?: number;
     }): Promise<TagListResponse> {
         const searchParams = new URLSearchParams();
         if (params) {
@@ -68,6 +69,7 @@ export class TagsResource {
         query?: string;
         cursor?: string;
         filter?: 'newest' | 'oldest';
+        limit?: number;
     }): Promise<import('../types').ThreadListResponse> {
         const searchParams = new URLSearchParams();
         if (params) {
@@ -97,6 +99,7 @@ export class TagsResource {
 
     async getSubscribers(id: string, params?: {
         cursor?: string;
+        limit?: number;
     }): Promise<any> {
         const searchParams = new URLSearchParams();
         if (params) {
@@ -113,6 +116,7 @@ export class TagsResource {
         userId: string;
         query?: string;
         cursor?: string;
+        limit?: number;
     }): Promise<TagListResponse> {
         const searchParams = new URLSearchParams();
         Object.entries(params).forEach(([key, value]) => {

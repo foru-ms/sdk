@@ -97,7 +97,7 @@ The SDK provides multiple ways to handle pagination:
 ```typescript
 // Auto-pagination with async iterator
 for await (const thread of client.pagination.paginateAll(
-  (cursor) => client.threads.list({ cursor, filter: 'newest' })
+  (cursor) => client.threads.list({ cursor, filter: 'newest', limit: 25 })
 )) {
   console.log(thread.title);
 }
@@ -108,13 +108,36 @@ const allThreads = await client.pagination.fetchAllPages(
   5 // max pages
 );
 
-// Manual pagination
+// Manual pagination with custom page size
 let cursor: string | undefined;
 do {
-  const response = await client.threads.list({ cursor });
+  const response = await client.threads.list({ 
+    cursor, 
+    limit: 50 // Request up to 50 items per page (max)
+  });
   // Process threads...
   cursor = response.nextThreadCursor;
 } while (cursor);
+```
+
+### Pagination Limit Parameter
+
+All paginated endpoints support an optional `limit` parameter to control page size:
+
+- **Min**: 1
+- **Max**: 50
+- **Default**: 15
+
+```typescript
+// Get 50 threads per page (maximum)
+const threads = await client.threads.list({ limit: 50 });
+
+// Get 10 users per page
+const users = await client.users.list({ limit: 10 });
+
+// Limit applies to all paginated endpoints
+const posts = await client.posts.list({ limit: 25 });
+const notifications = await client.notifications.list({ userId: 'user-123', limit: 30 });
 ```
 
 ## Webhooks
@@ -188,31 +211,31 @@ Check the `/examples` directory for detailed examples:
 ### Threads (`client.threads`)
 
 **Thread Management**
-*   `list(params: { query?: string; tagId?: string; filter?: 'newest' | 'oldest'; type?: 'created' | 'liked' | 'disliked' | 'upvoted' | 'downvoted' | 'subscribed'; cursor?: string; userId?: string })`: List threads with filtering options.
+*   `list(params: { query?: string; tagId?: string; filter?: 'newest' | 'oldest'; type?: 'created' | 'liked' | 'disliked' | 'upvoted' | 'downvoted' | 'subscribed'; cursor?: string; userId?: string; limit?: number })`: List threads with filtering options. `limit` controls page size (1-50, default: 15).
 *   `create(payload: CreateThreadPayload)`: Create a new thread.
 *   `retrieve(id: string)`: Get a thread by ID.
 *   `update(id: string, payload: UpdateThreadPayload)`: Update a thread.
 *   `delete(id: string)`: Delete a thread.
-*   `getPosts(id: string, params: { query?: string; cursor?: string; filter?: 'newest' | 'oldest' })`: Get posts in a thread.
+*   `getPosts(id: string, params: { query?: string; cursor?: string; filter?: 'newest' | 'oldest'; limit?: number })`: Get posts in a thread.
 
 **Thread Interactions**
 *   `like(id: string, userId?: string, extendedData?: any)`: Like a thread.
 *   `unlike(id: string, userId?: string)`: Unlike a thread.
-*   `getLikes(id: string, params?: { cursor?: string })`: Get users who liked a thread with pagination.
+*   `getLikes(id: string, params?: { cursor?: string; limit?: number })`: Get users who liked a thread with pagination.
 *   `dislike(id: string, userId?: string, extendedData?: any)`: Dislike a thread.
 *   `undislike(id: string, userId?: string)`: Remove dislike from a thread.
-*   `getDislikes(id: string, params?: { cursor?: string })`: Get users who disliked a thread with pagination.
+*   `getDislikes(id: string, params?: { cursor?: string; limit?: number })`: Get users who disliked a thread with pagination.
 *   `upvote(id: string, userId?: string, extendedData?: any)`: Upvote a thread.
 *   `unupvote(id: string, userId?: string)`: Remove upvote from a thread.
-*   `getUpvotes(id: string, params?: { cursor?: string })`: Get users who upvoted a thread with pagination.
+*   `getUpvotes(id: string, params?: { cursor?: string; limit?: number })`: Get users who upvoted a thread with pagination.
 *   `downvote(id: string, userId?: string, extendedData?: any)`: Downvote a thread.
 *   `undownvote(id: string, userId?: string)`: Remove downvote from a thread.
-*   `getDownvotes(id: string, params?: { cursor?: string })`: Get users who downvoted a thread with pagination.
+*   `getDownvotes(id: string, params?: { cursor?: string; limit?: number })`: Get users who downvoted a thread with pagination.
 
 **Thread Subscriptions**
 *   `subscribe(id: string, userId?: string, extendedData?: any)`: Subscribe to a thread.
 *   `unsubscribe(id: string, userId?: string)`: Unsubscribe from a thread.
-*   `getSubscribers(id: string, params?: { cursor?: string })`: Get users subscribed to a thread with pagination.
+*   `getSubscribers(id: string, params?: { cursor?: string; limit?: number })`: Get users subscribed to a thread with pagination.
 
 **Thread Polls**
 *   `createPoll(id: string, payload: { title?: string; expiresAt?: string; options: Array<{ title: string; color?: string; extendedData?: any }>, extendedData?: any })`: Create a poll for a thread.
@@ -227,59 +250,59 @@ Check the `/examples` directory for detailed examples:
 ### Posts (`client.posts`)
 
 **Post Management**
-*   `list(params: { query?: string; filter?: 'newest' | 'oldest'; type?: 'created' | 'liked' | 'disliked' | 'upvoted' | 'downvoted'; cursor?: string; userId?: string })`: List posts with filtering options.
+*   `list(params: { query?: string; filter?: 'newest' | 'oldest'; type?: 'created' | 'liked' | 'disliked' | 'upvoted' | 'downvoted'; cursor?: string; userId?: string; limit?: number })`: List posts with filtering options. `limit` controls page size (1-50, default: 15).
 *   `create(payload: CreatePostPayload)`: Create a new post/reply.
 *   `retrieve(id: string)`: Get a post by ID.
 *   `update(id: string, payload: UpdatePostPayload)`: Update a post.
 *   `delete(id: string, payload?: { userId?: string })`: Delete a post.
-*   `getChildren(id: string, params?: { query?: string; cursor?: string; filter?: 'newest' | 'oldest' })`: Get child posts (nested replies).
+*   `getChildren(id: string, params?: { query?: string; cursor?: string; filter?: 'newest' | 'oldest'; limit?: number })`: Get child posts (nested replies).
 
 **Post Interactions**
 *   `like(id: string, userId?: string, extendedData?: any)`: Like a post.
 *   `unlike(id: string, userId?: string)`: Unlike a post.
-*   `getLikes(id: string, params?: { cursor?: string })`: Get users who liked a post with pagination.
+*   `getLikes(id: string, params?: { cursor?: string; limit?: number })`: Get users who liked a post with pagination.
 *   `dislike(id: string, userId?: string, extendedData?: any)`: Dislike a post.
 *   `undislike(id: string, userId?: string)`: Remove dislike from a post.
-*   `getDislikes(id: string, params?: { cursor?: string })`: Get users who disliked a post with pagination.
+*   `getDislikes(id: string, params?: { cursor?: string; limit?: number })`: Get users who disliked a post with pagination.
 *   `upvote(id: string, userId?: string, extendedData?: any)`: Upvote a post.
 *   `unupvote(id: string, userId?: string)`: Remove upvote from a post.
-*   `getUpvotes(id: string, params?: { cursor?: string })`: Get users who upvoted a post with pagination.
+*   `getUpvotes(id: string, params?: { cursor?: string; limit?: number })`: Get users who upvoted a post with pagination.
 *   `downvote(id: string, userId?: string, extendedData?: any)`: Downvote a post.
 *   `undownvote(id: string, userId?: string)`: Remove downvote from a post.
-*   `getDownvotes(id: string, params?: { cursor?: string })`: Get users who downvoted a post with pagination.
+*   `getDownvotes(id: string, params?: { cursor?: string; limit?: number })`: Get users who downvoted a post with pagination.
 
 ### Users (`client.users`)
 
-*   `list(params?: { query?: string; filter?: 'newest' | 'oldest'; cursor?: string })`: List users.
+*   `list(params?: { query?: string; filter?: 'newest' | 'oldest'; cursor?: string; limit?: number })`: List users. `limit` controls page size (1-50, default: 15).
 *   `retrieve(userId: string)`: Get user by ID.
 *   `create(payload: { username: string; email: string; password: string; displayName?: string; emailVerified?: boolean; roles?: string[]; bio?: string; signature?: string; url?: string; extendedData?: Record<string, any> })`: Create a user (Admin).
 *   `update(id: string, payload: { username?: string; email?: string; password?: string; displayName?: string; emailVerified?: boolean; roles?: string[]; bio?: string; signature?: string; url?: string; extendedData?: Record<string, any> })`: Update a user.
 *   `delete(id: string)`: Delete a user.
-*   `getThreads(id: string, params?: { query?: string; cursor?: string; filter?: 'newest' | 'oldest' })`: Get all threads created by a user.
-*   `getPosts(id: string, params?: { query?: string; cursor?: string; filter?: 'newest' | 'oldest' })`: Get all posts created by a user.
-*   `getFollowers(id: string, params?: { query?: string; cursor?: string; filter?: 'newest' | 'oldest' })`: Get user's followers.
-*   `getFollowing(id: string, params?: { query?: string; cursor?: string; filter?: 'newest' | 'oldest' })`: Get who a user follows.
+*   `getThreads(id: string, params?: { query?: string; cursor?: string; filter?: 'newest' | 'oldest'; limit?: number })`: Get all threads created by a user.
+*   `getPosts(id: string, params?: { query?: string; cursor?: string; filter?: 'newest' | 'oldest'; limit?: number })`: Get all posts created by a user.
+*   `getFollowers(id: string, params?: { query?: string; cursor?: string; filter?: 'newest' | 'oldest'; limit?: number })`: Get user's followers.
+*   `getFollowing(id: string, params?: { query?: string; cursor?: string; filter?: 'newest' | 'oldest'; limit?: number })`: Get who a user follows.
 *   `follow(id: string, followerId?: string, extendedData?: any)`: Follow a user.
 *   `unfollow(id: string, followerId?: string)`: Unfollow a user.
 
 
 ### Tags (`client.tags`)
 
-*   `list(params?: { query?: string; cursor?: string })`: List all tags.
-*   `listSubscribed(params: { userId?: string; query?: string; cursor?: string })`: List tags a user is subscribed to.
+*   `list(params?: { query?: string; cursor?: string; limit?: number })`: List all tags. `limit` controls page size (1-50, default: 15).
+*   `listSubscribed(params: { userId?: string; query?: string; cursor?: string; limit?: number })`: List tags a user is subscribed to.
 *   `create(payload: { name: string; description?: string; color?: string; extendedData?: Record<string, any> })`: Create a tag.
 *   `retrieve(id: string, params?: { userId?: string })`: Get a tag with optional user context.
 *   `update(id: string, payload: { name?: string; description?: string; color?: string; extendedData?: Record<string, any> })`: Update a tag.
 *   `delete(id: string)`: Delete a tag.
-*   `getThreads(id: string, params?: { query?: string; cursor?: string; filter?: 'newest' | 'oldest' })`: Get all threads with a specific tag.
+*   `getThreads(id: string, params?: { query?: string; cursor?: string; filter?: 'newest' | 'oldest'; limit?: number })`: Get all threads with a specific tag.
 *   `subscribe(id: string, userId?: string)`: Subscribe to a tag.
 *   `unsubscribe(id: string, userId?: string)`: Unsubscribe from a tag.
-*   `getSubscribers(id: string, params?: { cursor?: string })`: Get users subscribed to a tag with pagination.
+*   `getSubscribers(id: string, params?: { cursor?: string; limit?: number })`: Get users subscribed to a tag with pagination.
 
 
 ### Notifications (`client.notifications`)
 
-*   `list(params: { userId?: string; read?: boolean; filter?: 'newest' | 'oldest'; cursor?: string })`: List notifications for a user.
+*   `list(params: { userId?: string; read?: boolean; filter?: 'newest' | 'oldest'; cursor?: string; limit?: number })`: List notifications for a user. `limit` controls page size (1-50, default: 15).
 *   `create(payload: { threadId?: string; postId?: string; privateMessageId?: string; notifierId?: string; notifiedId: string; type: string; description?: string; extendedData?: Record<string, any> })`: Create a notification manually.
 *   `retrieve(id: string, userId?: string)`: Get a notification by ID.
 *   `update(id: string, payload: { userId?: string; read: boolean })`: Update a notification's read status.
@@ -288,7 +311,7 @@ Check the `/examples` directory for detailed examples:
 
 ### Search (`client.search`)
 
-*   `search(params: { query: string; type: 'threads' | 'posts' | 'users' | 'tags'; cursor?: string })`: Polymorphic search.
+*   `search(params: { query: string; type: 'threads' | 'posts' | 'users' | 'tags'; cursor?: string; limit?: number })`: Polymorphic search. `limit` controls page size (1-50, default: 15).
 
 ### Webhooks (`client.webhooks`)
 
@@ -297,7 +320,7 @@ Check the `/examples` directory for detailed examples:
 *   `retrieve(id: string)`: Get a webhook by ID.
 *   `update(id: string, payload: { name?: string; url?: string; events?: string[]; active?: boolean })`: Update a webhook configuration.
 *   `delete(id: string)`: Delete a webhook.
-*   `getDeliveries(id: string, params?: { cursor?: string })`: Get webhook delivery history with pagination. Track successful and failed deliveries.
+*   `getDeliveries(id: string, params?: { cursor?: string; limit?: number })`: Get webhook delivery history with pagination. Track successful and failed deliveries. `limit` controls page size (1-50, default: 15).
 *   `verifySignature(payload: any, signature: string, timestamp: string, secret: string, maxAge?: number)`: Verify webhook signature for security. Uses HMAC-SHA256. Default maxAge is 5 minutes to prevent replay attacks.
 
 ### Stats (`client.stats`)
@@ -317,7 +340,7 @@ Check the `/examples` directory for detailed examples:
 
 ### Private Messages (`client.privateMessages`)
 
-*   `list(params?: { query?: string; userId?: string; filter?: 'newest' | 'oldest'; cursor?: string })`: List private messages.
+*   `list(params?: { query?: string; userId?: string; filter?: 'newest' | 'oldest'; cursor?: string; limit?: number })`: List private messages. `limit` controls page size (1-50, default: 15).
 *   `create(payload: { title?: string; body: string; recipientId: string; senderId?: string; extendedData?: Record<string, any> })`: Send a new private message.
 *   `retrieve(id: string, userId?: string)`: Get a message by ID.
 *   `reply(id: string, payload: { body: string; senderId?: string; title?: string; extendedData?: Record<string, any> })`: Reply to a message thread.
@@ -326,7 +349,7 @@ Check the `/examples` directory for detailed examples:
 
 ### Reports (`client.reports`)
 
-*   `list(params?: { reporterId?: string; reportedId?: string; read?: boolean; cursor?: string; filter?: 'newest' | 'oldest' })`: List reports with filtering options.
+*   `list(params?: { reporterId?: string; reportedId?: string; read?: boolean; cursor?: string; filter?: 'newest' | 'oldest'; limit?: number })`: List reports with filtering options. `limit` controls page size (1-50, default: 15).
 *   `create(payload: { reporterId?: string; reportedId?: string; threadId?: string; postId?: string; privateMessageId?: string; type?: string; description?: string; extendedData?: Record<string, any> })`: Submit a new report.
 *   `retrieve(id: string)`: Get a report by ID.
 *   `update(id: string, payload: { threadId?: string; postId?: string; privateMessageId?: string; reportedId?: string; reporterId?: string; type?: string; description?: string; read?: boolean; extendedData?: Record<string, any> })`: Update report details (full update).
@@ -336,7 +359,7 @@ Check the `/examples` directory for detailed examples:
 
 ### Roles (`client.roles`)
 
-*   `list(params?: { filter?: 'newest' | 'oldest'; cursor?: string })`: List user roles.
+*   `list(params?: { filter?: 'newest' | 'oldest'; cursor?: string; limit?: number })`: List user roles. `limit` controls page size (1-50, default: 15).
 *   `create(payload: { name: string; description?: string; color?: string; extendedData?: Record<string, any> })`: Create a new role.
 *   `retrieve(id: string)`: Get a role by ID.
 *   `update(id: string, payload: { name?: string; description?: string; color?: string; extendedData?: Record<string, any> })`: Update a role.
@@ -529,6 +552,13 @@ We welcome contributions! Please see our contributing guidelines for more inform
 - Issues: https://github.com/foru-ms/sdk/issues
 
 ## Changelog
+
+### v1.2.4
+- Pagination Enhancement: Added configurable `limit` query parameter to all paginated endpoints
+  - Allows clients to control page size (min: 1, max: 50, default: 15)
+  - Applied to all list operations across Threads, Posts, Users, Tags, Notifications, Private Messages, Reports, Roles, Search, and Webhooks
+  - Updated documentation with usage examples and parameter specifications
+  - Improves API flexibility for different use cases (mobile, desktop, batch processing)
 
 ### v1.2.3
 - README documentation update

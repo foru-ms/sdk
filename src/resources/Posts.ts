@@ -14,6 +14,7 @@ export class PostsResource {
         type?: InteractionType;
         cursor?: string;
         userId?: string;
+        limit?: number;
     }): Promise<PostListResponse> {
         const searchParams = new URLSearchParams();
         if (params) {
@@ -59,6 +60,7 @@ export class PostsResource {
         query?: string;
         cursor?: string;
         filter?: 'newest' | 'oldest';
+        limit?: number;
     }): Promise<any> {
         const searchParams = new URLSearchParams();
         if (params) {
@@ -86,6 +88,7 @@ export class PostsResource {
 
     async getLikes(id: string, params?: {
         cursor?: string;
+        limit?: number;
     }): Promise<any> {
         const searchParams = new URLSearchParams();
         if (params) {
@@ -113,6 +116,7 @@ export class PostsResource {
 
     async getDislikes(id: string, params?: {
         cursor?: string;
+        limit?: number;
     }): Promise<any> {
         const searchParams = new URLSearchParams();
         if (params) {
@@ -140,6 +144,7 @@ export class PostsResource {
 
     async getUpvotes(id: string, params?: {
         cursor?: string;
+        limit?: number;
     }): Promise<any> {
         const searchParams = new URLSearchParams();
         if (params) {
@@ -167,6 +172,7 @@ export class PostsResource {
 
     async getDownvotes(id: string, params?: {
         cursor?: string;
+        limit?: number;
     }): Promise<any> {
         const searchParams = new URLSearchParams();
         if (params) {

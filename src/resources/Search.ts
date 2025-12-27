@@ -12,6 +12,7 @@ export class SearchResource {
         query: string;
         type: 'threads' | 'posts' | 'users' | 'tags';
         cursor?: string;
+        limit?: number;
     }): Promise<SearchResponse> {
         const searchParams = new URLSearchParams();
         Object.entries(params).forEach(([key, value]) => {

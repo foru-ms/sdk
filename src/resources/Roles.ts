@@ -11,6 +11,7 @@ export class RolesResource {
     async list(params?: {
         filter?: 'newest' | 'oldest';
         cursor?: string;
+        limit?: number;
     }): Promise<RoleListResponse> {
         const searchParams = new URLSearchParams();
         if (params) {

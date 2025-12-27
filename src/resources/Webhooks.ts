@@ -83,9 +83,10 @@ export class WebhooksResource {
      * @param params - Query parameters
      * @returns Promise resolving to delivery history
      */
-    async getDeliveries(id: string, params?: { cursor?: string }): Promise<{ deliveries: any[]; total: number; nextCursor?: string }> {
+    async getDeliveries(id: string, params?: { cursor?: string; limit?: number }): Promise<{ deliveries: any[]; total: number; nextCursor?: string }> {
         const searchParams = new URLSearchParams();
         if (params?.cursor) searchParams.append('cursor', params.cursor);
+        if (params?.limit) searchParams.append('limit', params.limit.toString());
 
         return this.client.request<{ deliveries: any[]; total: number; nextCursor?: string }>(`/webhooks/${id}/deliveries?${searchParams.toString()}`, {
             method: 'GET',

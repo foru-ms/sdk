@@ -13,6 +13,7 @@ export class PrivateMessagesResource {
         userId?: string;
         filter?: 'newest' | 'oldest';
         cursor?: string;
+        limit?: number;
     }): Promise<PrivateMessageListResponse> {
         const searchParams = new URLSearchParams();
         if (params) {

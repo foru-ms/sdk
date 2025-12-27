@@ -14,6 +14,7 @@ export class ReportsResource {
         read?: boolean;
         cursor?: string;
         filter?: 'newest' | 'oldest';
+        limit?: number;
     }): Promise<ReportListResponse> {
         const searchParams = new URLSearchParams();
         if (params) {

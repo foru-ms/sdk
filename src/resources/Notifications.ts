@@ -13,6 +13,7 @@ export class NotificationsResource {
         read?: boolean;
         filter?: 'newest' | 'oldest';
         cursor?: string;
+        limit?: number;
     }): Promise<NotificationListResponse> {
         const searchParams = new URLSearchParams();
         Object.entries(params).forEach(([key, value]) => {
