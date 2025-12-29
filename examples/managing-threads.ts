@@ -70,8 +70,12 @@ async function main() {
     await client.threads.vote(pollThread.id, 'option-id-1', userId);
     console.log('Vote cast');
 
+    // Get poll
+    const poll = await client.threads.getPoll(pollThread.id, userId);
+    console.log('Poll:', poll);
+
     // Get poll results
-    const pollResults = await client.threads.getPoll(pollThread.id, userId);
+    const pollResults = await client.threads.getPollResults(pollThread.id, userId);
     console.log('Poll results:', pollResults);
 
     // Example 7: Add Posts to Thread

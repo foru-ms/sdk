@@ -86,6 +86,30 @@ export interface PollOption {
 }
 
 /**
+ * Simplified poll option for results
+ */
+export interface PollOptionResult {
+    /** The ID of the poll option */
+    id: string;
+    /** The title of the poll option */
+    title: string;
+    /** The color of the poll option */
+    color?: string;
+    /** The number of votes this option received */
+    votes: number;
+}
+
+/**
+ * Poll results data
+ */
+export interface PollResults {
+    /** List of poll options with results */
+    options: PollOptionResult[];
+    /** The option ID that the user voted for, or null if they haven't voted */
+    userVote?: string | null;
+}
+
+/**
  * Response for batch operations
  */
 export interface BatchOperationResponse {

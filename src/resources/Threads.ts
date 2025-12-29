@@ -1,5 +1,6 @@
 import { ForumClient } from '../Client';
 import { ThreadListResponse, ThreadFilter, InteractionType } from '../types';
+import { PollResults } from '../response-types';
 
 export class ThreadsResource {
     private client: ForumClient;
@@ -228,6 +229,19 @@ export class ThreadsResource {
         const query = searchParams.toString();
         return this.client.request(
             `/thread/${threadId}/poll${query ? `?${query}` : ''}`,
+            { method: 'GET' }
+        );
+    }
+
+    async getPollResults(threadId: string, userId?: string): Promise<PollResults> {
+        const searchParams = new URLSearchParams();
+        if (userId) {
+            searchParams.append('userId', userId);
+        }
+
+        const query = searchParams.toString();
+        return this.client.request<PollResults>(
+            `/thread/${threadId}/poll/results${query ? `?${query}` : ''}`,
             { method: 'GET' }
         );
     }
