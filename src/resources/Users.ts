@@ -133,16 +133,17 @@ export class UsersResource {
         });
     }
 
-    async follow(id: string, followerId: string, extendedData?: any): Promise<any> {
+    async follow(id: string, followerId?: string, extendedData?: any): Promise<any> {
         return this.client.request(`/user/${id}/followers`, {
             method: 'POST',
             body: JSON.stringify({ followerId, extendedData }),
         });
     }
 
-    async unfollow(id: string, followerId: string): Promise<any> {
-        return this.client.request(`/user/${id}/followers?followerId=${followerId}`, {
+    async unfollow(id: string, followerId?: string): Promise<any> {
+        return this.client.request(`/user/${id}/followers`, {
             method: 'DELETE',
+            body: JSON.stringify({ followerId }),
         });
     }
 
