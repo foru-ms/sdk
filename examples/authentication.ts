@@ -14,13 +14,15 @@ async function main() {
     try {
         // Example 1: User Registration
         console.log('=== User Registration ===');
-        const newUser = await client.auth.register({
+        const { user, token } = await client.auth.register({
             username: 'john_doe',
             email: 'john@example.com',
             password: 'securePassword123',
             displayName: 'John Doe',
         });
-        console.log('User registered:', newUser);
+        console.log('User registered:', user);
+        console.log('Auth token:', token);
+        // Note: Token is automatically set on the client
 
         // Example 2: User Login
         console.log('\n=== User Login ===');
@@ -29,9 +31,7 @@ async function main() {
             password: 'securePassword123',
         });
         console.log('Login successful, token:', loginResponse.token);
-
-        // Store the token for authenticated requests
-        client.setToken(loginResponse.token);
+        // Note: Token is automatically set on the client
 
         // Example 3: Get Current User
         console.log('\n=== Get Current User ===');

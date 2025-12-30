@@ -201,7 +201,7 @@ Check the `/examples` directory for detailed examples:
 ### Auth (`client.auth`)
 
 *   `login(payload: { login: string; password: string })`: Login a user. Returns `{ token: string }`.
-*   `register(payload: RegisterPayload)`: Register a new user.
+*   `register(payload: RegisterPayload)`: Register a new user. Returns `{ user: User, token: string }`. Token is automatically set on the client.
 *   `me()`: Get specific details of the currently authenticated user.
 *   `forgotPassword(email: string)`: Initiate password reset flow.
 *   `resetPassword(payload: { password: string; oldPassword?: string; email?: string; token?: string })`: Reset password using token or old password.
@@ -382,6 +382,7 @@ import {
   RegisterPayload,
   User,
   LoginResponse,
+  RegisterResponse,
   SecurityInfo,
   
   // Thread Types
@@ -551,6 +552,9 @@ We welcome contributions! Please see our contributing guidelines for more inform
 - Issues: https://github.com/foru-ms/sdk/issues
 
 ## Changelog
+
+### v1.3.0
+- Added Auth resource, authentication example, and related types
 
 ### v1.2.8
 - Added Poll resource for poll management

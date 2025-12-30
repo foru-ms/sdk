@@ -1,5 +1,5 @@
 import { ForumClient } from '../Client';
-import { LoginResponse } from '../types';
+import { LoginResponse, RegisterResponse } from '../types';
 
 export class AuthResource {
     private client: ForumClient;
@@ -21,11 +21,17 @@ export class AuthResource {
         return response;
     }
 
-    async register(payload: import('../types').RegisterPayload): Promise<import('../types').User> {
-        return this.client.request<import('../types').User>('/auth/register', {
+    async register(payload: import('../types').RegisterPayload): Promise<RegisterResponse> {
+        const response = await this.client.request<RegisterResponse>('/auth/register', {
             method: 'POST',
             body: JSON.stringify(payload),
         });
+
+        if (response.token) {
+            this.client.setToken(response.token);
+        }
+
+        return response;
     }
 
     async me(): Promise<import('../types').User> {

@@ -128,6 +128,11 @@ export interface LoginResponse {
     token: string;
 }
 
+export interface RegisterResponse {
+    user: User;
+    token: string;
+}
+
 export interface SecurityInfo {
     userId: string;
     username: string;
