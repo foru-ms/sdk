@@ -304,7 +304,7 @@ Check the `/examples` directory for detailed examples:
 *   `list(params?: { userId?: string; status?: string; filter?: 'newest' | 'oldest'; cursor?: string; limit?: number })`: List notifications for a user. `limit` controls page size (1-50, default: 15).
 *   `create(payload: { threadId?: string; postId?: string; privateMessageId?: string; notifierId?: string; notifiedId: string; type: string; description?: string; extendedData?: Record<string, any> })`: Create a notification manually.
 *   `retrieve(id: string, userId?: string)`: Get a notification by ID.
-*   `update(id: string, payload: { userId?: string; status: string })`: Update a notification's status.
+*   `update(id: string, payload: { userId?: string; status?: string })`: Update a notification's status.
 *   `delete(id: string, userId?: string)`: Delete a notification.
 *   `markAllAsRead(userId?: string, status?: string)`: Bulk update status for all of a user's notifications. Default status is `'read'`.
 
@@ -352,8 +352,8 @@ Check the `/examples` directory for detailed examples:
 *   `create(payload: { reporterId?: string; reportedId?: string; threadId?: string; postId?: string; privateMessageId?: string; type?: string; description?: string; extendedData?: Record<string, any> })`: Submit a new report.
 *   `retrieve(id: string)`: Get a report by ID.
 *   `update(id: string, payload: { threadId?: string; postId?: string; privateMessageId?: string; reportedId?: string; reporterId?: string; type?: string; description?: string; status?: string; extendedData?: Record<string, any> })`: Update report details (full update).
-*   `updateStatus(id: string, status: string)`: Update status of a report (partial update).
-*   `batchUpdate(payload: { reportIds: string[]; status: string })`: Bulk update status for multiple reports.
+*   `updateStatus(id: string, status?: string)`: Update status of a report (partial update).
+*   `batchUpdate(payload: { reportIds: string[]; status?: string })`: Bulk update status for multiple reports.
 *   `delete(id: string)`: Delete a report.
 
 ### Roles (`client.roles`)
@@ -552,6 +552,9 @@ We welcome contributions! Please see our contributing guidelines for more inform
 - Issues: https://github.com/foru-ms/sdk/issues
 
 ## Changelog
+
+### v1.3.2
+- Fixed issue with optional parameters not being optional in typescript
 
 ### v1.3.1
 - Updated Notifications, PrivateMessages, Reports to use `status` (string) instead of `read` (boolean)
