@@ -61,7 +61,7 @@ export class PrivateMessagesResource {
     }
 
     async update(id: string, payload: {
-        read?: boolean;
+        status?: string;
         extendedData?: Record<string, any>;
     }): Promise<PrivateMessage> {
         return this.client.request<PrivateMessage>(`/private-message/${id}`, {

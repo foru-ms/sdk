@@ -181,7 +181,7 @@ export interface Notification {
     notifiedId: string;
     type: string;
     description?: string;
-    read: boolean;
+    status: string;
     createdAt: string;
     extendedData?: Record<string, any>;
     post?: Post;
@@ -264,7 +264,7 @@ export interface PrivateMessage {
     recipientId: string;
     title?: string;
     body: string;
-    read: boolean;
+    status: string;
     parentId?: string;
     children?: PrivateMessage[];
     sender?: User;
@@ -289,7 +289,7 @@ export interface Report {
     privateMessageId?: string;
     type: string;
     description?: string;
-    read: boolean;
+    status: string;
     createdAt: string;
     post?: Post;
     thread?: Thread;

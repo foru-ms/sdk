@@ -301,12 +301,12 @@ Check the `/examples` directory for detailed examples:
 
 ### Notifications (`client.notifications`)
 
-*   `list(params?: { userId?: string; read?: boolean; filter?: 'newest' | 'oldest'; cursor?: string; limit?: number })`: List notifications for a user. `limit` controls page size (1-50, default: 15).
+*   `list(params?: { userId?: string; status?: string; filter?: 'newest' | 'oldest'; cursor?: string; limit?: number })`: List notifications for a user. `limit` controls page size (1-50, default: 15).
 *   `create(payload: { threadId?: string; postId?: string; privateMessageId?: string; notifierId?: string; notifiedId: string; type: string; description?: string; extendedData?: Record<string, any> })`: Create a notification manually.
 *   `retrieve(id: string, userId?: string)`: Get a notification by ID.
-*   `update(id: string, payload: { userId?: string; read: boolean })`: Update a notification's read status.
+*   `update(id: string, payload: { userId?: string; status: string })`: Update a notification's status.
 *   `delete(id: string, userId?: string)`: Delete a notification.
-*   `markAllAsRead(userId?: string, read?: boolean)`: Bulk update read status for all of a user's notifications. Default read status is `true`.
+*   `markAllAsRead(userId?: string, status?: string)`: Bulk update status for all of a user's notifications. Default status is `'read'`.
 
 ### Search (`client.search`)
 
@@ -343,17 +343,17 @@ Check the `/examples` directory for detailed examples:
 *   `create(payload: { title?: string; body: string; recipientId: string; senderId?: string; extendedData?: Record<string, any> })`: Send a new private message.
 *   `retrieve(id: string, userId?: string)`: Get a message by ID.
 *   `reply(id: string, payload: { body: string; senderId?: string; title?: string; extendedData?: Record<string, any> })`: Reply to a message thread.
-*   `update(id: string, payload: { body?: string; extendedData?: Record<string, any> })`: Update a message (only sender can update).
+*   `update(id: string, payload: { status?: string; body?: string; extendedData?: Record<string, any> })`: Update a message (only sender can update).
 *   `delete(id: string)`: Delete a message (participants can delete).
 
 ### Reports (`client.reports`)
 
-*   `list(params?: { reporterId?: string; reportedId?: string; read?: boolean; cursor?: string; filter?: 'newest' | 'oldest'; limit?: number })`: List reports with filtering options. `limit` controls page size (1-50, default: 15).
+*   `list(params?: { reporterId?: string; reportedId?: string; status?: string; cursor?: string; filter?: 'newest' | 'oldest'; limit?: number })`: List reports with filtering options. `limit` controls page size (1-50, default: 15).
 *   `create(payload: { reporterId?: string; reportedId?: string; threadId?: string; postId?: string; privateMessageId?: string; type?: string; description?: string; extendedData?: Record<string, any> })`: Submit a new report.
 *   `retrieve(id: string)`: Get a report by ID.
-*   `update(id: string, payload: { threadId?: string; postId?: string; privateMessageId?: string; reportedId?: string; reporterId?: string; type?: string; description?: string; read?: boolean; extendedData?: Record<string, any> })`: Update report details (full update).
-*   `updateStatus(id: string, read: boolean)`: Update read status of a report (partial update).
-*   `batchUpdate(payload: { reportIds: string[]; read: boolean })`: Bulk update read status for multiple reports.
+*   `update(id: string, payload: { threadId?: string; postId?: string; privateMessageId?: string; reportedId?: string; reporterId?: string; type?: string; description?: string; status?: string; extendedData?: Record<string, any> })`: Update report details (full update).
+*   `updateStatus(id: string, status: string)`: Update status of a report (partial update).
+*   `batchUpdate(payload: { reportIds: string[]; status: string })`: Bulk update status for multiple reports.
 *   `delete(id: string)`: Delete a report.
 
 ### Roles (`client.roles`)
@@ -552,6 +552,9 @@ We welcome contributions! Please see our contributing guidelines for more inform
 - Issues: https://github.com/foru-ms/sdk/issues
 
 ## Changelog
+
+### v1.3.1
+- Updated Notifications, PrivateMessages, Reports to use `status` (string) instead of `read` (boolean)
 
 ### v1.3.0
 - Added Auth resource, authentication example, and related types

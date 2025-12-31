@@ -10,7 +10,7 @@ export class NotificationsResource {
 
     async list(params?: {
         userId?: string;
-        read?: boolean;
+        status?: string;
         filter?: 'newest' | 'oldest';
         cursor?: string;
         limit?: number;
@@ -29,10 +29,10 @@ export class NotificationsResource {
         });
     }
 
-    async markAllAsRead(userId?: string, read: boolean = true): Promise<{ count: number }> {
+    async markAllAsRead(userId?: string, status: string = 'read'): Promise<{ count: number }> {
         return this.client.request<{ count: number }>('/notifications', {
             method: 'PATCH',
-            body: JSON.stringify({ userId, read }),
+            body: JSON.stringify({ userId, status }),
         });
     }
 
@@ -42,7 +42,7 @@ export class NotificationsResource {
         });
     }
 
-    async update(id: string, payload: { read: boolean }): Promise<Notification> {
+    async update(id: string, payload: { status: string }): Promise<Notification> {
         return this.client.request<Notification>(`/notification/${id}`, {
             method: 'PATCH',
             body: JSON.stringify(payload),

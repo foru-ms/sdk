@@ -11,7 +11,7 @@ export class ReportsResource {
     async list(params?: {
         reporterId?: string;
         reportedId?: string;
-        read?: boolean;
+        status?: string;
         cursor?: string;
         filter?: 'newest' | 'oldest';
         limit?: number;
@@ -48,7 +48,7 @@ export class ReportsResource {
 
     async batchUpdate(payload: {
         reportIds: string[];
-        read: boolean;
+        status: string;
     }): Promise<{ count?: number; message?: string }> {
         return this.client.request<{ count?: number; message?: string }>('/reports', {
             method: 'PATCH',
@@ -70,7 +70,7 @@ export class ReportsResource {
         reporterId?: string;
         type?: string;
         description?: string;
-        read?: boolean;
+        status?: string;
         extendedData?: Record<string, any>;
     }): Promise<Report> {
         return this.client.request<Report>(`/report/${id}`, {
@@ -85,10 +85,10 @@ export class ReportsResource {
         });
     }
 
-    async updateStatus(id: string, read: boolean): Promise<Report> {
+    async updateStatus(id: string, status: string): Promise<Report> {
         return this.client.request<Report>(`/report/${id}`, {
             method: 'PATCH',
-            body: JSON.stringify({ read }),
+            body: JSON.stringify({ status }),
         });
     }
 }
