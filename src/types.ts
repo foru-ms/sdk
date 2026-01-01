@@ -16,6 +16,8 @@ export interface User {
     displayName: string | null;
     roles?: any[]; // Refine if needed
     extendedData?: Record<string, any>;
+    postsCount?: number;
+    threadsCount?: number;
     createdAt?: string;
     updatedAt?: string;
 }
@@ -29,6 +31,8 @@ export interface Thread {
     userId: string;
     locked: boolean;
     pinned: boolean;
+    postsCount?: number;
+    lastPostAt?: string;
     createdAt: string;
     updatedAt: string;
     user?: User;
@@ -70,6 +74,7 @@ export interface UpdateThreadPayload {
     userId?: string;
     locked?: boolean;
     pinned?: boolean;
+    tags?: string[];
     extendedData?: Record<string, any>;
 }
 

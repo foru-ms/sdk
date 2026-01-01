@@ -553,6 +553,11 @@ We welcome contributions! Please see our contributing guidelines for more inform
 
 ## Changelog
 
+### v1.3.3
+- Added postsCount?: number and threadsCount?: number to User interface
+- Added postsCount?: number and lastPostAt?: string to Thread interface
+- Added tags?: string[] to UpdateThreadPayload
+
 ### v1.3.2
 - Fixed issue with optional parameters not being optional in typescript
 
