@@ -1,11 +1,5 @@
-export type { DeleteThreadsIdReactionsRequest } from "./DeleteThreadsIdReactionsRequest.js";
 export type { DeleteThreadsIdRequest } from "./DeleteThreadsIdRequest.js";
-export type { DeleteThreadsIdSubscribersRequest } from "./DeleteThreadsIdSubscribersRequest.js";
-export type { GetThreadsIdPostsRequest } from "./GetThreadsIdPostsRequest.js";
-export type { GetThreadsIdReactionsRequest } from "./GetThreadsIdReactionsRequest.js";
 export type { GetThreadsIdRequest } from "./GetThreadsIdRequest.js";
-export type { GetThreadsIdSubscribersRequest } from "./GetThreadsIdSubscribersRequest.js";
 export type { GetThreadsRequest } from "./GetThreadsRequest.js";
 export type { PatchThreadsIdRequest } from "./PatchThreadsIdRequest.js";
-export type { PostThreadsIdReactionsRequest } from "./PostThreadsIdReactionsRequest.js";
-export type { PostThreadsIdSubscribersRequest } from "./PostThreadsIdSubscribersRequest.js";
+export type { PostThreadsRequest } from "./PostThreadsRequest.js";

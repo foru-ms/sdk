@@ -2,12 +2,12 @@
 
 import type { BaseClientOptions, BaseRequestOptions } from "../../../../BaseClient.js";
 import { type NormalizedClientOptionsWithAuth, normalizeClientOptionsWithAuth } from "../../../../BaseClient.js";
-import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
+import { mergeHeaders } from "../../../../core/headers.js";
 import * as core from "../../../../core/index.js";
 import * as environments from "../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../errors/handleNonStatusCodeError.js";
 import * as errors from "../../../../errors/index.js";
-import type * as Forum from "../../../index.js";
+import * as Forum from "../../../index.js";
 
 export declare namespace ThreadsClient {
     export type Options = BaseClientOptions;
@@ -18,7 +18,7 @@ export declare namespace ThreadsClient {
 export class ThreadsClient {
     protected readonly _options: NormalizedClientOptionsWithAuth<ThreadsClient.Options>;
 
-    constructor(options: ThreadsClient.Options) {
+    constructor(options: ThreadsClient.Options = {}) {
         this._options = normalizeClientOptionsWithAuth(options);
     }
 
@@ -26,51 +26,43 @@ export class ThreadsClient {
      * @param {Forum.GetThreadsRequest} request
      * @param {ThreadsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.PaymentRequiredError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
      * @example
-     *     await client.threads.listThreads()
+     *     await client.threads.listAllThreads()
      */
-    public listThreads(
+    public listAllThreads(
         request: Forum.GetThreadsRequest = {},
         requestOptions?: ThreadsClient.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__listThreads(request, requestOptions));
+    ): core.HttpResponsePromise<Forum.GetThreadsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__listAllThreads(request, requestOptions));
     }
 
-    private async __listThreads(
+    private async __listAllThreads(
         request: Forum.GetThreadsRequest = {},
         requestOptions?: ThreadsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
-        const { limit, cursor, search, tagId, userId, sort } = request;
+    ): Promise<core.WithRawResponse<Forum.GetThreadsResponse>> {
+        const { page, limit, search } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (limit != null) {
-            _queryParams.limit = limit.toString();
+        if (page != null) {
+            _queryParams.page = page.toString();
         }
 
-        if (cursor != null) {
-            _queryParams.cursor = cursor;
+        if (limit != null) {
+            _queryParams.limit = limit.toString();
         }
 
         if (search != null) {
             _queryParams.search = search;
         }
 
-        if (tagId != null) {
-            _queryParams.tagId = tagId;
-        }
-
-        if (userId != null) {
-            _queryParams.userId = userId;
-        }
-
-        if (sort != null) {
-            _queryParams.sort = sort;
-        }
-
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
             this._options?.headers,
-            mergeOnlyDefinedHeaders({ "x-api-key": requestOptions?.apiKey ?? this._options?.apiKey }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -90,45 +82,74 @@ export class ThreadsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
+            return { data: _response.body as Forum.GetThreadsResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
-            throw new errors.ForumError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 402:
+                    throw new Forum.PaymentRequiredError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/threads");
     }
 
     /**
-     * @param {unknown} request
+     * @param {Forum.PostThreadsRequest} request
      * @param {ThreadsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Forum.BadRequestError}
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.PaymentRequiredError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
      * @example
-     *     await client.threads.createThread({
-     *         "key": "value"
+     *     await client.threads.createAThread({
+     *         title: "title",
+     *         body: "body"
      *     })
      */
-    public createThread(
-        request?: unknown,
+    public createAThread(
+        request: Forum.PostThreadsRequest,
         requestOptions?: ThreadsClient.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__createThread(request, requestOptions));
+    ): core.HttpResponsePromise<Forum.PostThreadsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__createAThread(request, requestOptions));
     }
 
-    private async __createThread(
-        request?: unknown,
+    private async __createAThread(
+        request: Forum.PostThreadsRequest,
         requestOptions?: ThreadsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
+    ): Promise<core.WithRawResponse<Forum.PostThreadsResponse>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
             this._options?.headers,
-            mergeOnlyDefinedHeaders({ "x-api-key": requestOptions?.apiKey ?? this._options?.apiKey }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -151,15 +172,40 @@ export class ThreadsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
+            return { data: _response.body as Forum.PostThreadsResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
-            throw new errors.ForumError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Forum.BadRequestError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 402:
+                    throw new Forum.PaymentRequiredError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/threads");
@@ -169,28 +215,33 @@ export class ThreadsClient {
      * @param {Forum.GetThreadsIdRequest} request
      * @param {ThreadsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.PaymentRequiredError}
+     * @throws {@link Forum.NotFoundError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
      * @example
-     *     await client.threads.getThread({
+     *     await client.threads.getAThread({
      *         id: "id"
      *     })
      */
-    public getThread(
+    public getAThread(
         request: Forum.GetThreadsIdRequest,
         requestOptions?: ThreadsClient.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__getThread(request, requestOptions));
+    ): core.HttpResponsePromise<Forum.GetThreadsIdResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__getAThread(request, requestOptions));
     }
 
-    private async __getThread(
+    private async __getAThread(
         request: Forum.GetThreadsIdRequest,
         requestOptions?: ThreadsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
+    ): Promise<core.WithRawResponse<Forum.GetThreadsIdResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
             this._options?.headers,
-            mergeOnlyDefinedHeaders({ "x-api-key": requestOptions?.apiKey ?? this._options?.apiKey }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -210,15 +261,40 @@ export class ThreadsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
+            return { data: _response.body as Forum.GetThreadsIdResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
-            throw new errors.ForumError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 402:
+                    throw new Forum.PaymentRequiredError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Forum.NotFoundError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/threads/{id}");
@@ -228,28 +304,33 @@ export class ThreadsClient {
      * @param {Forum.DeleteThreadsIdRequest} request
      * @param {ThreadsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.PaymentRequiredError}
+     * @throws {@link Forum.NotFoundError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
      * @example
-     *     await client.threads.deleteThread({
+     *     await client.threads.deleteAThread({
      *         id: "id"
      *     })
      */
-    public deleteThread(
+    public deleteAThread(
         request: Forum.DeleteThreadsIdRequest,
         requestOptions?: ThreadsClient.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__deleteThread(request, requestOptions));
+    ): core.HttpResponsePromise<Forum.DeleteThreadsIdResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__deleteAThread(request, requestOptions));
     }
 
-    private async __deleteThread(
+    private async __deleteAThread(
         request: Forum.DeleteThreadsIdRequest,
         requestOptions?: ThreadsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
+    ): Promise<core.WithRawResponse<Forum.DeleteThreadsIdResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
             this._options?.headers,
-            mergeOnlyDefinedHeaders({ "x-api-key": requestOptions?.apiKey ?? this._options?.apiKey }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -269,15 +350,40 @@ export class ThreadsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
+            return { data: _response.body as Forum.DeleteThreadsIdResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
-            throw new errors.ForumError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 402:
+                    throw new Forum.PaymentRequiredError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Forum.NotFoundError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "DELETE", "/threads/{id}");
@@ -287,31 +393,34 @@ export class ThreadsClient {
      * @param {Forum.PatchThreadsIdRequest} request
      * @param {ThreadsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Forum.BadRequestError}
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.PaymentRequiredError}
+     * @throws {@link Forum.NotFoundError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
      * @example
-     *     await client.threads.updateThread({
-     *         id: "id",
-     *         body: {
-     *             "key": "value"
-     *         }
+     *     await client.threads.updateAThread({
+     *         id: "id"
      *     })
      */
-    public updateThread(
+    public updateAThread(
         request: Forum.PatchThreadsIdRequest,
         requestOptions?: ThreadsClient.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__updateThread(request, requestOptions));
+    ): core.HttpResponsePromise<Forum.PatchThreadsIdResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__updateAThread(request, requestOptions));
     }
 
-    private async __updateThread(
+    private async __updateAThread(
         request: Forum.PatchThreadsIdRequest,
         requestOptions?: ThreadsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
-        const { id, body: _body } = request;
+    ): Promise<core.WithRawResponse<Forum.PatchThreadsIdResponse>> {
+        const { id, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
             this._options?.headers,
-            mergeOnlyDefinedHeaders({ "x-api-key": requestOptions?.apiKey ?? this._options?.apiKey }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -334,470 +443,44 @@ export class ThreadsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
+            return { data: _response.body as Forum.PatchThreadsIdResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
-            throw new errors.ForumError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Forum.BadRequestError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 402:
+                    throw new Forum.PaymentRequiredError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Forum.NotFoundError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "PATCH", "/threads/{id}");
-    }
-
-    /**
-     * @param {Forum.GetThreadsIdPostsRequest} request
-     * @param {ThreadsClient.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @example
-     *     await client.threads.listThreadPosts({
-     *         id: "id"
-     *     })
-     */
-    public listThreadPosts(
-        request: Forum.GetThreadsIdPostsRequest,
-        requestOptions?: ThreadsClient.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__listThreadPosts(request, requestOptions));
-    }
-
-    private async __listThreadPosts(
-        request: Forum.GetThreadsIdPostsRequest,
-        requestOptions?: ThreadsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
-        const { id, limit, cursor } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (limit != null) {
-            _queryParams.limit = limit.toString();
-        }
-
-        if (cursor != null) {
-            _queryParams.cursor = cursor;
-        }
-
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            mergeOnlyDefinedHeaders({ "x-api-key": requestOptions?.apiKey ?? this._options?.apiKey }),
-            requestOptions?.headers,
-        );
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ForumEnvironment.Production,
-                `threads/${core.url.encodePathParam(id)}/posts`,
-            ),
-            method: "GET",
-            headers: _headers,
-            queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            throw new errors.ForumError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
-        }
-
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/threads/{id}/posts");
-    }
-
-    /**
-     * @param {Forum.GetThreadsIdReactionsRequest} request
-     * @param {ThreadsClient.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @example
-     *     await client.threads.listThreadReactions({
-     *         id: "id"
-     *     })
-     */
-    public listThreadReactions(
-        request: Forum.GetThreadsIdReactionsRequest,
-        requestOptions?: ThreadsClient.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__listThreadReactions(request, requestOptions));
-    }
-
-    private async __listThreadReactions(
-        request: Forum.GetThreadsIdReactionsRequest,
-        requestOptions?: ThreadsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
-        const { id, limit, cursor, type: type_ } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (limit != null) {
-            _queryParams.limit = limit.toString();
-        }
-
-        if (cursor != null) {
-            _queryParams.cursor = cursor;
-        }
-
-        if (type_ != null) {
-            _queryParams.type = type_;
-        }
-
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            mergeOnlyDefinedHeaders({ "x-api-key": requestOptions?.apiKey ?? this._options?.apiKey }),
-            requestOptions?.headers,
-        );
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ForumEnvironment.Production,
-                `threads/${core.url.encodePathParam(id)}/reactions`,
-            ),
-            method: "GET",
-            headers: _headers,
-            queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            throw new errors.ForumError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
-        }
-
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/threads/{id}/reactions");
-    }
-
-    /**
-     * @param {Forum.PostThreadsIdReactionsRequest} request
-     * @param {ThreadsClient.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @example
-     *     await client.threads.addReaction({
-     *         id: "id",
-     *         body: {
-     *             "key": "value"
-     *         }
-     *     })
-     */
-    public addReaction(
-        request: Forum.PostThreadsIdReactionsRequest,
-        requestOptions?: ThreadsClient.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__addReaction(request, requestOptions));
-    }
-
-    private async __addReaction(
-        request: Forum.PostThreadsIdReactionsRequest,
-        requestOptions?: ThreadsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
-        const { id, body: _body } = request;
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            mergeOnlyDefinedHeaders({ "x-api-key": requestOptions?.apiKey ?? this._options?.apiKey }),
-            requestOptions?.headers,
-        );
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ForumEnvironment.Production,
-                `threads/${core.url.encodePathParam(id)}/reactions`,
-            ),
-            method: "POST",
-            headers: _headers,
-            contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
-            requestType: "json",
-            body: _body,
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            throw new errors.ForumError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
-        }
-
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/threads/{id}/reactions");
-    }
-
-    /**
-     * @param {Forum.DeleteThreadsIdReactionsRequest} request
-     * @param {ThreadsClient.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @example
-     *     await client.threads.removeReaction({
-     *         id: "id",
-     *         type: "LIKE"
-     *     })
-     */
-    public removeReaction(
-        request: Forum.DeleteThreadsIdReactionsRequest,
-        requestOptions?: ThreadsClient.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__removeReaction(request, requestOptions));
-    }
-
-    private async __removeReaction(
-        request: Forum.DeleteThreadsIdReactionsRequest,
-        requestOptions?: ThreadsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
-        const { id, type: type_ } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        _queryParams.type = type_;
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            mergeOnlyDefinedHeaders({ "x-api-key": requestOptions?.apiKey ?? this._options?.apiKey }),
-            requestOptions?.headers,
-        );
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ForumEnvironment.Production,
-                `threads/${core.url.encodePathParam(id)}/reactions`,
-            ),
-            method: "DELETE",
-            headers: _headers,
-            queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            throw new errors.ForumError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
-        }
-
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "DELETE", "/threads/{id}/reactions");
-    }
-
-    /**
-     * @param {Forum.GetThreadsIdSubscribersRequest} request
-     * @param {ThreadsClient.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @example
-     *     await client.threads.listThreadSubscribers({
-     *         id: "id"
-     *     })
-     */
-    public listThreadSubscribers(
-        request: Forum.GetThreadsIdSubscribersRequest,
-        requestOptions?: ThreadsClient.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__listThreadSubscribers(request, requestOptions));
-    }
-
-    private async __listThreadSubscribers(
-        request: Forum.GetThreadsIdSubscribersRequest,
-        requestOptions?: ThreadsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
-        const { id, limit, cursor } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (limit != null) {
-            _queryParams.limit = limit.toString();
-        }
-
-        if (cursor != null) {
-            _queryParams.cursor = cursor;
-        }
-
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            mergeOnlyDefinedHeaders({ "x-api-key": requestOptions?.apiKey ?? this._options?.apiKey }),
-            requestOptions?.headers,
-        );
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ForumEnvironment.Production,
-                `threads/${core.url.encodePathParam(id)}/subscribers`,
-            ),
-            method: "GET",
-            headers: _headers,
-            queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            throw new errors.ForumError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
-        }
-
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/threads/{id}/subscribers");
-    }
-
-    /**
-     * @param {Forum.PostThreadsIdSubscribersRequest} request
-     * @param {ThreadsClient.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @example
-     *     await client.threads.subscribeToThread({
-     *         id: "id"
-     *     })
-     */
-    public subscribeToThread(
-        request: Forum.PostThreadsIdSubscribersRequest,
-        requestOptions?: ThreadsClient.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__subscribeToThread(request, requestOptions));
-    }
-
-    private async __subscribeToThread(
-        request: Forum.PostThreadsIdSubscribersRequest,
-        requestOptions?: ThreadsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
-        const { id } = request;
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            mergeOnlyDefinedHeaders({ "x-api-key": requestOptions?.apiKey ?? this._options?.apiKey }),
-            requestOptions?.headers,
-        );
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ForumEnvironment.Production,
-                `threads/${core.url.encodePathParam(id)}/subscribers`,
-            ),
-            method: "POST",
-            headers: _headers,
-            queryParameters: requestOptions?.queryParams,
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            throw new errors.ForumError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
-        }
-
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/threads/{id}/subscribers");
-    }
-
-    /**
-     * @param {Forum.DeleteThreadsIdSubscribersRequest} request
-     * @param {ThreadsClient.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @example
-     *     await client.threads.unsubscribe({
-     *         id: "id"
-     *     })
-     */
-    public unsubscribe(
-        request: Forum.DeleteThreadsIdSubscribersRequest,
-        requestOptions?: ThreadsClient.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__unsubscribe(request, requestOptions));
-    }
-
-    private async __unsubscribe(
-        request: Forum.DeleteThreadsIdSubscribersRequest,
-        requestOptions?: ThreadsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
-        const { id } = request;
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            mergeOnlyDefinedHeaders({ "x-api-key": requestOptions?.apiKey ?? this._options?.apiKey }),
-            requestOptions?.headers,
-        );
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ForumEnvironment.Production,
-                `threads/${core.url.encodePathParam(id)}/subscribers`,
-            ),
-            method: "DELETE",
-            headers: _headers,
-            queryParameters: requestOptions?.queryParams,
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            throw new errors.ForumError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
-        }
-
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "DELETE", "/threads/{id}/subscribers");
     }
 }

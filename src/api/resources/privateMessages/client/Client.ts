@@ -2,12 +2,12 @@
 
 import type { BaseClientOptions, BaseRequestOptions } from "../../../../BaseClient.js";
 import { type NormalizedClientOptionsWithAuth, normalizeClientOptionsWithAuth } from "../../../../BaseClient.js";
-import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
+import { mergeHeaders } from "../../../../core/headers.js";
 import * as core from "../../../../core/index.js";
 import * as environments from "../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../errors/handleNonStatusCodeError.js";
 import * as errors from "../../../../errors/index.js";
-import type * as Forum from "../../../index.js";
+import * as Forum from "../../../index.js";
 
 export declare namespace PrivateMessagesClient {
     export type Options = BaseClientOptions;
@@ -18,7 +18,7 @@ export declare namespace PrivateMessagesClient {
 export class PrivateMessagesClient {
     protected readonly _options: NormalizedClientOptionsWithAuth<PrivateMessagesClient.Options>;
 
-    constructor(options: PrivateMessagesClient.Options) {
+    constructor(options: PrivateMessagesClient.Options = {}) {
         this._options = normalizeClientOptionsWithAuth(options);
     }
 
@@ -26,35 +26,43 @@ export class PrivateMessagesClient {
      * @param {Forum.GetPrivateMessagesRequest} request
      * @param {PrivateMessagesClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.PaymentRequiredError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
      * @example
-     *     await client.privateMessages.listPMs()
+     *     await client.privateMessages.listAllPrivateMessages()
      */
-    public listPMs(
+    public listAllPrivateMessages(
         request: Forum.GetPrivateMessagesRequest = {},
         requestOptions?: PrivateMessagesClient.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__listPMs(request, requestOptions));
+    ): core.HttpResponsePromise<Forum.GetPrivateMessagesResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__listAllPrivateMessages(request, requestOptions));
     }
 
-    private async __listPMs(
+    private async __listAllPrivateMessages(
         request: Forum.GetPrivateMessagesRequest = {},
         requestOptions?: PrivateMessagesClient.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
-        const { limit, cursor } = request;
+    ): Promise<core.WithRawResponse<Forum.GetPrivateMessagesResponse>> {
+        const { page, limit, search } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
+        if (page != null) {
+            _queryParams.page = page.toString();
+        }
+
         if (limit != null) {
             _queryParams.limit = limit.toString();
         }
 
-        if (cursor != null) {
-            _queryParams.cursor = cursor;
+        if (search != null) {
+            _queryParams.search = search;
         }
 
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
             this._options?.headers,
-            mergeOnlyDefinedHeaders({ "x-api-key": requestOptions?.apiKey ?? this._options?.apiKey }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -74,45 +82,74 @@ export class PrivateMessagesClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
+            return { data: _response.body as Forum.GetPrivateMessagesResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
-            throw new errors.ForumError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 402:
+                    throw new Forum.PaymentRequiredError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/private-messages");
     }
 
     /**
-     * @param {unknown} request
+     * @param {Forum.PostPrivateMessagesRequest} request
      * @param {PrivateMessagesClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Forum.BadRequestError}
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.PaymentRequiredError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
      * @example
-     *     await client.privateMessages.sendPm({
-     *         "key": "value"
+     *     await client.privateMessages.createAPrivateMessage({
+     *         recipientId: "recipientId",
+     *         body: "body"
      *     })
      */
-    public sendPm(
-        request?: unknown,
+    public createAPrivateMessage(
+        request: Forum.PostPrivateMessagesRequest,
         requestOptions?: PrivateMessagesClient.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__sendPm(request, requestOptions));
+    ): core.HttpResponsePromise<Forum.PostPrivateMessagesResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__createAPrivateMessage(request, requestOptions));
     }
 
-    private async __sendPm(
-        request?: unknown,
+    private async __createAPrivateMessage(
+        request: Forum.PostPrivateMessagesRequest,
         requestOptions?: PrivateMessagesClient.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
+    ): Promise<core.WithRawResponse<Forum.PostPrivateMessagesResponse>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
             this._options?.headers,
-            mergeOnlyDefinedHeaders({ "x-api-key": requestOptions?.apiKey ?? this._options?.apiKey }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -135,15 +172,40 @@ export class PrivateMessagesClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
+            return { data: _response.body as Forum.PostPrivateMessagesResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
-            throw new errors.ForumError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Forum.BadRequestError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 402:
+                    throw new Forum.PaymentRequiredError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/private-messages");
@@ -153,28 +215,33 @@ export class PrivateMessagesClient {
      * @param {Forum.GetPrivateMessagesIdRequest} request
      * @param {PrivateMessagesClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.PaymentRequiredError}
+     * @throws {@link Forum.NotFoundError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
      * @example
-     *     await client.privateMessages.getPm({
+     *     await client.privateMessages.getAPrivateMessage({
      *         id: "id"
      *     })
      */
-    public getPm(
+    public getAPrivateMessage(
         request: Forum.GetPrivateMessagesIdRequest,
         requestOptions?: PrivateMessagesClient.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__getPm(request, requestOptions));
+    ): core.HttpResponsePromise<Forum.GetPrivateMessagesIdResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__getAPrivateMessage(request, requestOptions));
     }
 
-    private async __getPm(
+    private async __getAPrivateMessage(
         request: Forum.GetPrivateMessagesIdRequest,
         requestOptions?: PrivateMessagesClient.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
+    ): Promise<core.WithRawResponse<Forum.GetPrivateMessagesIdResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
             this._options?.headers,
-            mergeOnlyDefinedHeaders({ "x-api-key": requestOptions?.apiKey ?? this._options?.apiKey }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -194,15 +261,40 @@ export class PrivateMessagesClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
+            return { data: _response.body as Forum.GetPrivateMessagesIdResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
-            throw new errors.ForumError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 402:
+                    throw new Forum.PaymentRequiredError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Forum.NotFoundError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/private-messages/{id}");
@@ -212,28 +304,33 @@ export class PrivateMessagesClient {
      * @param {Forum.DeletePrivateMessagesIdRequest} request
      * @param {PrivateMessagesClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.PaymentRequiredError}
+     * @throws {@link Forum.NotFoundError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
      * @example
-     *     await client.privateMessages.deletePm({
+     *     await client.privateMessages.deleteAPrivateMessage({
      *         id: "id"
      *     })
      */
-    public deletePm(
+    public deleteAPrivateMessage(
         request: Forum.DeletePrivateMessagesIdRequest,
         requestOptions?: PrivateMessagesClient.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__deletePm(request, requestOptions));
+    ): core.HttpResponsePromise<Forum.DeletePrivateMessagesIdResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__deleteAPrivateMessage(request, requestOptions));
     }
 
-    private async __deletePm(
+    private async __deleteAPrivateMessage(
         request: Forum.DeletePrivateMessagesIdRequest,
         requestOptions?: PrivateMessagesClient.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
+    ): Promise<core.WithRawResponse<Forum.DeletePrivateMessagesIdResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
             this._options?.headers,
-            mergeOnlyDefinedHeaders({ "x-api-key": requestOptions?.apiKey ?? this._options?.apiKey }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -253,81 +350,45 @@ export class PrivateMessagesClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
+            return {
+                data: _response.body as Forum.DeletePrivateMessagesIdResponse,
+                rawResponse: _response.rawResponse,
+            };
         }
 
         if (_response.error.reason === "status-code") {
-            throw new errors.ForumError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 402:
+                    throw new Forum.PaymentRequiredError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Forum.NotFoundError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "DELETE", "/private-messages/{id}");
-    }
-
-    /**
-     * @param {Forum.PostPrivateMessagesIdRepliesRequest} request
-     * @param {PrivateMessagesClient.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @example
-     *     await client.privateMessages.replyToPm({
-     *         id: "id"
-     *     })
-     */
-    public replyToPm(
-        request: Forum.PostPrivateMessagesIdRepliesRequest,
-        requestOptions?: PrivateMessagesClient.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__replyToPm(request, requestOptions));
-    }
-
-    private async __replyToPm(
-        request: Forum.PostPrivateMessagesIdRepliesRequest,
-        requestOptions?: PrivateMessagesClient.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
-        const { id } = request;
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            mergeOnlyDefinedHeaders({ "x-api-key": requestOptions?.apiKey ?? this._options?.apiKey }),
-            requestOptions?.headers,
-        );
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ForumEnvironment.Production,
-                `private-messages/${core.url.encodePathParam(id)}/replies`,
-            ),
-            method: "POST",
-            headers: _headers,
-            queryParameters: requestOptions?.queryParams,
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            throw new errors.ForumError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
-        }
-
-        return handleNonStatusCodeError(
-            _response.error,
-            _response.rawResponse,
-            "POST",
-            "/private-messages/{id}/replies",
-        );
     }
 }

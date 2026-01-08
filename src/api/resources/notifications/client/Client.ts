@@ -2,12 +2,12 @@
 
 import type { BaseClientOptions, BaseRequestOptions } from "../../../../BaseClient.js";
 import { type NormalizedClientOptionsWithAuth, normalizeClientOptionsWithAuth } from "../../../../BaseClient.js";
-import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
+import { mergeHeaders } from "../../../../core/headers.js";
 import * as core from "../../../../core/index.js";
 import * as environments from "../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../errors/handleNonStatusCodeError.js";
 import * as errors from "../../../../errors/index.js";
-import type * as Forum from "../../../index.js";
+import * as Forum from "../../../index.js";
 
 export declare namespace NotificationsClient {
     export type Options = BaseClientOptions;
@@ -18,7 +18,7 @@ export declare namespace NotificationsClient {
 export class NotificationsClient {
     protected readonly _options: NormalizedClientOptionsWithAuth<NotificationsClient.Options>;
 
-    constructor(options: NotificationsClient.Options) {
+    constructor(options: NotificationsClient.Options = {}) {
         this._options = normalizeClientOptionsWithAuth(options);
     }
 
@@ -26,39 +26,43 @@ export class NotificationsClient {
      * @param {Forum.GetNotificationsRequest} request
      * @param {NotificationsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.PaymentRequiredError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
      * @example
-     *     await client.notifications.listNotifications()
+     *     await client.notifications.listAllNotifications()
      */
-    public listNotifications(
+    public listAllNotifications(
         request: Forum.GetNotificationsRequest = {},
         requestOptions?: NotificationsClient.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__listNotifications(request, requestOptions));
+    ): core.HttpResponsePromise<Forum.GetNotificationsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__listAllNotifications(request, requestOptions));
     }
 
-    private async __listNotifications(
+    private async __listAllNotifications(
         request: Forum.GetNotificationsRequest = {},
         requestOptions?: NotificationsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
-        const { limit, cursor, unreadOnly } = request;
+    ): Promise<core.WithRawResponse<Forum.GetNotificationsResponse>> {
+        const { page, limit, search } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
+        if (page != null) {
+            _queryParams.page = page.toString();
+        }
+
         if (limit != null) {
             _queryParams.limit = limit.toString();
         }
 
-        if (cursor != null) {
-            _queryParams.cursor = cursor;
-        }
-
-        if (unreadOnly != null) {
-            _queryParams.unreadOnly = unreadOnly;
+        if (search != null) {
+            _queryParams.search = search;
         }
 
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
             this._options?.headers,
-            mergeOnlyDefinedHeaders({ "x-api-key": requestOptions?.apiKey ?? this._options?.apiKey }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -78,38 +82,74 @@ export class NotificationsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
+            return { data: _response.body as Forum.GetNotificationsResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
-            throw new errors.ForumError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 402:
+                    throw new Forum.PaymentRequiredError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/notifications");
     }
 
     /**
+     * @param {Forum.PostNotificationsRequest} request
      * @param {NotificationsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Forum.BadRequestError}
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.PaymentRequiredError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
      * @example
-     *     await client.notifications.markAllRead()
+     *     await client.notifications.createANotification({
+     *         userId: "userId",
+     *         type: "type"
+     *     })
      */
-    public markAllRead(requestOptions?: NotificationsClient.RequestOptions): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__markAllRead(requestOptions));
+    public createANotification(
+        request: Forum.PostNotificationsRequest,
+        requestOptions?: NotificationsClient.RequestOptions,
+    ): core.HttpResponsePromise<Forum.PostNotificationsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__createANotification(request, requestOptions));
     }
 
-    private async __markAllRead(
+    private async __createANotification(
+        request: Forum.PostNotificationsRequest,
         requestOptions?: NotificationsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
+    ): Promise<core.WithRawResponse<Forum.PostNotificationsResponse>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
             this._options?.headers,
-            mergeOnlyDefinedHeaders({ "x-api-key": requestOptions?.apiKey ?? this._options?.apiKey }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -119,9 +159,12 @@ export class NotificationsClient {
                     environments.ForumEnvironment.Production,
                 "notifications",
             ),
-            method: "PATCH",
+            method: "POST",
             headers: _headers,
+            contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
+            requestType: "json",
+            body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -129,46 +172,76 @@ export class NotificationsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
+            return { data: _response.body as Forum.PostNotificationsResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
-            throw new errors.ForumError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Forum.BadRequestError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 402:
+                    throw new Forum.PaymentRequiredError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
         }
 
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "PATCH", "/notifications");
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/notifications");
     }
 
     /**
      * @param {Forum.GetNotificationsIdRequest} request
      * @param {NotificationsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.PaymentRequiredError}
+     * @throws {@link Forum.NotFoundError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
      * @example
-     *     await client.notifications.getNotification({
+     *     await client.notifications.getANotification({
      *         id: "id"
      *     })
      */
-    public getNotification(
+    public getANotification(
         request: Forum.GetNotificationsIdRequest,
         requestOptions?: NotificationsClient.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__getNotification(request, requestOptions));
+    ): core.HttpResponsePromise<Forum.GetNotificationsIdResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__getANotification(request, requestOptions));
     }
 
-    private async __getNotification(
+    private async __getANotification(
         request: Forum.GetNotificationsIdRequest,
         requestOptions?: NotificationsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
+    ): Promise<core.WithRawResponse<Forum.GetNotificationsIdResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
             this._options?.headers,
-            mergeOnlyDefinedHeaders({ "x-api-key": requestOptions?.apiKey ?? this._options?.apiKey }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -188,15 +261,40 @@ export class NotificationsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
+            return { data: _response.body as Forum.GetNotificationsIdResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
-            throw new errors.ForumError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 402:
+                    throw new Forum.PaymentRequiredError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Forum.NotFoundError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/notifications/{id}");
@@ -206,28 +304,33 @@ export class NotificationsClient {
      * @param {Forum.DeleteNotificationsIdRequest} request
      * @param {NotificationsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.PaymentRequiredError}
+     * @throws {@link Forum.NotFoundError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
      * @example
-     *     await client.notifications.deleteNotification({
+     *     await client.notifications.deleteANotification({
      *         id: "id"
      *     })
      */
-    public deleteNotification(
+    public deleteANotification(
         request: Forum.DeleteNotificationsIdRequest,
         requestOptions?: NotificationsClient.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__deleteNotification(request, requestOptions));
+    ): core.HttpResponsePromise<Forum.DeleteNotificationsIdResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__deleteANotification(request, requestOptions));
     }
 
-    private async __deleteNotification(
+    private async __deleteANotification(
         request: Forum.DeleteNotificationsIdRequest,
         requestOptions?: NotificationsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
+    ): Promise<core.WithRawResponse<Forum.DeleteNotificationsIdResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
             this._options?.headers,
-            mergeOnlyDefinedHeaders({ "x-api-key": requestOptions?.apiKey ?? this._options?.apiKey }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -247,15 +350,40 @@ export class NotificationsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
+            return { data: _response.body as Forum.DeleteNotificationsIdResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
-            throw new errors.ForumError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 402:
+                    throw new Forum.PaymentRequiredError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Forum.NotFoundError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "DELETE", "/notifications/{id}");
@@ -265,28 +393,34 @@ export class NotificationsClient {
      * @param {Forum.PatchNotificationsIdRequest} request
      * @param {NotificationsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Forum.BadRequestError}
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.PaymentRequiredError}
+     * @throws {@link Forum.NotFoundError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
      * @example
-     *     await client.notifications.updateNotification({
+     *     await client.notifications.updateANotification({
      *         id: "id"
      *     })
      */
-    public updateNotification(
+    public updateANotification(
         request: Forum.PatchNotificationsIdRequest,
         requestOptions?: NotificationsClient.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__updateNotification(request, requestOptions));
+    ): core.HttpResponsePromise<Forum.PatchNotificationsIdResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__updateANotification(request, requestOptions));
     }
 
-    private async __updateNotification(
+    private async __updateANotification(
         request: Forum.PatchNotificationsIdRequest,
         requestOptions?: NotificationsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
-        const { id } = request;
+    ): Promise<core.WithRawResponse<Forum.PatchNotificationsIdResponse>> {
+        const { id, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
             this._options?.headers,
-            mergeOnlyDefinedHeaders({ "x-api-key": requestOptions?.apiKey ?? this._options?.apiKey }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -298,7 +432,10 @@ export class NotificationsClient {
             ),
             method: "PATCH",
             headers: _headers,
+            contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
+            requestType: "json",
+            body: _body,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -306,15 +443,42 @@ export class NotificationsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
+            return { data: _response.body as Forum.PatchNotificationsIdResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
-            throw new errors.ForumError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Forum.BadRequestError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 402:
+                    throw new Forum.PaymentRequiredError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Forum.NotFoundError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "PATCH", "/notifications/{id}");

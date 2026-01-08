@@ -3,13 +3,19 @@
 /**
  * @example
  *     {
- *         id: "id",
- *         body: {
- *             "key": "value"
- *         }
+ *         id: "id"
  *     }
  */
 export interface PatchRolesIdRequest {
     id: string;
-    body?: unknown;
+    /** Role name */
+    name?: string;
+    /** Role slug (unique identifier) */
+    slug?: string;
+    /** Role description */
+    description?: string;
+    /** Role color hex */
+    color?: string;
+    /** Extended data */
+    extendedData?: Record<string, unknown>;
 }

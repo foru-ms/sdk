@@ -3,13 +3,19 @@
 /**
  * @example
  *     {
- *         id: "id",
- *         body: {
- *             "key": "value"
- *         }
+ *         id: "id"
  *     }
  */
 export interface PatchTagsIdRequest {
     id: string;
-    body?: unknown;
+    /** Tag name */
+    name?: string;
+    /** Tag slug (unique identifier) */
+    slug?: string;
+    /** Tag description */
+    description?: string;
+    /** Hex color code */
+    color?: string;
+    /** Extended data */
+    extendedData?: Record<string, unknown>;
 }

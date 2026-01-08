@@ -5,9 +5,7 @@
  *     {}
  */
 export interface GetPostsRequest {
-    /** Items per page (max 75) */
+    page?: number;
     limit?: number;
-    /** Pagination cursor */
-    cursor?: string;
-    userId?: string;
+    search?: string;
 }

@@ -5,8 +5,7 @@
  *     {}
  */
 export interface GetRolesRequest {
-    /** Items per page (max 75) */
+    page?: number;
     limit?: number;
-    /** Pagination cursor */
-    cursor?: string;
+    search?: string;
 }

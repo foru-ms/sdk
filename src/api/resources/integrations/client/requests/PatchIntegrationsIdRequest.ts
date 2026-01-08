@@ -3,13 +3,15 @@
 /**
  * @example
  *     {
- *         id: "id",
- *         body: {
- *             "key": "value"
- *         }
+ *         id: "id"
  *     }
  */
 export interface PatchIntegrationsIdRequest {
     id: string;
-    body?: unknown;
+    /** Integration name */
+    name?: string;
+    /** JSON configuration (merged with existing) */
+    config?: Record<string, unknown>;
+    /** Enable/disable integration */
+    active?: boolean;
 }

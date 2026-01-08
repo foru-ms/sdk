@@ -8,4 +8,19 @@
  */
 export interface PatchNotificationsIdRequest {
     id: string;
+    /** Notification status */
+    status?: PatchNotificationsIdRequest.Status;
+    /** Update extended data */
+    extendedData?: Record<string, unknown>;
+}
+
+export namespace PatchNotificationsIdRequest {
+    /** Notification status */
+    export const Status = {
+        Read: "read",
+        Unread: "unread",
+        Dismissed: "dismissed",
+        Archived: "archived",
+    } as const;
+    export type Status = (typeof Status)[keyof typeof Status];
 }

@@ -3,13 +3,21 @@
 /**
  * @example
  *     {
- *         id: "id",
- *         body: {
- *             "key": "value"
- *         }
+ *         id: "id"
  *     }
  */
 export interface PatchThreadsIdRequest {
     id: string;
-    body?: unknown;
+    /** New title */
+    title?: string;
+    /** New content */
+    body?: string;
+    /** Lock/unlock thread */
+    locked?: boolean;
+    /** Pin/unpin thread */
+    pinned?: boolean;
+    /** Update tags by slug, name, or ID */
+    tags?: string[];
+    /** Update extended data */
+    extendedData?: Record<string, unknown>;
 }

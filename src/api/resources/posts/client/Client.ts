@@ -2,12 +2,12 @@
 
 import type { BaseClientOptions, BaseRequestOptions } from "../../../../BaseClient.js";
 import { type NormalizedClientOptionsWithAuth, normalizeClientOptionsWithAuth } from "../../../../BaseClient.js";
-import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
+import { mergeHeaders } from "../../../../core/headers.js";
 import * as core from "../../../../core/index.js";
 import * as environments from "../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../errors/handleNonStatusCodeError.js";
 import * as errors from "../../../../errors/index.js";
-import type * as Forum from "../../../index.js";
+import * as Forum from "../../../index.js";
 
 export declare namespace PostsClient {
     export type Options = BaseClientOptions;
@@ -18,7 +18,7 @@ export declare namespace PostsClient {
 export class PostsClient {
     protected readonly _options: NormalizedClientOptionsWithAuth<PostsClient.Options>;
 
-    constructor(options: PostsClient.Options) {
+    constructor(options: PostsClient.Options = {}) {
         this._options = normalizeClientOptionsWithAuth(options);
     }
 
@@ -26,39 +26,43 @@ export class PostsClient {
      * @param {Forum.GetPostsRequest} request
      * @param {PostsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.PaymentRequiredError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
      * @example
-     *     await client.posts.listPosts()
+     *     await client.posts.listAllPosts()
      */
-    public listPosts(
+    public listAllPosts(
         request: Forum.GetPostsRequest = {},
         requestOptions?: PostsClient.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__listPosts(request, requestOptions));
+    ): core.HttpResponsePromise<Forum.GetPostsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__listAllPosts(request, requestOptions));
     }
 
-    private async __listPosts(
+    private async __listAllPosts(
         request: Forum.GetPostsRequest = {},
         requestOptions?: PostsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
-        const { limit, cursor, userId } = request;
+    ): Promise<core.WithRawResponse<Forum.GetPostsResponse>> {
+        const { page, limit, search } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
+        if (page != null) {
+            _queryParams.page = page.toString();
+        }
+
         if (limit != null) {
             _queryParams.limit = limit.toString();
         }
 
-        if (cursor != null) {
-            _queryParams.cursor = cursor;
-        }
-
-        if (userId != null) {
-            _queryParams.userId = userId;
+        if (search != null) {
+            _queryParams.search = search;
         }
 
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
             this._options?.headers,
-            mergeOnlyDefinedHeaders({ "x-api-key": requestOptions?.apiKey ?? this._options?.apiKey }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -78,42 +82,74 @@ export class PostsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
+            return { data: _response.body as Forum.GetPostsResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
-            throw new errors.ForumError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 402:
+                    throw new Forum.PaymentRequiredError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/posts");
     }
 
     /**
-     * @param {unknown} request
+     * @param {Forum.PostPostsRequest} request
      * @param {PostsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Forum.BadRequestError}
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.PaymentRequiredError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
      * @example
-     *     await client.posts.createPost({
-     *         "key": "value"
+     *     await client.posts.createAPost({
+     *         threadId: "threadId",
+     *         body: "body"
      *     })
      */
-    public createPost(request?: unknown, requestOptions?: PostsClient.RequestOptions): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__createPost(request, requestOptions));
+    public createAPost(
+        request: Forum.PostPostsRequest,
+        requestOptions?: PostsClient.RequestOptions,
+    ): core.HttpResponsePromise<Forum.PostPostsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__createAPost(request, requestOptions));
     }
 
-    private async __createPost(
-        request?: unknown,
+    private async __createAPost(
+        request: Forum.PostPostsRequest,
         requestOptions?: PostsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
+    ): Promise<core.WithRawResponse<Forum.PostPostsResponse>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
             this._options?.headers,
-            mergeOnlyDefinedHeaders({ "x-api-key": requestOptions?.apiKey ?? this._options?.apiKey }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -136,15 +172,40 @@ export class PostsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
+            return { data: _response.body as Forum.PostPostsResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
-            throw new errors.ForumError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Forum.BadRequestError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 402:
+                    throw new Forum.PaymentRequiredError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/posts");
@@ -154,28 +215,33 @@ export class PostsClient {
      * @param {Forum.GetPostsIdRequest} request
      * @param {PostsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.PaymentRequiredError}
+     * @throws {@link Forum.NotFoundError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
      * @example
-     *     await client.posts.getPost({
+     *     await client.posts.getAPost({
      *         id: "id"
      *     })
      */
-    public getPost(
+    public getAPost(
         request: Forum.GetPostsIdRequest,
         requestOptions?: PostsClient.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__getPost(request, requestOptions));
+    ): core.HttpResponsePromise<Forum.GetPostsIdResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__getAPost(request, requestOptions));
     }
 
-    private async __getPost(
+    private async __getAPost(
         request: Forum.GetPostsIdRequest,
         requestOptions?: PostsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
+    ): Promise<core.WithRawResponse<Forum.GetPostsIdResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
             this._options?.headers,
-            mergeOnlyDefinedHeaders({ "x-api-key": requestOptions?.apiKey ?? this._options?.apiKey }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -195,15 +261,40 @@ export class PostsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
+            return { data: _response.body as Forum.GetPostsIdResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
-            throw new errors.ForumError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 402:
+                    throw new Forum.PaymentRequiredError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Forum.NotFoundError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/posts/{id}");
@@ -213,28 +304,33 @@ export class PostsClient {
      * @param {Forum.DeletePostsIdRequest} request
      * @param {PostsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.PaymentRequiredError}
+     * @throws {@link Forum.NotFoundError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
      * @example
-     *     await client.posts.deletePost({
+     *     await client.posts.deleteAPost({
      *         id: "id"
      *     })
      */
-    public deletePost(
+    public deleteAPost(
         request: Forum.DeletePostsIdRequest,
         requestOptions?: PostsClient.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__deletePost(request, requestOptions));
+    ): core.HttpResponsePromise<Forum.DeletePostsIdResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__deleteAPost(request, requestOptions));
     }
 
-    private async __deletePost(
+    private async __deleteAPost(
         request: Forum.DeletePostsIdRequest,
         requestOptions?: PostsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
+    ): Promise<core.WithRawResponse<Forum.DeletePostsIdResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
             this._options?.headers,
-            mergeOnlyDefinedHeaders({ "x-api-key": requestOptions?.apiKey ?? this._options?.apiKey }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -254,15 +350,40 @@ export class PostsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
+            return { data: _response.body as Forum.DeletePostsIdResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
-            throw new errors.ForumError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 402:
+                    throw new Forum.PaymentRequiredError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Forum.NotFoundError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "DELETE", "/posts/{id}");
@@ -272,31 +393,34 @@ export class PostsClient {
      * @param {Forum.PatchPostsIdRequest} request
      * @param {PostsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Forum.BadRequestError}
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.PaymentRequiredError}
+     * @throws {@link Forum.NotFoundError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
      * @example
-     *     await client.posts.updatePost({
-     *         id: "id",
-     *         body: {
-     *             "key": "value"
-     *         }
+     *     await client.posts.updateAPost({
+     *         id: "id"
      *     })
      */
-    public updatePost(
+    public updateAPost(
         request: Forum.PatchPostsIdRequest,
         requestOptions?: PostsClient.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__updatePost(request, requestOptions));
+    ): core.HttpResponsePromise<Forum.PatchPostsIdResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__updateAPost(request, requestOptions));
     }
 
-    private async __updatePost(
+    private async __updateAPost(
         request: Forum.PatchPostsIdRequest,
         requestOptions?: PostsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
-        const { id, body: _body } = request;
+    ): Promise<core.WithRawResponse<Forum.PatchPostsIdResponse>> {
+        const { id, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
             this._options?.headers,
-            mergeOnlyDefinedHeaders({ "x-api-key": requestOptions?.apiKey ?? this._options?.apiKey }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -319,216 +443,44 @@ export class PostsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
+            return { data: _response.body as Forum.PatchPostsIdResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
-            throw new errors.ForumError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Forum.BadRequestError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 402:
+                    throw new Forum.PaymentRequiredError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Forum.NotFoundError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "PATCH", "/posts/{id}");
-    }
-
-    /**
-     * @param {Forum.GetPostsIdReactionsRequest} request
-     * @param {PostsClient.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @example
-     *     await client.posts.listPostReactions({
-     *         id: "id"
-     *     })
-     */
-    public listPostReactions(
-        request: Forum.GetPostsIdReactionsRequest,
-        requestOptions?: PostsClient.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__listPostReactions(request, requestOptions));
-    }
-
-    private async __listPostReactions(
-        request: Forum.GetPostsIdReactionsRequest,
-        requestOptions?: PostsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
-        const { id, limit, cursor, type: type_ } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (limit != null) {
-            _queryParams.limit = limit.toString();
-        }
-
-        if (cursor != null) {
-            _queryParams.cursor = cursor;
-        }
-
-        if (type_ != null) {
-            _queryParams.type = type_;
-        }
-
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            mergeOnlyDefinedHeaders({ "x-api-key": requestOptions?.apiKey ?? this._options?.apiKey }),
-            requestOptions?.headers,
-        );
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ForumEnvironment.Production,
-                `posts/${core.url.encodePathParam(id)}/reactions`,
-            ),
-            method: "GET",
-            headers: _headers,
-            queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            throw new errors.ForumError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
-        }
-
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/posts/{id}/reactions");
-    }
-
-    /**
-     * @param {Forum.PostPostsIdReactionsRequest} request
-     * @param {PostsClient.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @example
-     *     await client.posts.addReaction({
-     *         id: "id",
-     *         body: {
-     *             "key": "value"
-     *         }
-     *     })
-     */
-    public addReaction(
-        request: Forum.PostPostsIdReactionsRequest,
-        requestOptions?: PostsClient.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__addReaction(request, requestOptions));
-    }
-
-    private async __addReaction(
-        request: Forum.PostPostsIdReactionsRequest,
-        requestOptions?: PostsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
-        const { id, body: _body } = request;
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            mergeOnlyDefinedHeaders({ "x-api-key": requestOptions?.apiKey ?? this._options?.apiKey }),
-            requestOptions?.headers,
-        );
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ForumEnvironment.Production,
-                `posts/${core.url.encodePathParam(id)}/reactions`,
-            ),
-            method: "POST",
-            headers: _headers,
-            contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
-            requestType: "json",
-            body: _body,
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            throw new errors.ForumError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
-        }
-
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/posts/{id}/reactions");
-    }
-
-    /**
-     * @param {Forum.DeletePostsIdReactionsRequest} request
-     * @param {PostsClient.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @example
-     *     await client.posts.removeReaction({
-     *         id: "id",
-     *         type: "LIKE"
-     *     })
-     */
-    public removeReaction(
-        request: Forum.DeletePostsIdReactionsRequest,
-        requestOptions?: PostsClient.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__removeReaction(request, requestOptions));
-    }
-
-    private async __removeReaction(
-        request: Forum.DeletePostsIdReactionsRequest,
-        requestOptions?: PostsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
-        const { id, type: type_ } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        _queryParams.type = type_;
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            mergeOnlyDefinedHeaders({ "x-api-key": requestOptions?.apiKey ?? this._options?.apiKey }),
-            requestOptions?.headers,
-        );
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ForumEnvironment.Production,
-                `posts/${core.url.encodePathParam(id)}/reactions`,
-            ),
-            method: "DELETE",
-            headers: _headers,
-            queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            throw new errors.ForumError({
-                statusCode: _response.error.statusCode,
-                body: _response.error.body,
-                rawResponse: _response.rawResponse,
-            });
-        }
-
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "DELETE", "/posts/{id}/reactions");
     }
 }

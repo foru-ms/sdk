@@ -3,13 +3,17 @@
 /**
  * @example
  *     {
- *         id: "id",
- *         body: {
- *             "key": "value"
- *         }
+ *         id: "id"
  *     }
  */
 export interface PatchPostsIdRequest {
     id: string;
-    body?: unknown;
+    /** Updated post content */
+    body?: string;
+    /** Move post to another thread */
+    threadId?: string;
+    /** Change parent post */
+    parentId?: string;
+    /** Update extended data */
+    extendedData?: Record<string, unknown>;
 }

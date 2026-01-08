@@ -1,5 +1,7 @@
 # Foru.ms TypeScript Library
 
+![](https://foru.ms/images/cover.png)
+
 [![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=https%3A%2F%2Fgithub.com%2Fforu-ms%2Fsdk)
 [![npm shield](https://img.shields.io/npm/v/@foru-ms/sdk)](https://www.npmjs.com/package/@foru-ms/sdk)
 
@@ -44,9 +46,11 @@ Instantiate and use the client with the following:
 ```typescript
 import { ForumClient } from "@foru-ms/sdk";
 
-const client = new ForumClient({ token: "YOUR_TOKEN", apiKey: "YOUR_API_KEY" });
-await client.auth.login({
-    "key": "value"
+const client = new ForumClient({ apiKey: "YOUR_API_KEY" });
+await client.auth.register({
+    username: "username",
+    email: "email",
+    password: "password"
 });
 ```
 
@@ -58,7 +62,7 @@ following namespace:
 ```typescript
 import { Forum } from "@foru-ms/sdk";
 
-const request: Forum.GetThreadsRequest = {
+const request: Forum.PostAuthRegisterRequest = {
     ...
 };
 ```
@@ -72,7 +76,7 @@ will be thrown.
 import { ForumError } from "@foru-ms/sdk";
 
 try {
-    await client.auth.login(...);
+    await client.auth.register(...);
 } catch (err) {
     if (err instanceof ForumError) {
         console.log(err.statusCode);
@@ -99,7 +103,7 @@ const client = new ForumClient({
     }
 });
 
-const response = await client.auth.login(..., {
+const response = await client.auth.register(..., {
     headers: {
         'X-Custom-Header': 'custom value'
     }
@@ -111,7 +115,7 @@ const response = await client.auth.login(..., {
 If you would like to send additional query string parameters as part of the request, use the `queryParams` request option.
 
 ```typescript
-const response = await client.auth.login(..., {
+const response = await client.auth.register(..., {
     queryParams: {
         'customQueryParamKey': 'custom query param value'
     }
@@ -133,7 +137,7 @@ A request is deemed retryable when any of the following HTTP status codes is ret
 Use the `maxRetries` request option to configure this behavior.
 
 ```typescript
-const response = await client.auth.login(..., {
+const response = await client.auth.register(..., {
     maxRetries: 0 // override maxRetries at the request level
 });
 ```
@@ -143,7 +147,7 @@ const response = await client.auth.login(..., {
 The SDK defaults to a 60 second timeout. Use the `timeoutInSeconds` option to configure this behavior.
 
 ```typescript
-const response = await client.auth.login(..., {
+const response = await client.auth.register(..., {
     timeoutInSeconds: 30 // override timeout to 30s
 });
 ```
@@ -154,7 +158,7 @@ The SDK allows users to abort requests at any point by passing in an abort signa
 
 ```typescript
 const controller = new AbortController();
-const response = await client.auth.login(..., {
+const response = await client.auth.register(..., {
     abortSignal: controller.signal
 });
 controller.abort(); // aborts the request
@@ -166,7 +170,7 @@ The SDK provides access to raw response data, including headers, through the `.w
 The `.withRawResponse()` method returns a promise that results to an object with a `data` and a `rawResponse` property.
 
 ```typescript
-const { data, rawResponse } = await client.auth.login(...).withRawResponse();
+const { data, rawResponse } = await client.auth.register(...).withRawResponse();
 
 console.log(data);
 console.log(rawResponse.headers['X-My-Header']);

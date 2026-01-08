@@ -5,9 +5,7 @@
  *     {}
  */
 export interface GetReportsRequest {
-    /** Items per page (max 75) */
+    page?: number;
     limit?: number;
-    /** Pagination cursor */
-    cursor?: string;
-    status?: string;
+    search?: string;
 }

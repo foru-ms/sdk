@@ -5,5 +5,5 @@
     "generatorConfig": {
         "namespaceExport": "Forum"
     },
-    "sdkVersion": "1.3.4"
+    "sdkVersion": "2.0.2"
 }

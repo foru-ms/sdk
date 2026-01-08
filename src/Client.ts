@@ -3,14 +3,11 @@
 import { AuthClient } from "./api/resources/auth/client/Client.js";
 import { IntegrationsClient } from "./api/resources/integrations/client/Client.js";
 import { NotificationsClient } from "./api/resources/notifications/client/Client.js";
-import { PollsClient } from "./api/resources/polls/client/Client.js";
 import { PostsClient } from "./api/resources/posts/client/Client.js";
 import { PrivateMessagesClient } from "./api/resources/privateMessages/client/Client.js";
 import { ReportsClient } from "./api/resources/reports/client/Client.js";
 import { RolesClient } from "./api/resources/roles/client/Client.js";
-import { SearchClient } from "./api/resources/search/client/Client.js";
-import { SsoClient } from "./api/resources/sso/client/Client.js";
-import { StatsClient } from "./api/resources/stats/client/Client.js";
+import { SsOsClient } from "./api/resources/ssOs/client/Client.js";
 import { TagsClient } from "./api/resources/tags/client/Client.js";
 import { ThreadsClient } from "./api/resources/threads/client/Client.js";
 import { UsersClient } from "./api/resources/users/client/Client.js";
@@ -27,22 +24,19 @@ export declare namespace ForumClient {
 export class ForumClient {
     protected readonly _options: NormalizedClientOptionsWithAuth<ForumClient.Options>;
     protected _auth: AuthClient | undefined;
-    protected _threads: ThreadsClient | undefined;
-    protected _polls: PollsClient | undefined;
-    protected _posts: PostsClient | undefined;
-    protected _users: UsersClient | undefined;
     protected _tags: TagsClient | undefined;
-    protected _roles: RolesClient | undefined;
-    protected _notifications: NotificationsClient | undefined;
+    protected _threads: ThreadsClient | undefined;
+    protected _posts: PostsClient | undefined;
     protected _privateMessages: PrivateMessagesClient | undefined;
+    protected _users: UsersClient | undefined;
+    protected _roles: RolesClient | undefined;
     protected _reports: ReportsClient | undefined;
-    protected _search: SearchClient | undefined;
-    protected _stats: StatsClient | undefined;
+    protected _notifications: NotificationsClient | undefined;
     protected _webhooks: WebhooksClient | undefined;
     protected _integrations: IntegrationsClient | undefined;
-    protected _sso: SsoClient | undefined;
+    protected _ssOs: SsOsClient | undefined;
 
-    constructor(options: ForumClient.Options) {
+    constructor(options: ForumClient.Options = {}) {
         this._options = normalizeClientOptionsWithAuth(options);
     }
 
@@ -50,48 +44,36 @@ export class ForumClient {
         return (this._auth ??= new AuthClient(this._options));
     }
 
-    public get threads(): ThreadsClient {
-        return (this._threads ??= new ThreadsClient(this._options));
+    public get tags(): TagsClient {
+        return (this._tags ??= new TagsClient(this._options));
     }
 
-    public get polls(): PollsClient {
-        return (this._polls ??= new PollsClient(this._options));
+    public get threads(): ThreadsClient {
+        return (this._threads ??= new ThreadsClient(this._options));
     }
 
     public get posts(): PostsClient {
         return (this._posts ??= new PostsClient(this._options));
     }
 
-    public get users(): UsersClient {
-        return (this._users ??= new UsersClient(this._options));
+    public get privateMessages(): PrivateMessagesClient {
+        return (this._privateMessages ??= new PrivateMessagesClient(this._options));
     }
 
-    public get tags(): TagsClient {
-        return (this._tags ??= new TagsClient(this._options));
+    public get users(): UsersClient {
+        return (this._users ??= new UsersClient(this._options));
     }
 
     public get roles(): RolesClient {
         return (this._roles ??= new RolesClient(this._options));
     }
 
-    public get notifications(): NotificationsClient {
-        return (this._notifications ??= new NotificationsClient(this._options));
-    }
-
-    public get privateMessages(): PrivateMessagesClient {
-        return (this._privateMessages ??= new PrivateMessagesClient(this._options));
-    }
-
     public get reports(): ReportsClient {
         return (this._reports ??= new ReportsClient(this._options));
     }
 
-    public get search(): SearchClient {
-        return (this._search ??= new SearchClient(this._options));
-    }
-
-    public get stats(): StatsClient {
-        return (this._stats ??= new StatsClient(this._options));
+    public get notifications(): NotificationsClient {
+        return (this._notifications ??= new NotificationsClient(this._options));
     }
 
     public get webhooks(): WebhooksClient {
@@ -102,7 +84,7 @@ export class ForumClient {
         return (this._integrations ??= new IntegrationsClient(this._options));
     }
 
-    public get sso(): SsoClient {
-        return (this._sso ??= new SsoClient(this._options));
+    public get ssOs(): SsOsClient {
+        return (this._ssOs ??= new SsOsClient(this._options));
     }
 }

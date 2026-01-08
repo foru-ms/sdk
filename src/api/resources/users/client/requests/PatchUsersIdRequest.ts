@@ -3,13 +3,27 @@
 /**
  * @example
  *     {
- *         id: "id",
- *         body: {
- *             "key": "value"
- *         }
+ *         id: "id"
  *     }
  */
 export interface PatchUsersIdRequest {
     id: string;
-    body?: unknown;
+    /** Display name */
+    displayName?: string;
+    /** User bio */
+    bio?: string;
+    /** Forum signature */
+    signature?: string;
+    /** Username (letters, numbers, underscores, hyphens) */
+    username?: string;
+    /** Email address */
+    email?: string;
+    /** New password */
+    password?: string;
+    /** Website URL */
+    url?: string;
+    /** Extended data */
+    extendedData?: Record<string, unknown>;
+    /** Role slugs (admin only) */
+    roles?: string[];
 }

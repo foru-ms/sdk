@@ -1,6 +1,6 @@
 # Reference
 ## Auth
-<details><summary><code>client.auth.<a href="/src/api/resources/auth/client/Client.ts">login</a>({ ...params }) -> void</code></summary>
+<details><summary><code>client.auth.<a href="/src/api/resources/auth/client/Client.ts">register</a>({ ...params }) -> Forum.PostAuthRegisterResponse</code></summary>
 <dl>
 <dd>
 
@@ -13,8 +13,10 @@
 <dd>
 
 ```typescript
-await client.auth.login({
-    "key": "value"
+await client.auth.register({
+    username: "username",
+    email: "email",
+    password: "password"
 });
 
 ```
@@ -31,7 +33,7 @@ await client.auth.login({
 <dl>
 <dd>
 
-**request:** `unknown` 
+**request:** `Forum.PostAuthRegisterRequest` 
     
 </dd>
 </dl>
@@ -51,7 +53,7 @@ await client.auth.login({
 </dl>
 </details>
 
-<details><summary><code>client.auth.<a href="/src/api/resources/auth/client/Client.ts">register</a>() -> void</code></summary>
+<details><summary><code>client.auth.<a href="/src/api/resources/auth/client/Client.ts">login</a>({ ...params }) -> Forum.PostAuthLoginResponse</code></summary>
 <dl>
 <dd>
 
@@ -64,7 +66,10 @@ await client.auth.login({
 <dd>
 
 ```typescript
-await client.auth.register();
+await client.auth.login({
+    login: "login",
+    password: "password"
+});
 
 ```
 </dd>
@@ -80,6 +85,14 @@ await client.auth.register();
 <dl>
 <dd>
 
+**request:** `Forum.PostAuthLoginRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **requestOptions:** `AuthClient.RequestOptions` 
     
 </dd>
@@ -92,7 +105,7 @@ await client.auth.register();
 </dl>
 </details>
 
-<details><summary><code>client.auth.<a href="/src/api/resources/auth/client/Client.ts">getCurrentUser</a>() -> void</code></summary>
+<details><summary><code>client.auth.<a href="/src/api/resources/auth/client/Client.ts">getCurrentUser</a>() -> Forum.GetAuthMeResponse</code></summary>
 <dl>
 <dd>
 
@@ -133,7 +146,7 @@ await client.auth.getCurrentUser();
 </dl>
 </details>
 
-<details><summary><code>client.auth.<a href="/src/api/resources/auth/client/Client.ts">requestPasswordReset</a>() -> void</code></summary>
+<details><summary><code>client.auth.<a href="/src/api/resources/auth/client/Client.ts">requestPasswordReset</a>({ ...params }) -> Forum.PostAuthForgotPasswordResponse</code></summary>
 <dl>
 <dd>
 
@@ -146,7 +159,9 @@ await client.auth.getCurrentUser();
 <dd>
 
 ```typescript
-await client.auth.requestPasswordReset();
+await client.auth.requestPasswordReset({
+    email: "email"
+});
 
 ```
 </dd>
@@ -158,6 +173,14 @@ await client.auth.requestPasswordReset();
 
 <dl>
 <dd>
+
+<dl>
+<dd>
+
+**request:** `Forum.PostAuthForgotPasswordRequest` 
+    
+</dd>
+</dl>
 
 <dl>
 <dd>
@@ -174,7 +197,7 @@ await client.auth.requestPasswordReset();
 </dl>
 </details>
 
-<details><summary><code>client.auth.<a href="/src/api/resources/auth/client/Client.ts">resetPassword</a>() -> void</code></summary>
+<details><summary><code>client.auth.<a href="/src/api/resources/auth/client/Client.ts">resetPassword</a>({ ...params }) -> Forum.PostAuthResetPasswordResponse</code></summary>
 <dl>
 <dd>
 
@@ -187,7 +210,9 @@ await client.auth.requestPasswordReset();
 <dd>
 
 ```typescript
-await client.auth.resetPassword();
+await client.auth.resetPassword({
+    password: "password"
+});
 
 ```
 </dd>
@@ -199,1657 +224,19 @@ await client.auth.resetPassword();
 
 <dl>
 <dd>
+
+<dl>
+<dd>
+
+**request:** `Forum.PostAuthResetPasswordRequest` 
+    
+</dd>
+</dl>
 
 <dl>
 <dd>
 
 **requestOptions:** `AuthClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.auth.<a href="/src/api/resources/auth/client/Client.ts">securityInfo</a>() -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.auth.securityInfo();
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**requestOptions:** `AuthClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## Threads
-<details><summary><code>client.threads.<a href="/src/api/resources/threads/client/Client.ts">listThreads</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.threads.listThreads();
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.GetThreadsRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `ThreadsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.threads.<a href="/src/api/resources/threads/client/Client.ts">createThread</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.threads.createThread({
-    "key": "value"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `unknown` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `ThreadsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.threads.<a href="/src/api/resources/threads/client/Client.ts">getThread</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.threads.getThread({
-    id: "id"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.GetThreadsIdRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `ThreadsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.threads.<a href="/src/api/resources/threads/client/Client.ts">deleteThread</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.threads.deleteThread({
-    id: "id"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.DeleteThreadsIdRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `ThreadsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.threads.<a href="/src/api/resources/threads/client/Client.ts">updateThread</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.threads.updateThread({
-    id: "id",
-    body: {
-        "key": "value"
-    }
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.PatchThreadsIdRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `ThreadsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.threads.<a href="/src/api/resources/threads/client/Client.ts">listThreadPosts</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.threads.listThreadPosts({
-    id: "id"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.GetThreadsIdPostsRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `ThreadsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.threads.<a href="/src/api/resources/threads/client/Client.ts">listThreadReactions</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.threads.listThreadReactions({
-    id: "id"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.GetThreadsIdReactionsRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `ThreadsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.threads.<a href="/src/api/resources/threads/client/Client.ts">addReaction</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.threads.addReaction({
-    id: "id",
-    body: {
-        "key": "value"
-    }
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.PostThreadsIdReactionsRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `ThreadsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.threads.<a href="/src/api/resources/threads/client/Client.ts">removeReaction</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.threads.removeReaction({
-    id: "id",
-    type: "LIKE"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.DeleteThreadsIdReactionsRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `ThreadsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.threads.<a href="/src/api/resources/threads/client/Client.ts">listThreadSubscribers</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.threads.listThreadSubscribers({
-    id: "id"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.GetThreadsIdSubscribersRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `ThreadsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.threads.<a href="/src/api/resources/threads/client/Client.ts">subscribeToThread</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.threads.subscribeToThread({
-    id: "id"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.PostThreadsIdSubscribersRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `ThreadsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.threads.<a href="/src/api/resources/threads/client/Client.ts">unsubscribe</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.threads.unsubscribe({
-    id: "id"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.DeleteThreadsIdSubscribersRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `ThreadsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## Polls
-<details><summary><code>client.polls.<a href="/src/api/resources/polls/client/Client.ts">getPollResults</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.polls.getPollResults({
-    id: "id"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.GetThreadsIdPollRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `PollsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.polls.<a href="/src/api/resources/polls/client/Client.ts">createPoll</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.polls.createPoll({
-    id: "id",
-    body: {
-        "key": "value"
-    }
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.PostThreadsIdPollRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `PollsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.polls.<a href="/src/api/resources/polls/client/Client.ts">updateClosePoll</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.polls.updateClosePoll({
-    id: "id",
-    body: {
-        "key": "value"
-    }
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.PatchThreadsIdPollRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `PollsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.polls.<a href="/src/api/resources/polls/client/Client.ts">castVote</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.polls.castVote({
-    id: "id",
-    body: {
-        "key": "value"
-    }
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.PostThreadsIdPollVotesRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `PollsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.polls.<a href="/src/api/resources/polls/client/Client.ts">removeVote</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.polls.removeVote({
-    id: "id"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.DeleteThreadsIdPollVotesRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `PollsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## Posts
-<details><summary><code>client.posts.<a href="/src/api/resources/posts/client/Client.ts">listPosts</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.posts.listPosts();
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.GetPostsRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `PostsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.posts.<a href="/src/api/resources/posts/client/Client.ts">createPost</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.posts.createPost({
-    "key": "value"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `unknown` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `PostsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.posts.<a href="/src/api/resources/posts/client/Client.ts">getPost</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.posts.getPost({
-    id: "id"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.GetPostsIdRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `PostsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.posts.<a href="/src/api/resources/posts/client/Client.ts">deletePost</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.posts.deletePost({
-    id: "id"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.DeletePostsIdRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `PostsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.posts.<a href="/src/api/resources/posts/client/Client.ts">updatePost</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.posts.updatePost({
-    id: "id",
-    body: {
-        "key": "value"
-    }
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.PatchPostsIdRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `PostsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.posts.<a href="/src/api/resources/posts/client/Client.ts">listPostReactions</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.posts.listPostReactions({
-    id: "id"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.GetPostsIdReactionsRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `PostsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.posts.<a href="/src/api/resources/posts/client/Client.ts">addReaction</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.posts.addReaction({
-    id: "id",
-    body: {
-        "key": "value"
-    }
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.PostPostsIdReactionsRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `PostsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.posts.<a href="/src/api/resources/posts/client/Client.ts">removeReaction</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.posts.removeReaction({
-    id: "id",
-    type: "LIKE"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.DeletePostsIdReactionsRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `PostsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## Users
-<details><summary><code>client.users.<a href="/src/api/resources/users/client/Client.ts">listUsers</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.users.listUsers();
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.GetUsersRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `UsersClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.users.<a href="/src/api/resources/users/client/Client.ts">getUser</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.users.getUser({
-    id: "id"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.GetUsersIdRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `UsersClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.users.<a href="/src/api/resources/users/client/Client.ts">deleteUser</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.users.deleteUser({
-    id: "id"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.DeleteUsersIdRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `UsersClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.users.<a href="/src/api/resources/users/client/Client.ts">updateUser</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.users.updateUser({
-    id: "id",
-    body: {
-        "key": "value"
-    }
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.PatchUsersIdRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `UsersClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.users.<a href="/src/api/resources/users/client/Client.ts">listFollowers</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.users.listFollowers({
-    id: "id"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.GetUsersIdFollowersRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `UsersClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.users.<a href="/src/api/resources/users/client/Client.ts">listFollowing</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.users.listFollowing({
-    id: "id"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.GetUsersIdFollowingRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `UsersClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -1862,7 +249,7 @@ await client.users.listFollowing({
 </details>
 
 ## Tags
-<details><summary><code>client.tags.<a href="/src/api/resources/tags/client/Client.ts">listTags</a>({ ...params }) -> void</code></summary>
+<details><summary><code>client.tags.<a href="/src/api/resources/tags/client/Client.ts">listAllTags</a>({ ...params }) -> Forum.GetTagsResponse</code></summary>
 <dl>
 <dd>
 
@@ -1875,7 +262,7 @@ await client.users.listFollowing({
 <dd>
 
 ```typescript
-await client.tags.listTags();
+await client.tags.listAllTags();
 
 ```
 </dd>
@@ -1911,7 +298,7 @@ await client.tags.listTags();
 </dl>
 </details>
 
-<details><summary><code>client.tags.<a href="/src/api/resources/tags/client/Client.ts">createTag</a>({ ...params }) -> void</code></summary>
+<details><summary><code>client.tags.<a href="/src/api/resources/tags/client/Client.ts">createATag</a>({ ...params }) -> Forum.PostTagsResponse</code></summary>
 <dl>
 <dd>
 
@@ -1924,8 +311,8 @@ await client.tags.listTags();
 <dd>
 
 ```typescript
-await client.tags.createTag({
-    "key": "value"
+await client.tags.createATag({
+    name: "name"
 });
 
 ```
@@ -1942,7 +329,7 @@ await client.tags.createTag({
 <dl>
 <dd>
 
-**request:** `unknown` 
+**request:** `Forum.PostTagsRequest` 
     
 </dd>
 </dl>
@@ -1962,7 +349,7 @@ await client.tags.createTag({
 </dl>
 </details>
 
-<details><summary><code>client.tags.<a href="/src/api/resources/tags/client/Client.ts">getTag</a>({ ...params }) -> void</code></summary>
+<details><summary><code>client.tags.<a href="/src/api/resources/tags/client/Client.ts">getATag</a>({ ...params }) -> Forum.GetTagsIdResponse</code></summary>
 <dl>
 <dd>
 
@@ -1975,7 +362,7 @@ await client.tags.createTag({
 <dd>
 
 ```typescript
-await client.tags.getTag({
+await client.tags.getATag({
     id: "id"
 });
 
@@ -2013,7 +400,7 @@ await client.tags.getTag({
 </dl>
 </details>
 
-<details><summary><code>client.tags.<a href="/src/api/resources/tags/client/Client.ts">deleteTag</a>({ ...params }) -> void</code></summary>
+<details><summary><code>client.tags.<a href="/src/api/resources/tags/client/Client.ts">deleteATag</a>({ ...params }) -> Forum.DeleteTagsIdResponse</code></summary>
 <dl>
 <dd>
 
@@ -2026,7 +413,7 @@ await client.tags.getTag({
 <dd>
 
 ```typescript
-await client.tags.deleteTag({
+await client.tags.deleteATag({
     id: "id"
 });
 
@@ -2064,7 +451,7 @@ await client.tags.deleteTag({
 </dl>
 </details>
 
-<details><summary><code>client.tags.<a href="/src/api/resources/tags/client/Client.ts">updateTag</a>({ ...params }) -> void</code></summary>
+<details><summary><code>client.tags.<a href="/src/api/resources/tags/client/Client.ts">updateATag</a>({ ...params }) -> Forum.PatchTagsIdResponse</code></summary>
 <dl>
 <dd>
 
@@ -2077,11 +464,8 @@ await client.tags.deleteTag({
 <dd>
 
 ```typescript
-await client.tags.updateTag({
-    id: "id",
-    body: {
-        "key": "value"
-    }
+await client.tags.updateATag({
+    id: "id"
 });
 
 ```
@@ -2118,7 +502,8 @@ await client.tags.updateTag({
 </dl>
 </details>
 
-<details><summary><code>client.tags.<a href="/src/api/resources/tags/client/Client.ts">listTagSubscribers</a>({ ...params }) -> void</code></summary>
+## Threads
+<details><summary><code>client.threads.<a href="/src/api/resources/threads/client/Client.ts">listAllThreads</a>({ ...params }) -> Forum.GetThreadsResponse</code></summary>
 <dl>
 <dd>
 
@@ -2131,7 +516,108 @@ await client.tags.updateTag({
 <dd>
 
 ```typescript
-await client.tags.listTagSubscribers({
+await client.threads.listAllThreads();
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Forum.GetThreadsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ThreadsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.threads.<a href="/src/api/resources/threads/client/Client.ts">createAThread</a>({ ...params }) -> Forum.PostThreadsResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.threads.createAThread({
+    title: "title",
+    body: "body"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Forum.PostThreadsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ThreadsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.threads.<a href="/src/api/resources/threads/client/Client.ts">getAThread</a>({ ...params }) -> Forum.GetThreadsIdResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.threads.getAThread({
     id: "id"
 });
 
@@ -2149,7 +635,7 @@ await client.tags.listTagSubscribers({
 <dl>
 <dd>
 
-**request:** `Forum.GetTagsIdSubscribersRequest` 
+**request:** `Forum.GetThreadsIdRequest` 
     
 </dd>
 </dl>
@@ -2157,7 +643,7 @@ await client.tags.listTagSubscribers({
 <dl>
 <dd>
 
-**requestOptions:** `TagsClient.RequestOptions` 
+**requestOptions:** `ThreadsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -2169,7 +655,7 @@ await client.tags.listTagSubscribers({
 </dl>
 </details>
 
-<details><summary><code>client.tags.<a href="/src/api/resources/tags/client/Client.ts">subscribeToTag</a>({ ...params }) -> void</code></summary>
+<details><summary><code>client.threads.<a href="/src/api/resources/threads/client/Client.ts">deleteAThread</a>({ ...params }) -> Forum.DeleteThreadsIdResponse</code></summary>
 <dl>
 <dd>
 
@@ -2182,7 +668,7 @@ await client.tags.listTagSubscribers({
 <dd>
 
 ```typescript
-await client.tags.subscribeToTag({
+await client.threads.deleteAThread({
     id: "id"
 });
 
@@ -2200,7 +686,7 @@ await client.tags.subscribeToTag({
 <dl>
 <dd>
 
-**request:** `Forum.PostTagsIdSubscribersRequest` 
+**request:** `Forum.DeleteThreadsIdRequest` 
     
 </dd>
 </dl>
@@ -2208,7 +694,7 @@ await client.tags.subscribeToTag({
 <dl>
 <dd>
 
-**requestOptions:** `TagsClient.RequestOptions` 
+**requestOptions:** `ThreadsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -2220,7 +706,7 @@ await client.tags.subscribeToTag({
 </dl>
 </details>
 
-<details><summary><code>client.tags.<a href="/src/api/resources/tags/client/Client.ts">unsubscribe</a>({ ...params }) -> void</code></summary>
+<details><summary><code>client.threads.<a href="/src/api/resources/threads/client/Client.ts">updateAThread</a>({ ...params }) -> Forum.PatchThreadsIdResponse</code></summary>
 <dl>
 <dd>
 
@@ -2233,7 +719,7 @@ await client.tags.subscribeToTag({
 <dd>
 
 ```typescript
-await client.tags.unsubscribe({
+await client.threads.updateAThread({
     id: "id"
 });
 
@@ -2251,7 +737,7 @@ await client.tags.unsubscribe({
 <dl>
 <dd>
 
-**request:** `Forum.DeleteTagsIdSubscribersRequest` 
+**request:** `Forum.PatchThreadsIdRequest` 
     
 </dd>
 </dl>
@@ -2259,7 +745,7 @@ await client.tags.unsubscribe({
 <dl>
 <dd>
 
-**requestOptions:** `TagsClient.RequestOptions` 
+**requestOptions:** `ThreadsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -2271,8 +757,8 @@ await client.tags.unsubscribe({
 </dl>
 </details>
 
-## Roles
-<details><summary><code>client.roles.<a href="/src/api/resources/roles/client/Client.ts">listRoles</a>({ ...params }) -> void</code></summary>
+## Posts
+<details><summary><code>client.posts.<a href="/src/api/resources/posts/client/Client.ts">listAllPosts</a>({ ...params }) -> Forum.GetPostsResponse</code></summary>
 <dl>
 <dd>
 
@@ -2285,7 +771,7 @@ await client.tags.unsubscribe({
 <dd>
 
 ```typescript
-await client.roles.listRoles();
+await client.posts.listAllPosts();
 
 ```
 </dd>
@@ -2301,7 +787,7 @@ await client.roles.listRoles();
 <dl>
 <dd>
 
-**request:** `Forum.GetRolesRequest` 
+**request:** `Forum.GetPostsRequest` 
     
 </dd>
 </dl>
@@ -2309,7 +795,7 @@ await client.roles.listRoles();
 <dl>
 <dd>
 
-**requestOptions:** `RolesClient.RequestOptions` 
+**requestOptions:** `PostsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -2321,7 +807,7 @@ await client.roles.listRoles();
 </dl>
 </details>
 
-<details><summary><code>client.roles.<a href="/src/api/resources/roles/client/Client.ts">createRole</a>({ ...params }) -> void</code></summary>
+<details><summary><code>client.posts.<a href="/src/api/resources/posts/client/Client.ts">createAPost</a>({ ...params }) -> Forum.PostPostsResponse</code></summary>
 <dl>
 <dd>
 
@@ -2334,8 +820,9 @@ await client.roles.listRoles();
 <dd>
 
 ```typescript
-await client.roles.createRole({
-    "key": "value"
+await client.posts.createAPost({
+    threadId: "threadId",
+    body: "body"
 });
 
 ```
@@ -2352,7 +839,7 @@ await client.roles.createRole({
 <dl>
 <dd>
 
-**request:** `unknown` 
+**request:** `Forum.PostPostsRequest` 
     
 </dd>
 </dl>
@@ -2360,7 +847,7 @@ await client.roles.createRole({
 <dl>
 <dd>
 
-**requestOptions:** `RolesClient.RequestOptions` 
+**requestOptions:** `PostsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -2372,7 +859,7 @@ await client.roles.createRole({
 </dl>
 </details>
 
-<details><summary><code>client.roles.<a href="/src/api/resources/roles/client/Client.ts">getRole</a>({ ...params }) -> void</code></summary>
+<details><summary><code>client.posts.<a href="/src/api/resources/posts/client/Client.ts">getAPost</a>({ ...params }) -> Forum.GetPostsIdResponse</code></summary>
 <dl>
 <dd>
 
@@ -2385,7 +872,7 @@ await client.roles.createRole({
 <dd>
 
 ```typescript
-await client.roles.getRole({
+await client.posts.getAPost({
     id: "id"
 });
 
@@ -2403,7 +890,7 @@ await client.roles.getRole({
 <dl>
 <dd>
 
-**request:** `Forum.GetRolesIdRequest` 
+**request:** `Forum.GetPostsIdRequest` 
     
 </dd>
 </dl>
@@ -2411,7 +898,7 @@ await client.roles.getRole({
 <dl>
 <dd>
 
-**requestOptions:** `RolesClient.RequestOptions` 
+**requestOptions:** `PostsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -2423,7 +910,7 @@ await client.roles.getRole({
 </dl>
 </details>
 
-<details><summary><code>client.roles.<a href="/src/api/resources/roles/client/Client.ts">deleteRole</a>({ ...params }) -> void</code></summary>
+<details><summary><code>client.posts.<a href="/src/api/resources/posts/client/Client.ts">deleteAPost</a>({ ...params }) -> Forum.DeletePostsIdResponse</code></summary>
 <dl>
 <dd>
 
@@ -2436,7 +923,7 @@ await client.roles.getRole({
 <dd>
 
 ```typescript
-await client.roles.deleteRole({
+await client.posts.deleteAPost({
     id: "id"
 });
 
@@ -2454,7 +941,7 @@ await client.roles.deleteRole({
 <dl>
 <dd>
 
-**request:** `Forum.DeleteRolesIdRequest` 
+**request:** `Forum.DeletePostsIdRequest` 
     
 </dd>
 </dl>
@@ -2462,7 +949,7 @@ await client.roles.deleteRole({
 <dl>
 <dd>
 
-**requestOptions:** `RolesClient.RequestOptions` 
+**requestOptions:** `PostsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -2474,7 +961,7 @@ await client.roles.deleteRole({
 </dl>
 </details>
 
-<details><summary><code>client.roles.<a href="/src/api/resources/roles/client/Client.ts">updateRole</a>({ ...params }) -> void</code></summary>
+<details><summary><code>client.posts.<a href="/src/api/resources/posts/client/Client.ts">updateAPost</a>({ ...params }) -> Forum.PatchPostsIdResponse</code></summary>
 <dl>
 <dd>
 
@@ -2487,152 +974,7 @@ await client.roles.deleteRole({
 <dd>
 
 ```typescript
-await client.roles.updateRole({
-    id: "id",
-    body: {
-        "key": "value"
-    }
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.PatchRolesIdRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `RolesClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## Notifications
-<details><summary><code>client.notifications.<a href="/src/api/resources/notifications/client/Client.ts">listNotifications</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.notifications.listNotifications();
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.GetNotificationsRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `NotificationsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.notifications.<a href="/src/api/resources/notifications/client/Client.ts">markAllRead</a>() -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.notifications.markAllRead();
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**requestOptions:** `NotificationsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.notifications.<a href="/src/api/resources/notifications/client/Client.ts">getNotification</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.notifications.getNotification({
+await client.posts.updateAPost({
     id: "id"
 });
 
@@ -2650,7 +992,7 @@ await client.notifications.getNotification({
 <dl>
 <dd>
 
-**request:** `Forum.GetNotificationsIdRequest` 
+**request:** `Forum.PatchPostsIdRequest` 
     
 </dd>
 </dl>
@@ -2658,109 +1000,7 @@ await client.notifications.getNotification({
 <dl>
 <dd>
 
-**requestOptions:** `NotificationsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.notifications.<a href="/src/api/resources/notifications/client/Client.ts">deleteNotification</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.notifications.deleteNotification({
-    id: "id"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.DeleteNotificationsIdRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `NotificationsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.notifications.<a href="/src/api/resources/notifications/client/Client.ts">updateNotification</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.notifications.updateNotification({
-    id: "id"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.PatchNotificationsIdRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `NotificationsClient.RequestOptions` 
+**requestOptions:** `PostsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -2773,7 +1013,7 @@ await client.notifications.updateNotification({
 </details>
 
 ## PrivateMessages
-<details><summary><code>client.privateMessages.<a href="/src/api/resources/privateMessages/client/Client.ts">listPMs</a>({ ...params }) -> void</code></summary>
+<details><summary><code>client.privateMessages.<a href="/src/api/resources/privateMessages/client/Client.ts">listAllPrivateMessages</a>({ ...params }) -> Forum.GetPrivateMessagesResponse</code></summary>
 <dl>
 <dd>
 
@@ -2786,7 +1026,7 @@ await client.notifications.updateNotification({
 <dd>
 
 ```typescript
-await client.privateMessages.listPMs();
+await client.privateMessages.listAllPrivateMessages();
 
 ```
 </dd>
@@ -2822,7 +1062,7 @@ await client.privateMessages.listPMs();
 </dl>
 </details>
 
-<details><summary><code>client.privateMessages.<a href="/src/api/resources/privateMessages/client/Client.ts">sendPm</a>({ ...params }) -> void</code></summary>
+<details><summary><code>client.privateMessages.<a href="/src/api/resources/privateMessages/client/Client.ts">createAPrivateMessage</a>({ ...params }) -> Forum.PostPrivateMessagesResponse</code></summary>
 <dl>
 <dd>
 
@@ -2835,8 +1075,9 @@ await client.privateMessages.listPMs();
 <dd>
 
 ```typescript
-await client.privateMessages.sendPm({
-    "key": "value"
+await client.privateMessages.createAPrivateMessage({
+    recipientId: "recipientId",
+    body: "body"
 });
 
 ```
@@ -2853,7 +1094,7 @@ await client.privateMessages.sendPm({
 <dl>
 <dd>
 
-**request:** `unknown` 
+**request:** `Forum.PostPrivateMessagesRequest` 
     
 </dd>
 </dl>
@@ -2873,7 +1114,7 @@ await client.privateMessages.sendPm({
 </dl>
 </details>
 
-<details><summary><code>client.privateMessages.<a href="/src/api/resources/privateMessages/client/Client.ts">getPm</a>({ ...params }) -> void</code></summary>
+<details><summary><code>client.privateMessages.<a href="/src/api/resources/privateMessages/client/Client.ts">getAPrivateMessage</a>({ ...params }) -> Forum.GetPrivateMessagesIdResponse</code></summary>
 <dl>
 <dd>
 
@@ -2886,7 +1127,7 @@ await client.privateMessages.sendPm({
 <dd>
 
 ```typescript
-await client.privateMessages.getPm({
+await client.privateMessages.getAPrivateMessage({
     id: "id"
 });
 
@@ -2924,7 +1165,7 @@ await client.privateMessages.getPm({
 </dl>
 </details>
 
-<details><summary><code>client.privateMessages.<a href="/src/api/resources/privateMessages/client/Client.ts">deletePm</a>({ ...params }) -> void</code></summary>
+<details><summary><code>client.privateMessages.<a href="/src/api/resources/privateMessages/client/Client.ts">deleteAPrivateMessage</a>({ ...params }) -> Forum.DeletePrivateMessagesIdResponse</code></summary>
 <dl>
 <dd>
 
@@ -2937,7 +1178,7 @@ await client.privateMessages.getPm({
 <dd>
 
 ```typescript
-await client.privateMessages.deletePm({
+await client.privateMessages.deleteAPrivateMessage({
     id: "id"
 });
 
@@ -2975,7 +1216,8 @@ await client.privateMessages.deletePm({
 </dl>
 </details>
 
-<details><summary><code>client.privateMessages.<a href="/src/api/resources/privateMessages/client/Client.ts">replyToPm</a>({ ...params }) -> void</code></summary>
+## Users
+<details><summary><code>client.users.<a href="/src/api/resources/users/client/Client.ts">listAllUsers</a>({ ...params }) -> Forum.GetUsersResponse</code></summary>
 <dl>
 <dd>
 
@@ -2988,7 +1230,56 @@ await client.privateMessages.deletePm({
 <dd>
 
 ```typescript
-await client.privateMessages.replyToPm({
+await client.users.listAllUsers();
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Forum.GetUsersRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `UsersClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.users.<a href="/src/api/resources/users/client/Client.ts">getAUser</a>({ ...params }) -> Forum.GetUsersIdResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.users.getAUser({
     id: "id"
 });
 
@@ -3006,7 +1297,7 @@ await client.privateMessages.replyToPm({
 <dl>
 <dd>
 
-**request:** `Forum.PostPrivateMessagesIdRepliesRequest` 
+**request:** `Forum.GetUsersIdRequest` 
     
 </dd>
 </dl>
@@ -3014,7 +1305,7 @@ await client.privateMessages.replyToPm({
 <dl>
 <dd>
 
-**requestOptions:** `PrivateMessagesClient.RequestOptions` 
+**requestOptions:** `UsersClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -3026,8 +1317,7 @@ await client.privateMessages.replyToPm({
 </dl>
 </details>
 
-## Reports
-<details><summary><code>client.reports.<a href="/src/api/resources/reports/client/Client.ts">listReports</a>({ ...params }) -> void</code></summary>
+<details><summary><code>client.users.<a href="/src/api/resources/users/client/Client.ts">deleteAUser</a>({ ...params }) -> Forum.DeleteUsersIdResponse</code></summary>
 <dl>
 <dd>
 
@@ -3040,7 +1330,364 @@ await client.privateMessages.replyToPm({
 <dd>
 
 ```typescript
-await client.reports.listReports();
+await client.users.deleteAUser({
+    id: "id"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Forum.DeleteUsersIdRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `UsersClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.users.<a href="/src/api/resources/users/client/Client.ts">updateAUser</a>({ ...params }) -> Forum.PatchUsersIdResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.users.updateAUser({
+    id: "id"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Forum.PatchUsersIdRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `UsersClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Roles
+<details><summary><code>client.roles.<a href="/src/api/resources/roles/client/Client.ts">listAllRoles</a>({ ...params }) -> Forum.GetRolesResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.roles.listAllRoles();
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Forum.GetRolesRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `RolesClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.roles.<a href="/src/api/resources/roles/client/Client.ts">createARole</a>({ ...params }) -> Forum.PostRolesResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.roles.createARole({
+    name: "name"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Forum.PostRolesRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `RolesClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.roles.<a href="/src/api/resources/roles/client/Client.ts">getARole</a>({ ...params }) -> Forum.GetRolesIdResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.roles.getARole({
+    id: "id"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Forum.GetRolesIdRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `RolesClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.roles.<a href="/src/api/resources/roles/client/Client.ts">deleteARole</a>({ ...params }) -> Forum.DeleteRolesIdResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.roles.deleteARole({
+    id: "id"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Forum.DeleteRolesIdRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `RolesClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.roles.<a href="/src/api/resources/roles/client/Client.ts">updateARole</a>({ ...params }) -> Forum.PatchRolesIdResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.roles.updateARole({
+    id: "id"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Forum.PatchRolesIdRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `RolesClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Reports
+<details><summary><code>client.reports.<a href="/src/api/resources/reports/client/Client.ts">listAllReports</a>({ ...params }) -> Forum.GetReportsResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.reports.listAllReports();
 
 ```
 </dd>
@@ -3076,7 +1723,7 @@ await client.reports.listReports();
 </dl>
 </details>
 
-<details><summary><code>client.reports.<a href="/src/api/resources/reports/client/Client.ts">createReport</a>({ ...params }) -> void</code></summary>
+<details><summary><code>client.reports.<a href="/src/api/resources/reports/client/Client.ts">createAReport</a>({ ...params }) -> Forum.PostReportsResponse</code></summary>
 <dl>
 <dd>
 
@@ -3089,8 +1736,8 @@ await client.reports.listReports();
 <dd>
 
 ```typescript
-await client.reports.createReport({
-    "key": "value"
+await client.reports.createAReport({
+    type: "type"
 });
 
 ```
@@ -3107,7 +1754,7 @@ await client.reports.createReport({
 <dl>
 <dd>
 
-**request:** `unknown` 
+**request:** `Forum.PostReportsRequest` 
     
 </dd>
 </dl>
@@ -3127,7 +1774,7 @@ await client.reports.createReport({
 </dl>
 </details>
 
-<details><summary><code>client.reports.<a href="/src/api/resources/reports/client/Client.ts">getReport</a>({ ...params }) -> void</code></summary>
+<details><summary><code>client.reports.<a href="/src/api/resources/reports/client/Client.ts">getAReport</a>({ ...params }) -> Forum.GetReportsIdResponse</code></summary>
 <dl>
 <dd>
 
@@ -3140,7 +1787,7 @@ await client.reports.createReport({
 <dd>
 
 ```typescript
-await client.reports.getReport({
+await client.reports.getAReport({
     id: "id"
 });
 
@@ -3178,7 +1825,7 @@ await client.reports.getReport({
 </dl>
 </details>
 
-<details><summary><code>client.reports.<a href="/src/api/resources/reports/client/Client.ts">deleteReport</a>({ ...params }) -> void</code></summary>
+<details><summary><code>client.reports.<a href="/src/api/resources/reports/client/Client.ts">deleteAReport</a>({ ...params }) -> Forum.DeleteReportsIdResponse</code></summary>
 <dl>
 <dd>
 
@@ -3191,7 +1838,7 @@ await client.reports.getReport({
 <dd>
 
 ```typescript
-await client.reports.deleteReport({
+await client.reports.deleteAReport({
     id: "id"
 });
 
@@ -3229,7 +1876,8 @@ await client.reports.deleteReport({
 </dl>
 </details>
 
-<details><summary><code>client.reports.<a href="/src/api/resources/reports/client/Client.ts">updateReport</a>({ ...params }) -> void</code></summary>
+## Notifications
+<details><summary><code>client.notifications.<a href="/src/api/resources/notifications/client/Client.ts">listAllNotifications</a>({ ...params }) -> Forum.GetNotificationsResponse</code></summary>
 <dl>
 <dd>
 
@@ -3242,7 +1890,108 @@ await client.reports.deleteReport({
 <dd>
 
 ```typescript
-await client.reports.updateReport({
+await client.notifications.listAllNotifications();
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Forum.GetNotificationsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `NotificationsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.notifications.<a href="/src/api/resources/notifications/client/Client.ts">createANotification</a>({ ...params }) -> Forum.PostNotificationsResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.notifications.createANotification({
+    userId: "userId",
+    type: "type"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Forum.PostNotificationsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `NotificationsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.notifications.<a href="/src/api/resources/notifications/client/Client.ts">getANotification</a>({ ...params }) -> Forum.GetNotificationsIdResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.notifications.getANotification({
     id: "id"
 });
 
@@ -3260,7 +2009,7 @@ await client.reports.updateReport({
 <dl>
 <dd>
 
-**request:** `Forum.PatchReportsIdRequest` 
+**request:** `Forum.GetNotificationsIdRequest` 
     
 </dd>
 </dl>
@@ -3268,7 +2017,7 @@ await client.reports.updateReport({
 <dl>
 <dd>
 
-**requestOptions:** `ReportsClient.RequestOptions` 
+**requestOptions:** `NotificationsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -3280,8 +2029,7 @@ await client.reports.updateReport({
 </dl>
 </details>
 
-## Search
-<details><summary><code>client.search.<a href="/src/api/resources/search/client/Client.ts">search</a>({ ...params }) -> void</code></summary>
+<details><summary><code>client.notifications.<a href="/src/api/resources/notifications/client/Client.ts">deleteANotification</a>({ ...params }) -> Forum.DeleteNotificationsIdResponse</code></summary>
 <dl>
 <dd>
 
@@ -3294,7 +2042,9 @@ await client.reports.updateReport({
 <dd>
 
 ```typescript
-await client.search.search();
+await client.notifications.deleteANotification({
+    id: "id"
+});
 
 ```
 </dd>
@@ -3310,7 +2060,7 @@ await client.search.search();
 <dl>
 <dd>
 
-**request:** `Forum.GetSearchRequest` 
+**request:** `Forum.DeleteNotificationsIdRequest` 
     
 </dd>
 </dl>
@@ -3318,7 +2068,7 @@ await client.search.search();
 <dl>
 <dd>
 
-**requestOptions:** `SearchClient.RequestOptions` 
+**requestOptions:** `NotificationsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -3330,8 +2080,7 @@ await client.search.search();
 </dl>
 </details>
 
-## Stats
-<details><summary><code>client.stats.<a href="/src/api/resources/stats/client/Client.ts">instanceStats</a>() -> void</code></summary>
+<details><summary><code>client.notifications.<a href="/src/api/resources/notifications/client/Client.ts">updateANotification</a>({ ...params }) -> Forum.PatchNotificationsIdResponse</code></summary>
 <dl>
 <dd>
 
@@ -3344,7 +2093,9 @@ await client.search.search();
 <dd>
 
 ```typescript
-await client.stats.instanceStats();
+await client.notifications.updateANotification({
+    id: "id"
+});
 
 ```
 </dd>
@@ -3360,7 +2111,15 @@ await client.stats.instanceStats();
 <dl>
 <dd>
 
-**requestOptions:** `StatsClient.RequestOptions` 
+**request:** `Forum.PatchNotificationsIdRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `NotificationsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -3373,7 +2132,7 @@ await client.stats.instanceStats();
 </details>
 
 ## Webhooks
-<details><summary><code>client.webhooks.<a href="/src/api/resources/webhooks/client/Client.ts">listWebhooks</a>({ ...params }) -> void</code></summary>
+<details><summary><code>client.webhooks.<a href="/src/api/resources/webhooks/client/Client.ts">listAllWebhooks</a>({ ...params }) -> Forum.GetWebhooksResponse</code></summary>
 <dl>
 <dd>
 
@@ -3386,7 +2145,7 @@ await client.stats.instanceStats();
 <dd>
 
 ```typescript
-await client.webhooks.listWebhooks();
+await client.webhooks.listAllWebhooks();
 
 ```
 </dd>
@@ -3422,7 +2181,7 @@ await client.webhooks.listWebhooks();
 </dl>
 </details>
 
-<details><summary><code>client.webhooks.<a href="/src/api/resources/webhooks/client/Client.ts">createWebhook</a>({ ...params }) -> void</code></summary>
+<details><summary><code>client.webhooks.<a href="/src/api/resources/webhooks/client/Client.ts">createAWebhook</a>({ ...params }) -> Forum.PostWebhooksResponse</code></summary>
 <dl>
 <dd>
 
@@ -3435,8 +2194,10 @@ await client.webhooks.listWebhooks();
 <dd>
 
 ```typescript
-await client.webhooks.createWebhook({
-    "key": "value"
+await client.webhooks.createAWebhook({
+    name: "name",
+    url: "url",
+    events: ["events"]
 });
 
 ```
@@ -3453,7 +2214,7 @@ await client.webhooks.createWebhook({
 <dl>
 <dd>
 
-**request:** `unknown` 
+**request:** `Forum.PostWebhooksRequest` 
     
 </dd>
 </dl>
@@ -3473,7 +2234,7 @@ await client.webhooks.createWebhook({
 </dl>
 </details>
 
-<details><summary><code>client.webhooks.<a href="/src/api/resources/webhooks/client/Client.ts">getWebhook</a>({ ...params }) -> void</code></summary>
+<details><summary><code>client.webhooks.<a href="/src/api/resources/webhooks/client/Client.ts">getAWebhook</a>({ ...params }) -> Forum.GetWebhooksIdResponse</code></summary>
 <dl>
 <dd>
 
@@ -3486,7 +2247,7 @@ await client.webhooks.createWebhook({
 <dd>
 
 ```typescript
-await client.webhooks.getWebhook({
+await client.webhooks.getAWebhook({
     id: "id"
 });
 
@@ -3524,7 +2285,7 @@ await client.webhooks.getWebhook({
 </dl>
 </details>
 
-<details><summary><code>client.webhooks.<a href="/src/api/resources/webhooks/client/Client.ts">deleteWebhook</a>({ ...params }) -> void</code></summary>
+<details><summary><code>client.webhooks.<a href="/src/api/resources/webhooks/client/Client.ts">deleteAWebhook</a>({ ...params }) -> Forum.DeleteWebhooksIdResponse</code></summary>
 <dl>
 <dd>
 
@@ -3537,7 +2298,7 @@ await client.webhooks.getWebhook({
 <dd>
 
 ```typescript
-await client.webhooks.deleteWebhook({
+await client.webhooks.deleteAWebhook({
     id: "id"
 });
 
@@ -3575,110 +2336,8 @@ await client.webhooks.deleteWebhook({
 </dl>
 </details>
 
-<details><summary><code>client.webhooks.<a href="/src/api/resources/webhooks/client/Client.ts">updateWebhook</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.webhooks.updateWebhook({
-    id: "id"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.PatchWebhooksIdRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `WebhooksClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.webhooks.<a href="/src/api/resources/webhooks/client/Client.ts">listDeliveries</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.webhooks.listDeliveries({
-    id: "id"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.GetWebhooksIdDeliveriesRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `WebhooksClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
 ## Integrations
-<details><summary><code>client.integrations.<a href="/src/api/resources/integrations/client/Client.ts">listIntegrations</a>({ ...params }) -> void</code></summary>
+<details><summary><code>client.integrations.<a href="/src/api/resources/integrations/client/Client.ts">listAllIntegrations</a>({ ...params }) -> Forum.GetIntegrationsResponse</code></summary>
 <dl>
 <dd>
 
@@ -3691,7 +2350,7 @@ await client.webhooks.listDeliveries({
 <dd>
 
 ```typescript
-await client.integrations.listIntegrations();
+await client.integrations.listAllIntegrations();
 
 ```
 </dd>
@@ -3727,7 +2386,7 @@ await client.integrations.listIntegrations();
 </dl>
 </details>
 
-<details><summary><code>client.integrations.<a href="/src/api/resources/integrations/client/Client.ts">createIntegration</a>({ ...params }) -> void</code></summary>
+<details><summary><code>client.integrations.<a href="/src/api/resources/integrations/client/Client.ts">createAnIntegration</a>({ ...params }) -> Forum.PostIntegrationsResponse</code></summary>
 <dl>
 <dd>
 
@@ -3740,8 +2399,11 @@ await client.integrations.listIntegrations();
 <dd>
 
 ```typescript
-await client.integrations.createIntegration({
-    "key": "value"
+await client.integrations.createAnIntegration({
+    type: "type",
+    config: {
+        "key": "value"
+    }
 });
 
 ```
@@ -3758,7 +2420,7 @@ await client.integrations.createIntegration({
 <dl>
 <dd>
 
-**request:** `unknown` 
+**request:** `Forum.PostIntegrationsRequest` 
     
 </dd>
 </dl>
@@ -3778,7 +2440,7 @@ await client.integrations.createIntegration({
 </dl>
 </details>
 
-<details><summary><code>client.integrations.<a href="/src/api/resources/integrations/client/Client.ts">getIntegration</a>({ ...params }) -> void</code></summary>
+<details><summary><code>client.integrations.<a href="/src/api/resources/integrations/client/Client.ts">getAnIntegration</a>({ ...params }) -> Forum.GetIntegrationsIdResponse</code></summary>
 <dl>
 <dd>
 
@@ -3791,7 +2453,7 @@ await client.integrations.createIntegration({
 <dd>
 
 ```typescript
-await client.integrations.getIntegration({
+await client.integrations.getAnIntegration({
     id: "id"
 });
 
@@ -3829,7 +2491,7 @@ await client.integrations.getIntegration({
 </dl>
 </details>
 
-<details><summary><code>client.integrations.<a href="/src/api/resources/integrations/client/Client.ts">deleteIntegration</a>({ ...params }) -> void</code></summary>
+<details><summary><code>client.integrations.<a href="/src/api/resources/integrations/client/Client.ts">deleteAnIntegration</a>({ ...params }) -> Forum.DeleteIntegrationsIdResponse</code></summary>
 <dl>
 <dd>
 
@@ -3842,7 +2504,7 @@ await client.integrations.getIntegration({
 <dd>
 
 ```typescript
-await client.integrations.deleteIntegration({
+await client.integrations.deleteAnIntegration({
     id: "id"
 });
 
@@ -3880,7 +2542,7 @@ await client.integrations.deleteIntegration({
 </dl>
 </details>
 
-<details><summary><code>client.integrations.<a href="/src/api/resources/integrations/client/Client.ts">updateIntegration</a>({ ...params }) -> void</code></summary>
+<details><summary><code>client.integrations.<a href="/src/api/resources/integrations/client/Client.ts">updateAnIntegration</a>({ ...params }) -> Forum.PatchIntegrationsIdResponse</code></summary>
 <dl>
 <dd>
 
@@ -3893,11 +2555,8 @@ await client.integrations.deleteIntegration({
 <dd>
 
 ```typescript
-await client.integrations.updateIntegration({
-    id: "id",
-    body: {
-        "key": "value"
-    }
+await client.integrations.updateAnIntegration({
+    id: "id"
 });
 
 ```
@@ -3934,7 +2593,8 @@ await client.integrations.updateIntegration({
 </dl>
 </details>
 
-<details><summary><code>client.integrations.<a href="/src/api/resources/integrations/client/Client.ts">oAuthAuthorize</a>({ ...params }) -> void</code></summary>
+## SsOs
+<details><summary><code>client.ssOs.<a href="/src/api/resources/ssOs/client/Client.ts">listAllSsOs</a>({ ...params }) -> Forum.GetSsoResponse</code></summary>
 <dl>
 <dd>
 
@@ -3947,110 +2607,7 @@ await client.integrations.updateIntegration({
 <dd>
 
 ```typescript
-await client.integrations.oAuthAuthorize({
-    provider: "provider"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.GetIntegrationsOauthProviderAuthorizeRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `IntegrationsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.integrations.<a href="/src/api/resources/integrations/client/Client.ts">oAuthCallback</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.integrations.oAuthCallback({
-    provider: "provider"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Forum.GetIntegrationsOauthProviderCallbackRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `IntegrationsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## Sso
-<details><summary><code>client.sso.<a href="/src/api/resources/sso/client/Client.ts">listSsoProviders</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.sso.listSsoProviders();
+await client.ssOs.listAllSsOs();
 
 ```
 </dd>
@@ -4074,7 +2631,7 @@ await client.sso.listSsoProviders();
 <dl>
 <dd>
 
-**requestOptions:** `SsoClient.RequestOptions` 
+**requestOptions:** `SsOsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -4086,7 +2643,7 @@ await client.sso.listSsoProviders();
 </dl>
 </details>
 
-<details><summary><code>client.sso.<a href="/src/api/resources/sso/client/Client.ts">createSsoProvider</a>({ ...params }) -> void</code></summary>
+<details><summary><code>client.ssOs.<a href="/src/api/resources/ssOs/client/Client.ts">createAnSso</a>({ ...params }) -> Forum.PostSsoResponse</code></summary>
 <dl>
 <dd>
 
@@ -4099,8 +2656,14 @@ await client.sso.listSsoProviders();
 <dd>
 
 ```typescript
-await client.sso.createSsoProvider({
-    "key": "value"
+await client.ssOs.createAnSso({
+    name: "name",
+    clientId: "clientId",
+    clientSecret: "clientSecret",
+    issuer: "issuer",
+    authorizationEndpoint: "authorizationEndpoint",
+    tokenEndpoint: "tokenEndpoint",
+    userInfoEndpoint: "userInfoEndpoint"
 });
 
 ```
@@ -4117,7 +2680,7 @@ await client.sso.createSsoProvider({
 <dl>
 <dd>
 
-**request:** `unknown` 
+**request:** `Forum.PostSsoRequest` 
     
 </dd>
 </dl>
@@ -4125,7 +2688,7 @@ await client.sso.createSsoProvider({
 <dl>
 <dd>
 
-**requestOptions:** `SsoClient.RequestOptions` 
+**requestOptions:** `SsOsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -4137,7 +2700,7 @@ await client.sso.createSsoProvider({
 </dl>
 </details>
 
-<details><summary><code>client.sso.<a href="/src/api/resources/sso/client/Client.ts">getSsoProvider</a>({ ...params }) -> void</code></summary>
+<details><summary><code>client.ssOs.<a href="/src/api/resources/ssOs/client/Client.ts">getAnSso</a>({ ...params }) -> Forum.GetSsoIdResponse</code></summary>
 <dl>
 <dd>
 
@@ -4150,7 +2713,7 @@ await client.sso.createSsoProvider({
 <dd>
 
 ```typescript
-await client.sso.getSsoProvider({
+await client.ssOs.getAnSso({
     id: "id"
 });
 
@@ -4176,7 +2739,7 @@ await client.sso.getSsoProvider({
 <dl>
 <dd>
 
-**requestOptions:** `SsoClient.RequestOptions` 
+**requestOptions:** `SsOsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -4188,7 +2751,7 @@ await client.sso.getSsoProvider({
 </dl>
 </details>
 
-<details><summary><code>client.sso.<a href="/src/api/resources/sso/client/Client.ts">deleteSsoProvider</a>({ ...params }) -> void</code></summary>
+<details><summary><code>client.ssOs.<a href="/src/api/resources/ssOs/client/Client.ts">deleteAnSso</a>({ ...params }) -> Forum.DeleteSsoIdResponse</code></summary>
 <dl>
 <dd>
 
@@ -4201,7 +2764,7 @@ await client.sso.getSsoProvider({
 <dd>
 
 ```typescript
-await client.sso.deleteSsoProvider({
+await client.ssOs.deleteAnSso({
     id: "id"
 });
 
@@ -4227,7 +2790,7 @@ await client.sso.deleteSsoProvider({
 <dl>
 <dd>
 
-**requestOptions:** `SsoClient.RequestOptions` 
+**requestOptions:** `SsOsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -4239,7 +2802,7 @@ await client.sso.deleteSsoProvider({
 </dl>
 </details>
 
-<details><summary><code>client.sso.<a href="/src/api/resources/sso/client/Client.ts">updateSsoProvider</a>({ ...params }) -> void</code></summary>
+<details><summary><code>client.ssOs.<a href="/src/api/resources/ssOs/client/Client.ts">updateAnSso</a>({ ...params }) -> Forum.PatchSsoIdResponse</code></summary>
 <dl>
 <dd>
 
@@ -4252,11 +2815,8 @@ await client.sso.deleteSsoProvider({
 <dd>
 
 ```typescript
-await client.sso.updateSsoProvider({
-    id: "id",
-    body: {
-        "key": "value"
-    }
+await client.ssOs.updateAnSso({
+    id: "id"
 });
 
 ```
@@ -4281,7 +2841,7 @@ await client.sso.updateSsoProvider({
 <dl>
 <dd>
 
-**requestOptions:** `SsoClient.RequestOptions` 
+**requestOptions:** `SsOsClient.RequestOptions` 
     
 </dd>
 </dl>
