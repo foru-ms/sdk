@@ -21,5 +21,11 @@ export namespace GetReportsIdResponse {
         /** ID of private message being reported */
         privateMessageId?: string;
         id: string;
+        /** Report status (pending, reviewed, resolved, dismissed) */
+        status: string | null;
+        /** Report creation timestamp */
+        createdAt: string;
+        /** Report last update timestamp */
+        updatedAt: string;
     }
 }

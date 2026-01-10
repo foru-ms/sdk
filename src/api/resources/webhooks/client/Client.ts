@@ -389,4 +389,283 @@ export class WebhooksClient {
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "DELETE", "/webhooks/{id}");
     }
+
+    /**
+     * @param {Forum.GetWebhooksIdDeliveriesRequest} request
+     * @param {WebhooksClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.NotFoundError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
+     * @example
+     *     await client.webhooks.listWebhookDeliveries({
+     *         id: "id"
+     *     })
+     */
+    public listWebhookDeliveries(
+        request: Forum.GetWebhooksIdDeliveriesRequest,
+        requestOptions?: WebhooksClient.RequestOptions,
+    ): core.HttpResponsePromise<Forum.GetWebhooksIdDeliveriesResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__listWebhookDeliveries(request, requestOptions));
+    }
+
+    private async __listWebhookDeliveries(
+        request: Forum.GetWebhooksIdDeliveriesRequest,
+        requestOptions?: WebhooksClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Forum.GetWebhooksIdDeliveriesResponse>> {
+        const { id, cursor, limit } = request;
+        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
+        if (cursor != null) {
+            _queryParams.cursor = cursor;
+        }
+
+        if (limit != null) {
+            _queryParams.limit = limit.toString();
+        }
+
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ForumEnvironment.Production,
+                `webhooks/${core.url.encodePathParam(id)}/deliveries`,
+            ),
+            method: "GET",
+            headers: _headers,
+            queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Forum.GetWebhooksIdDeliveriesResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Forum.NotFoundError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/webhooks/{id}/deliveries");
+    }
+
+    /**
+     * @param {Forum.GetWebhooksIdDeliveriesSubIdRequest} request
+     * @param {WebhooksClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.NotFoundError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
+     * @example
+     *     await client.webhooks.getADeliverieFromWebhook({
+     *         id: "id",
+     *         subId: "subId"
+     *     })
+     */
+    public getADeliverieFromWebhook(
+        request: Forum.GetWebhooksIdDeliveriesSubIdRequest,
+        requestOptions?: WebhooksClient.RequestOptions,
+    ): core.HttpResponsePromise<Forum.GetWebhooksIdDeliveriesSubIdResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__getADeliverieFromWebhook(request, requestOptions));
+    }
+
+    private async __getADeliverieFromWebhook(
+        request: Forum.GetWebhooksIdDeliveriesSubIdRequest,
+        requestOptions?: WebhooksClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Forum.GetWebhooksIdDeliveriesSubIdResponse>> {
+        const { id, subId } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ForumEnvironment.Production,
+                `webhooks/${core.url.encodePathParam(id)}/deliveries/${core.url.encodePathParam(subId)}`,
+            ),
+            method: "GET",
+            headers: _headers,
+            queryParameters: requestOptions?.queryParams,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Forum.GetWebhooksIdDeliveriesSubIdResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Forum.NotFoundError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "GET",
+            "/webhooks/{id}/deliveries/{subId}",
+        );
+    }
+
+    /**
+     * @param {Forum.DeleteWebhooksIdDeliveriesSubIdRequest} request
+     * @param {WebhooksClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.NotFoundError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
+     * @example
+     *     await client.webhooks.deleteADeliverieFromWebhook({
+     *         id: "id",
+     *         subId: "subId"
+     *     })
+     */
+    public deleteADeliverieFromWebhook(
+        request: Forum.DeleteWebhooksIdDeliveriesSubIdRequest,
+        requestOptions?: WebhooksClient.RequestOptions,
+    ): core.HttpResponsePromise<Forum.DeleteWebhooksIdDeliveriesSubIdResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__deleteADeliverieFromWebhook(request, requestOptions));
+    }
+
+    private async __deleteADeliverieFromWebhook(
+        request: Forum.DeleteWebhooksIdDeliveriesSubIdRequest,
+        requestOptions?: WebhooksClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Forum.DeleteWebhooksIdDeliveriesSubIdResponse>> {
+        const { id, subId } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ForumEnvironment.Production,
+                `webhooks/${core.url.encodePathParam(id)}/deliveries/${core.url.encodePathParam(subId)}`,
+            ),
+            method: "DELETE",
+            headers: _headers,
+            queryParameters: requestOptions?.queryParams,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Forum.DeleteWebhooksIdDeliveriesSubIdResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Forum.NotFoundError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "DELETE",
+            "/webhooks/{id}/deliveries/{subId}",
+        );
+    }
 }

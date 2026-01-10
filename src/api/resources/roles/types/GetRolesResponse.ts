@@ -21,6 +21,10 @@ export namespace GetRolesResponse {
             /** Extended data */
             extendedData?: Record<string, unknown>;
             id: string;
+            /** Role creation timestamp */
+            createdAt: string;
+            /** Role last update timestamp */
+            updatedAt: string;
         }
     }
 

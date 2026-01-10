@@ -483,4 +483,1270 @@ export class ThreadsClient {
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "PATCH", "/threads/{id}");
     }
+
+    /**
+     * @param {Forum.GetThreadsIdPostsRequest} request
+     * @param {ThreadsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.NotFoundError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
+     * @example
+     *     await client.threads.listThreadPosts({
+     *         id: "id"
+     *     })
+     */
+    public listThreadPosts(
+        request: Forum.GetThreadsIdPostsRequest,
+        requestOptions?: ThreadsClient.RequestOptions,
+    ): core.HttpResponsePromise<Forum.GetThreadsIdPostsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__listThreadPosts(request, requestOptions));
+    }
+
+    private async __listThreadPosts(
+        request: Forum.GetThreadsIdPostsRequest,
+        requestOptions?: ThreadsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Forum.GetThreadsIdPostsResponse>> {
+        const { id, cursor, limit } = request;
+        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
+        if (cursor != null) {
+            _queryParams.cursor = cursor;
+        }
+
+        if (limit != null) {
+            _queryParams.limit = limit.toString();
+        }
+
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ForumEnvironment.Production,
+                `threads/${core.url.encodePathParam(id)}/posts`,
+            ),
+            method: "GET",
+            headers: _headers,
+            queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: _response.body as Forum.GetThreadsIdPostsResponse, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Forum.NotFoundError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/threads/{id}/posts");
+    }
+
+    /**
+     * @param {Forum.GetThreadsIdPostsSubIdRequest} request
+     * @param {ThreadsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.NotFoundError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
+     * @example
+     *     await client.threads.getAPostFromThread({
+     *         id: "id",
+     *         subId: "subId"
+     *     })
+     */
+    public getAPostFromThread(
+        request: Forum.GetThreadsIdPostsSubIdRequest,
+        requestOptions?: ThreadsClient.RequestOptions,
+    ): core.HttpResponsePromise<Forum.GetThreadsIdPostsSubIdResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__getAPostFromThread(request, requestOptions));
+    }
+
+    private async __getAPostFromThread(
+        request: Forum.GetThreadsIdPostsSubIdRequest,
+        requestOptions?: ThreadsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Forum.GetThreadsIdPostsSubIdResponse>> {
+        const { id, subId } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ForumEnvironment.Production,
+                `threads/${core.url.encodePathParam(id)}/posts/${core.url.encodePathParam(subId)}`,
+            ),
+            method: "GET",
+            headers: _headers,
+            queryParameters: requestOptions?.queryParams,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: _response.body as Forum.GetThreadsIdPostsSubIdResponse, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Forum.NotFoundError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/threads/{id}/posts/{subId}");
+    }
+
+    /**
+     * @param {Forum.DeleteThreadsIdPostsSubIdRequest} request
+     * @param {ThreadsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.NotFoundError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
+     * @example
+     *     await client.threads.deleteAPostFromThread({
+     *         id: "id",
+     *         subId: "subId"
+     *     })
+     */
+    public deleteAPostFromThread(
+        request: Forum.DeleteThreadsIdPostsSubIdRequest,
+        requestOptions?: ThreadsClient.RequestOptions,
+    ): core.HttpResponsePromise<Forum.DeleteThreadsIdPostsSubIdResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__deleteAPostFromThread(request, requestOptions));
+    }
+
+    private async __deleteAPostFromThread(
+        request: Forum.DeleteThreadsIdPostsSubIdRequest,
+        requestOptions?: ThreadsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Forum.DeleteThreadsIdPostsSubIdResponse>> {
+        const { id, subId } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ForumEnvironment.Production,
+                `threads/${core.url.encodePathParam(id)}/posts/${core.url.encodePathParam(subId)}`,
+            ),
+            method: "DELETE",
+            headers: _headers,
+            queryParameters: requestOptions?.queryParams,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Forum.DeleteThreadsIdPostsSubIdResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Forum.NotFoundError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "DELETE",
+            "/threads/{id}/posts/{subId}",
+        );
+    }
+
+    /**
+     * @param {Forum.GetThreadsIdReactionsRequest} request
+     * @param {ThreadsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.NotFoundError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
+     * @example
+     *     await client.threads.listThreadReactions({
+     *         id: "id"
+     *     })
+     */
+    public listThreadReactions(
+        request: Forum.GetThreadsIdReactionsRequest,
+        requestOptions?: ThreadsClient.RequestOptions,
+    ): core.HttpResponsePromise<Forum.GetThreadsIdReactionsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__listThreadReactions(request, requestOptions));
+    }
+
+    private async __listThreadReactions(
+        request: Forum.GetThreadsIdReactionsRequest,
+        requestOptions?: ThreadsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Forum.GetThreadsIdReactionsResponse>> {
+        const { id, cursor, limit } = request;
+        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
+        if (cursor != null) {
+            _queryParams.cursor = cursor;
+        }
+
+        if (limit != null) {
+            _queryParams.limit = limit.toString();
+        }
+
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ForumEnvironment.Production,
+                `threads/${core.url.encodePathParam(id)}/reactions`,
+            ),
+            method: "GET",
+            headers: _headers,
+            queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: _response.body as Forum.GetThreadsIdReactionsResponse, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Forum.NotFoundError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/threads/{id}/reactions");
+    }
+
+    /**
+     * @param {Forum.PostThreadsIdReactionsRequest} request
+     * @param {ThreadsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Forum.BadRequestError}
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.NotFoundError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
+     * @example
+     *     await client.threads.createAReactionInThread({
+     *         id: "id",
+     *         type: "LIKE"
+     *     })
+     */
+    public createAReactionInThread(
+        request: Forum.PostThreadsIdReactionsRequest,
+        requestOptions?: ThreadsClient.RequestOptions,
+    ): core.HttpResponsePromise<Forum.PostThreadsIdReactionsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__createAReactionInThread(request, requestOptions));
+    }
+
+    private async __createAReactionInThread(
+        request: Forum.PostThreadsIdReactionsRequest,
+        requestOptions?: ThreadsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Forum.PostThreadsIdReactionsResponse>> {
+        const { id, ..._body } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ForumEnvironment.Production,
+                `threads/${core.url.encodePathParam(id)}/reactions`,
+            ),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
+            requestType: "json",
+            body: _body,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: _response.body as Forum.PostThreadsIdReactionsResponse, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Forum.BadRequestError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Forum.NotFoundError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/threads/{id}/reactions");
+    }
+
+    /**
+     * Removes the authenticated user's reaction. No subId needed.
+     *
+     * @param {Forum.DeleteThreadsIdReactionsRequest} request
+     * @param {ThreadsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.NotFoundError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
+     * @example
+     *     await client.threads.removeYourReactionFromThread({
+     *         id: "id"
+     *     })
+     */
+    public removeYourReactionFromThread(
+        request: Forum.DeleteThreadsIdReactionsRequest,
+        requestOptions?: ThreadsClient.RequestOptions,
+    ): core.HttpResponsePromise<Forum.DeleteThreadsIdReactionsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__removeYourReactionFromThread(request, requestOptions));
+    }
+
+    private async __removeYourReactionFromThread(
+        request: Forum.DeleteThreadsIdReactionsRequest,
+        requestOptions?: ThreadsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Forum.DeleteThreadsIdReactionsResponse>> {
+        const { id } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ForumEnvironment.Production,
+                `threads/${core.url.encodePathParam(id)}/reactions`,
+            ),
+            method: "DELETE",
+            headers: _headers,
+            queryParameters: requestOptions?.queryParams,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Forum.DeleteThreadsIdReactionsResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Forum.NotFoundError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "DELETE", "/threads/{id}/reactions");
+    }
+
+    /**
+     * @param {Forum.GetThreadsIdReactionsSubIdRequest} request
+     * @param {ThreadsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.NotFoundError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
+     * @example
+     *     await client.threads.getAReactionFromThread({
+     *         id: "id",
+     *         subId: "subId"
+     *     })
+     */
+    public getAReactionFromThread(
+        request: Forum.GetThreadsIdReactionsSubIdRequest,
+        requestOptions?: ThreadsClient.RequestOptions,
+    ): core.HttpResponsePromise<Forum.GetThreadsIdReactionsSubIdResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__getAReactionFromThread(request, requestOptions));
+    }
+
+    private async __getAReactionFromThread(
+        request: Forum.GetThreadsIdReactionsSubIdRequest,
+        requestOptions?: ThreadsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Forum.GetThreadsIdReactionsSubIdResponse>> {
+        const { id, subId } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ForumEnvironment.Production,
+                `threads/${core.url.encodePathParam(id)}/reactions/${core.url.encodePathParam(subId)}`,
+            ),
+            method: "GET",
+            headers: _headers,
+            queryParameters: requestOptions?.queryParams,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Forum.GetThreadsIdReactionsSubIdResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Forum.NotFoundError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "GET",
+            "/threads/{id}/reactions/{subId}",
+        );
+    }
+
+    /**
+     * @param {Forum.DeleteThreadsIdReactionsSubIdRequest} request
+     * @param {ThreadsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.NotFoundError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
+     * @example
+     *     await client.threads.deleteAReactionFromThread({
+     *         id: "id",
+     *         subId: "subId"
+     *     })
+     */
+    public deleteAReactionFromThread(
+        request: Forum.DeleteThreadsIdReactionsSubIdRequest,
+        requestOptions?: ThreadsClient.RequestOptions,
+    ): core.HttpResponsePromise<Forum.DeleteThreadsIdReactionsSubIdResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__deleteAReactionFromThread(request, requestOptions));
+    }
+
+    private async __deleteAReactionFromThread(
+        request: Forum.DeleteThreadsIdReactionsSubIdRequest,
+        requestOptions?: ThreadsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Forum.DeleteThreadsIdReactionsSubIdResponse>> {
+        const { id, subId } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ForumEnvironment.Production,
+                `threads/${core.url.encodePathParam(id)}/reactions/${core.url.encodePathParam(subId)}`,
+            ),
+            method: "DELETE",
+            headers: _headers,
+            queryParameters: requestOptions?.queryParams,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Forum.DeleteThreadsIdReactionsSubIdResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Forum.NotFoundError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "DELETE",
+            "/threads/{id}/reactions/{subId}",
+        );
+    }
+
+    /**
+     * @param {Forum.GetThreadsIdSubscribersRequest} request
+     * @param {ThreadsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.NotFoundError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
+     * @example
+     *     await client.threads.listThreadSubscribers({
+     *         id: "id"
+     *     })
+     */
+    public listThreadSubscribers(
+        request: Forum.GetThreadsIdSubscribersRequest,
+        requestOptions?: ThreadsClient.RequestOptions,
+    ): core.HttpResponsePromise<Forum.GetThreadsIdSubscribersResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__listThreadSubscribers(request, requestOptions));
+    }
+
+    private async __listThreadSubscribers(
+        request: Forum.GetThreadsIdSubscribersRequest,
+        requestOptions?: ThreadsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Forum.GetThreadsIdSubscribersResponse>> {
+        const { id, cursor, limit } = request;
+        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
+        if (cursor != null) {
+            _queryParams.cursor = cursor;
+        }
+
+        if (limit != null) {
+            _queryParams.limit = limit.toString();
+        }
+
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ForumEnvironment.Production,
+                `threads/${core.url.encodePathParam(id)}/subscribers`,
+            ),
+            method: "GET",
+            headers: _headers,
+            queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Forum.GetThreadsIdSubscribersResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Forum.NotFoundError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/threads/{id}/subscribers");
+    }
+
+    /**
+     * @param {Forum.GetThreadsIdSubscribersSubIdRequest} request
+     * @param {ThreadsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.NotFoundError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
+     * @example
+     *     await client.threads.getASubscriberFromThread({
+     *         id: "id",
+     *         subId: "subId"
+     *     })
+     */
+    public getASubscriberFromThread(
+        request: Forum.GetThreadsIdSubscribersSubIdRequest,
+        requestOptions?: ThreadsClient.RequestOptions,
+    ): core.HttpResponsePromise<Forum.GetThreadsIdSubscribersSubIdResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__getASubscriberFromThread(request, requestOptions));
+    }
+
+    private async __getASubscriberFromThread(
+        request: Forum.GetThreadsIdSubscribersSubIdRequest,
+        requestOptions?: ThreadsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Forum.GetThreadsIdSubscribersSubIdResponse>> {
+        const { id, subId } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ForumEnvironment.Production,
+                `threads/${core.url.encodePathParam(id)}/subscribers/${core.url.encodePathParam(subId)}`,
+            ),
+            method: "GET",
+            headers: _headers,
+            queryParameters: requestOptions?.queryParams,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Forum.GetThreadsIdSubscribersSubIdResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Forum.NotFoundError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "GET",
+            "/threads/{id}/subscribers/{subId}",
+        );
+    }
+
+    /**
+     * @param {Forum.DeleteThreadsIdSubscribersSubIdRequest} request
+     * @param {ThreadsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.NotFoundError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
+     * @example
+     *     await client.threads.deleteASubscriberFromThread({
+     *         id: "id",
+     *         subId: "subId"
+     *     })
+     */
+    public deleteASubscriberFromThread(
+        request: Forum.DeleteThreadsIdSubscribersSubIdRequest,
+        requestOptions?: ThreadsClient.RequestOptions,
+    ): core.HttpResponsePromise<Forum.DeleteThreadsIdSubscribersSubIdResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__deleteASubscriberFromThread(request, requestOptions));
+    }
+
+    private async __deleteASubscriberFromThread(
+        request: Forum.DeleteThreadsIdSubscribersSubIdRequest,
+        requestOptions?: ThreadsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Forum.DeleteThreadsIdSubscribersSubIdResponse>> {
+        const { id, subId } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ForumEnvironment.Production,
+                `threads/${core.url.encodePathParam(id)}/subscribers/${core.url.encodePathParam(subId)}`,
+            ),
+            method: "DELETE",
+            headers: _headers,
+            queryParameters: requestOptions?.queryParams,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Forum.DeleteThreadsIdSubscribersSubIdResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Forum.NotFoundError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "DELETE",
+            "/threads/{id}/subscribers/{subId}",
+        );
+    }
+
+    /**
+     * @param {Forum.GetThreadsIdPollRequest} request
+     * @param {ThreadsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.NotFoundError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
+     * @example
+     *     await client.threads.getThreadPoll({
+     *         id: "id"
+     *     })
+     */
+    public getThreadPoll(
+        request: Forum.GetThreadsIdPollRequest,
+        requestOptions?: ThreadsClient.RequestOptions,
+    ): core.HttpResponsePromise<Forum.GetThreadsIdPollResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__getThreadPoll(request, requestOptions));
+    }
+
+    private async __getThreadPoll(
+        request: Forum.GetThreadsIdPollRequest,
+        requestOptions?: ThreadsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Forum.GetThreadsIdPollResponse>> {
+        const { id } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ForumEnvironment.Production,
+                `threads/${core.url.encodePathParam(id)}/poll`,
+            ),
+            method: "GET",
+            headers: _headers,
+            queryParameters: requestOptions?.queryParams,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: _response.body as Forum.GetThreadsIdPollResponse, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Forum.NotFoundError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/threads/{id}/poll");
+    }
+
+    /**
+     * @param {Forum.PostThreadsIdPollRequest} request
+     * @param {ThreadsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Forum.BadRequestError}
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.NotFoundError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
+     * @example
+     *     await client.threads.createThreadPoll({
+     *         id: "id",
+     *         title: "title",
+     *         options: [{
+     *                 title: "title"
+     *             }]
+     *     })
+     */
+    public createThreadPoll(
+        request: Forum.PostThreadsIdPollRequest,
+        requestOptions?: ThreadsClient.RequestOptions,
+    ): core.HttpResponsePromise<Forum.PostThreadsIdPollResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__createThreadPoll(request, requestOptions));
+    }
+
+    private async __createThreadPoll(
+        request: Forum.PostThreadsIdPollRequest,
+        requestOptions?: ThreadsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Forum.PostThreadsIdPollResponse>> {
+        const { id, ..._body } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ForumEnvironment.Production,
+                `threads/${core.url.encodePathParam(id)}/poll`,
+            ),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
+            requestType: "json",
+            body: _body,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: _response.body as Forum.PostThreadsIdPollResponse, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Forum.BadRequestError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Forum.NotFoundError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/threads/{id}/poll");
+    }
+
+    /**
+     * @param {Forum.PatchThreadsIdPollRequest} request
+     * @param {ThreadsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Forum.BadRequestError}
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.NotFoundError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
+     * @example
+     *     await client.threads.updateThreadPoll({
+     *         id: "id"
+     *     })
+     */
+    public updateThreadPoll(
+        request: Forum.PatchThreadsIdPollRequest,
+        requestOptions?: ThreadsClient.RequestOptions,
+    ): core.HttpResponsePromise<Forum.PatchThreadsIdPollResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__updateThreadPoll(request, requestOptions));
+    }
+
+    private async __updateThreadPoll(
+        request: Forum.PatchThreadsIdPollRequest,
+        requestOptions?: ThreadsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Forum.PatchThreadsIdPollResponse>> {
+        const { id, ..._body } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ForumEnvironment.Production,
+                `threads/${core.url.encodePathParam(id)}/poll`,
+            ),
+            method: "PATCH",
+            headers: _headers,
+            contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
+            requestType: "json",
+            body: _body,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: _response.body as Forum.PatchThreadsIdPollResponse, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Forum.BadRequestError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Forum.NotFoundError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "PATCH", "/threads/{id}/poll");
+    }
 }

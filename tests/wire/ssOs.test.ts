@@ -9,12 +9,33 @@ describe("SsOsClient", () => {
         const server = mockServerPool.createServer();
         const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
-        const rawResponseBody = { data: [{}], meta: { total: 1, page: 1, limit: 1 } };
+        const rawResponseBody = {
+            data: [
+                {
+                    id: "id",
+                    provider: "OKTA",
+                    domain: "domain",
+                    active: true,
+                    createdAt: "createdAt",
+                    updatedAt: "updatedAt",
+                },
+            ],
+            meta: { total: 1, page: 1, limit: 1 },
+        };
         server.mockEndpoint().get("/sso").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.ssOs.listAllSsOs();
         expect(response).toEqual({
-            data: [{}],
+            data: [
+                {
+                    id: "id",
+                    provider: "OKTA",
+                    domain: "domain",
+                    active: true,
+                    createdAt: "createdAt",
+                    updatedAt: "updatedAt",
+                },
+            ],
             meta: {
                 total: 1,
                 page: 1,
@@ -83,7 +104,16 @@ describe("SsOsClient", () => {
             tokenEndpoint: "tokenEndpoint",
             userInfoEndpoint: "userInfoEndpoint",
         };
-        const rawResponseBody = { data: {} };
+        const rawResponseBody = {
+            data: {
+                id: "id",
+                provider: "OKTA",
+                domain: "domain",
+                active: true,
+                createdAt: "createdAt",
+                updatedAt: "updatedAt",
+            },
+        };
         server
             .mockEndpoint()
             .post("/sso")
@@ -103,7 +133,14 @@ describe("SsOsClient", () => {
             userInfoEndpoint: "userInfoEndpoint",
         });
         expect(response).toEqual({
-            data: {},
+            data: {
+                id: "id",
+                provider: "OKTA",
+                domain: "domain",
+                active: true,
+                createdAt: "createdAt",
+                updatedAt: "updatedAt",
+            },
         });
     });
 
@@ -286,14 +323,30 @@ describe("SsOsClient", () => {
         const server = mockServerPool.createServer();
         const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
-        const rawResponseBody = { data: {} };
+        const rawResponseBody = {
+            data: {
+                id: "id",
+                provider: "OKTA",
+                domain: "domain",
+                active: true,
+                createdAt: "createdAt",
+                updatedAt: "updatedAt",
+            },
+        };
         server.mockEndpoint().get("/sso/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.ssOs.getAnSso({
             id: "id",
         });
         expect(response).toEqual({
-            data: {},
+            data: {
+                id: "id",
+                provider: "OKTA",
+                domain: "domain",
+                active: true,
+                createdAt: "createdAt",
+                updatedAt: "updatedAt",
+            },
         });
     });
 
@@ -456,7 +509,16 @@ describe("SsOsClient", () => {
         const server = mockServerPool.createServer();
         const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = {};
-        const rawResponseBody = { data: {} };
+        const rawResponseBody = {
+            data: {
+                id: "id",
+                provider: "OKTA",
+                domain: "domain",
+                active: true,
+                createdAt: "createdAt",
+                updatedAt: "updatedAt",
+            },
+        };
         server
             .mockEndpoint()
             .patch("/sso/id")
@@ -470,7 +532,14 @@ describe("SsOsClient", () => {
             id: "id",
         });
         expect(response).toEqual({
-            data: {},
+            data: {
+                id: "id",
+                provider: "OKTA",
+                domain: "domain",
+                active: true,
+                createdAt: "createdAt",
+                updatedAt: "updatedAt",
+            },
         });
     });
 

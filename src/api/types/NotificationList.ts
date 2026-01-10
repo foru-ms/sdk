@@ -5,17 +5,19 @@ export interface NotificationList {
     limit?: number;
     /** Cursor for pagination */
     cursor?: string;
-    /** Filter unread notifications */
-    unreadOnly?: NotificationList.UnreadOnly;
-    /** Filter by user ID (admin only) */
+    /** Filter by notification status */
+    status?: NotificationList.Status;
+    /** Filter by recipient user ID (admin only) */
     userId?: string;
 }
 
 export namespace NotificationList {
-    /** Filter unread notifications */
-    export const UnreadOnly = {
-        True: "true",
-        False: "false",
+    /** Filter by notification status */
+    export const Status = {
+        Read: "read",
+        Unread: "unread",
+        Dismissed: "dismissed",
+        Archived: "archived",
     } as const;
-    export type UnreadOnly = (typeof UnreadOnly)[keyof typeof UnreadOnly];
+    export type Status = (typeof Status)[keyof typeof Status];
 }

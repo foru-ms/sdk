@@ -1,4 +1,10 @@
+export type { DeleteUsersIdFollowersSubIdRequest } from "./DeleteUsersIdFollowersSubIdRequest.js";
+export type { DeleteUsersIdFollowingSubIdRequest } from "./DeleteUsersIdFollowingSubIdRequest.js";
 export type { DeleteUsersIdRequest } from "./DeleteUsersIdRequest.js";
+export type { GetUsersIdFollowersRequest } from "./GetUsersIdFollowersRequest.js";
+export type { GetUsersIdFollowersSubIdRequest } from "./GetUsersIdFollowersSubIdRequest.js";
+export type { GetUsersIdFollowingRequest } from "./GetUsersIdFollowingRequest.js";
+export type { GetUsersIdFollowingSubIdRequest } from "./GetUsersIdFollowingSubIdRequest.js";
 export type { GetUsersIdRequest } from "./GetUsersIdRequest.js";
 export type { GetUsersRequest } from "./GetUsersRequest.js";
 export type { PatchUsersIdRequest } from "./PatchUsersIdRequest.js";

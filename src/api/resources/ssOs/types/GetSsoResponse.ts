@@ -9,7 +9,29 @@ export namespace GetSsoResponse {
     export type Data = Data.Item[];
 
     export namespace Data {
-        export type Item = {};
+        export interface Item {
+            id: string;
+            /** SSO provider type */
+            provider: Item.Provider;
+            /** Email domain for this provider */
+            domain: string;
+            /** Whether SSO is active */
+            active: boolean;
+            /** SSO configuration creation timestamp */
+            createdAt: string;
+            /** SSO configuration last update timestamp */
+            updatedAt: string;
+        }
+
+        export namespace Item {
+            /** SSO provider type */
+            export const Provider = {
+                Okta: "OKTA",
+                Auth0: "AUTH0",
+                Saml: "SAML",
+            } as const;
+            export type Provider = (typeof Provider)[keyof typeof Provider];
+        }
     }
 
     export interface Meta {

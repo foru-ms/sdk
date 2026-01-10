@@ -8,16 +8,33 @@
  *     }
  */
 export interface PostNotificationsRequest {
-    /** Target user ID to receive notification */
+    /** Target user ID to receive notification (maps to userId) */
     userId: string;
+    /** User ID who triggered the notification (optional, defaults to authenticated user) */
+    notifierId?: string;
     /** Notification type (e.g. mention, reply, follow) */
     type: string;
-    /** Notification title */
-    title?: string;
-    /** Notification content */
-    body?: string;
-    /** Link URL for the notification */
-    link?: string;
+    /** Notification text content */
+    description?: string;
+    /** Related thread ID */
+    threadId?: string;
+    /** Related post ID */
+    postId?: string;
+    /** Related private message ID */
+    privateMessageId?: string;
+    /** Initial notification status */
+    status?: PostNotificationsRequest.Status;
     /** Additional notification data */
     extendedData?: Record<string, unknown>;
+}
+
+export namespace PostNotificationsRequest {
+    /** Initial notification status */
+    export const Status = {
+        Read: "read",
+        Unread: "unread",
+        Dismissed: "dismissed",
+        Archived: "archived",
+    } as const;
+    export type Status = (typeof Status)[keyof typeof Status];
 }

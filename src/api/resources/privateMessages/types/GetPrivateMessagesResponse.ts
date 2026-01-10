@@ -9,7 +9,27 @@ export namespace GetPrivateMessagesResponse {
     export type Data = Data.Item[];
 
     export namespace Data {
-        export type Item = {};
+        export interface Item {
+            /** Recipient User ID */
+            recipientId: string;
+            /** Sender user ID (required for API key auth, ignored for JWT auth) */
+            senderId?: string;
+            /** Message title (optional for replies) */
+            title?: string;
+            /** Message content */
+            body: string;
+            /** Parent Message ID (for replies) */
+            parentId?: string;
+            /** Extended data */
+            extendedData?: Record<string, unknown>;
+            id: string;
+            /** Message status (sent, delivered, read, archived) */
+            status: string | null;
+            /** Message sent timestamp */
+            createdAt: string;
+            /** Message last update timestamp */
+            updatedAt: string;
+        }
     }
 
     export interface Meta {

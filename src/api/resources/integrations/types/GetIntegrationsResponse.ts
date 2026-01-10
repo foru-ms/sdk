@@ -9,7 +9,32 @@ export namespace GetIntegrationsResponse {
     export type Data = Data.Item[];
 
     export namespace Data {
-        export type Item = {};
+        export interface Item {
+            id: string;
+            /** Integration type */
+            type: Item.Type;
+            /** Integration name */
+            name: string;
+            /** Whether integration is active */
+            active: boolean;
+            /** Integration creation timestamp */
+            createdAt: string;
+            /** Integration last update timestamp */
+            updatedAt: string;
+        }
+
+        export namespace Item {
+            /** Integration type */
+            export const Type = {
+                Slack: "SLACK",
+                Discord: "DISCORD",
+                Salesforce: "SALESFORCE",
+                Hubspot: "HUBSPOT",
+                Okta: "OKTA",
+                Auth0: "AUTH0",
+            } as const;
+            export type Type = (typeof Type)[keyof typeof Type];
+        }
     }
 
     export interface Meta {

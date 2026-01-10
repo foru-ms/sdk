@@ -21,6 +21,20 @@ export namespace GetThreadsResponse {
             /** Poll data */
             poll?: Item.Poll;
             id: string;
+            /** URL-friendly identifier */
+            slug: string | null;
+            /** Whether thread is locked */
+            locked: boolean | null;
+            /** Whether thread is pinned */
+            pinned: boolean | null;
+            /** View count */
+            views: number;
+            /** Number of posts/replies */
+            postsCount: number;
+            /** Timestamp of the last post */
+            lastPostAt: string | null;
+            /** Custom metadata */
+            extendedData: Record<string, unknown> | null;
             createdAt: string;
             updatedAt: string;
         }

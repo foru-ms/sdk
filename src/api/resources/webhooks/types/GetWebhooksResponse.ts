@@ -9,7 +9,25 @@ export namespace GetWebhooksResponse {
     export type Data = Data.Item[];
 
     export namespace Data {
-        export type Item = {};
+        export interface Item {
+            id: string;
+            /** Webhook name */
+            name: string;
+            /** Webhook endpoint URL */
+            url: string;
+            /** Event types to trigger on */
+            events: string[];
+            /** Whether webhook is active */
+            active: boolean;
+            /** Last trigger timestamp */
+            lastTriggered: string | null;
+            /** Consecutive failure count */
+            failureCount: number;
+            /** Webhook creation timestamp */
+            createdAt: string;
+            /** Webhook last update timestamp */
+            updatedAt: string;
+        }
     }
 
     export interface Meta {

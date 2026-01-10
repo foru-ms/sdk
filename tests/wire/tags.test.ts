@@ -18,6 +18,8 @@ describe("TagsClient", () => {
                     color: "color",
                     extendedData: { key: "value" },
                     id: "id",
+                    createdAt: "createdAt",
+                    updatedAt: "updatedAt",
                 },
             ],
             meta: { total: 1, page: 1, limit: 1 },
@@ -36,6 +38,8 @@ describe("TagsClient", () => {
                         key: "value",
                     },
                     id: "id",
+                    createdAt: "createdAt",
+                    updatedAt: "updatedAt",
                 },
             ],
             meta: {
@@ -106,6 +110,8 @@ describe("TagsClient", () => {
                 color: "color",
                 extendedData: { key: "value" },
                 id: "id",
+                createdAt: "createdAt",
+                updatedAt: "updatedAt",
             },
         };
         server
@@ -130,6 +136,8 @@ describe("TagsClient", () => {
                     key: "value",
                 },
                 id: "id",
+                createdAt: "createdAt",
+                updatedAt: "updatedAt",
             },
         });
     });
@@ -251,6 +259,8 @@ describe("TagsClient", () => {
                 color: "color",
                 extendedData: { key: "value" },
                 id: "id",
+                createdAt: "createdAt",
+                updatedAt: "updatedAt",
             },
         };
         server.mockEndpoint().get("/tags/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
@@ -268,6 +278,8 @@ describe("TagsClient", () => {
                     key: "value",
                 },
                 id: "id",
+                createdAt: "createdAt",
+                updatedAt: "updatedAt",
             },
         });
     });
@@ -439,6 +451,8 @@ describe("TagsClient", () => {
                 color: "color",
                 extendedData: { key: "value" },
                 id: "id",
+                createdAt: "createdAt",
+                updatedAt: "updatedAt",
             },
         };
         server
@@ -463,6 +477,8 @@ describe("TagsClient", () => {
                     key: "value",
                 },
                 id: "id",
+                createdAt: "createdAt",
+                updatedAt: "updatedAt",
             },
         });
     });
@@ -589,6 +605,323 @@ describe("TagsClient", () => {
         await expect(async () => {
             return await client.tags.updateATag({
                 id: "id",
+            });
+        }).rejects.toThrow(Forum.InternalServerError);
+    });
+
+    test("listTagSubscribers (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { data: { items: [{}], nextCursor: "nextCursor", count: 1 } };
+        server
+            .mockEndpoint()
+            .get("/tags/id/subscribers")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.tags.listTagSubscribers({
+            id: "id",
+        });
+        expect(response).toEqual({
+            data: {
+                items: [{}],
+                nextCursor: "nextCursor",
+                count: 1,
+            },
+        });
+    });
+
+    test("listTagSubscribers (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { error: { code: "code", message: "message" } };
+        server
+            .mockEndpoint()
+            .get("/tags/id/subscribers")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.tags.listTagSubscribers({
+                id: "id",
+            });
+        }).rejects.toThrow(Forum.UnauthorizedError);
+    });
+
+    test("listTagSubscribers (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { error: { code: "code", message: "message" } };
+        server
+            .mockEndpoint()
+            .get("/tags/id/subscribers")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.tags.listTagSubscribers({
+                id: "id",
+            });
+        }).rejects.toThrow(Forum.NotFoundError);
+    });
+
+    test("listTagSubscribers (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { error: { code: "code", message: "message" } };
+        server
+            .mockEndpoint()
+            .get("/tags/id/subscribers")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.tags.listTagSubscribers({
+                id: "id",
+            });
+        }).rejects.toThrow(Forum.TooManyRequestsError);
+    });
+
+    test("listTagSubscribers (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { error: { code: "code", message: "message" } };
+        server
+            .mockEndpoint()
+            .get("/tags/id/subscribers")
+            .respondWith()
+            .statusCode(500)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.tags.listTagSubscribers({
+                id: "id",
+            });
+        }).rejects.toThrow(Forum.InternalServerError);
+    });
+
+    test("getASubscriberFromTag (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { data: {} };
+        server
+            .mockEndpoint()
+            .get("/tags/id/subscribers/subId")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.tags.getASubscriberFromTag({
+            id: "id",
+            subId: "subId",
+        });
+        expect(response).toEqual({
+            data: {},
+        });
+    });
+
+    test("getASubscriberFromTag (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { error: { code: "code", message: "message" } };
+        server
+            .mockEndpoint()
+            .get("/tags/id/subscribers/subId")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.tags.getASubscriberFromTag({
+                id: "id",
+                subId: "subId",
+            });
+        }).rejects.toThrow(Forum.UnauthorizedError);
+    });
+
+    test("getASubscriberFromTag (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { error: { code: "code", message: "message" } };
+        server
+            .mockEndpoint()
+            .get("/tags/id/subscribers/subId")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.tags.getASubscriberFromTag({
+                id: "id",
+                subId: "subId",
+            });
+        }).rejects.toThrow(Forum.NotFoundError);
+    });
+
+    test("getASubscriberFromTag (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { error: { code: "code", message: "message" } };
+        server
+            .mockEndpoint()
+            .get("/tags/id/subscribers/subId")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.tags.getASubscriberFromTag({
+                id: "id",
+                subId: "subId",
+            });
+        }).rejects.toThrow(Forum.TooManyRequestsError);
+    });
+
+    test("getASubscriberFromTag (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { error: { code: "code", message: "message" } };
+        server
+            .mockEndpoint()
+            .get("/tags/id/subscribers/subId")
+            .respondWith()
+            .statusCode(500)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.tags.getASubscriberFromTag({
+                id: "id",
+                subId: "subId",
+            });
+        }).rejects.toThrow(Forum.InternalServerError);
+    });
+
+    test("deleteASubscriberFromTag (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { success: true };
+        server
+            .mockEndpoint()
+            .delete("/tags/id/subscribers/subId")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.tags.deleteASubscriberFromTag({
+            id: "id",
+            subId: "subId",
+        });
+        expect(response).toEqual({
+            success: true,
+        });
+    });
+
+    test("deleteASubscriberFromTag (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { error: { code: "code", message: "message" } };
+        server
+            .mockEndpoint()
+            .delete("/tags/id/subscribers/subId")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.tags.deleteASubscriberFromTag({
+                id: "id",
+                subId: "subId",
+            });
+        }).rejects.toThrow(Forum.UnauthorizedError);
+    });
+
+    test("deleteASubscriberFromTag (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { error: { code: "code", message: "message" } };
+        server
+            .mockEndpoint()
+            .delete("/tags/id/subscribers/subId")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.tags.deleteASubscriberFromTag({
+                id: "id",
+                subId: "subId",
+            });
+        }).rejects.toThrow(Forum.NotFoundError);
+    });
+
+    test("deleteASubscriberFromTag (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { error: { code: "code", message: "message" } };
+        server
+            .mockEndpoint()
+            .delete("/tags/id/subscribers/subId")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.tags.deleteASubscriberFromTag({
+                id: "id",
+                subId: "subId",
+            });
+        }).rejects.toThrow(Forum.TooManyRequestsError);
+    });
+
+    test("deleteASubscriberFromTag (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { error: { code: "code", message: "message" } };
+        server
+            .mockEndpoint()
+            .delete("/tags/id/subscribers/subId")
+            .respondWith()
+            .statusCode(500)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.tags.deleteASubscriberFromTag({
+                id: "id",
+                subId: "subId",
             });
         }).rejects.toThrow(Forum.InternalServerError);
     });

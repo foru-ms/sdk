@@ -9,12 +9,47 @@ describe("NotificationsClient", () => {
         const server = mockServerPool.createServer();
         const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
-        const rawResponseBody = { data: [{}], meta: { total: 1, page: 1, limit: 1 } };
+        const rawResponseBody = {
+            data: [
+                {
+                    id: "id",
+                    userId: "userId",
+                    notifierId: "notifierId",
+                    type: "type",
+                    description: "description",
+                    status: "status",
+                    threadId: "threadId",
+                    postId: "postId",
+                    privateMessageId: "privateMessageId",
+                    extendedData: { key: "value" },
+                    createdAt: "createdAt",
+                    updatedAt: "updatedAt",
+                },
+            ],
+            meta: { total: 1, page: 1, limit: 1 },
+        };
         server.mockEndpoint().get("/notifications").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.notifications.listAllNotifications();
         expect(response).toEqual({
-            data: [{}],
+            data: [
+                {
+                    id: "id",
+                    userId: "userId",
+                    notifierId: "notifierId",
+                    type: "type",
+                    description: "description",
+                    status: "status",
+                    threadId: "threadId",
+                    postId: "postId",
+                    privateMessageId: "privateMessageId",
+                    extendedData: {
+                        key: "value",
+                    },
+                    createdAt: "createdAt",
+                    updatedAt: "updatedAt",
+                },
+            ],
             meta: {
                 total: 1,
                 page: 1,
@@ -75,7 +110,22 @@ describe("NotificationsClient", () => {
         const server = mockServerPool.createServer();
         const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { userId: "userId", type: "type" };
-        const rawResponseBody = { data: {} };
+        const rawResponseBody = {
+            data: {
+                id: "id",
+                userId: "userId",
+                notifierId: "notifierId",
+                type: "type",
+                description: "description",
+                status: "status",
+                threadId: "threadId",
+                postId: "postId",
+                privateMessageId: "privateMessageId",
+                extendedData: { key: "value" },
+                createdAt: "createdAt",
+                updatedAt: "updatedAt",
+            },
+        };
         server
             .mockEndpoint()
             .post("/notifications")
@@ -90,7 +140,22 @@ describe("NotificationsClient", () => {
             type: "type",
         });
         expect(response).toEqual({
-            data: {},
+            data: {
+                id: "id",
+                userId: "userId",
+                notifierId: "notifierId",
+                type: "type",
+                description: "description",
+                status: "status",
+                threadId: "threadId",
+                postId: "postId",
+                privateMessageId: "privateMessageId",
+                extendedData: {
+                    key: "value",
+                },
+                createdAt: "createdAt",
+                updatedAt: "updatedAt",
+            },
         });
     });
 
@@ -208,14 +273,44 @@ describe("NotificationsClient", () => {
         const server = mockServerPool.createServer();
         const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
-        const rawResponseBody = { data: {} };
+        const rawResponseBody = {
+            data: {
+                id: "id",
+                userId: "userId",
+                notifierId: "notifierId",
+                type: "type",
+                description: "description",
+                status: "status",
+                threadId: "threadId",
+                postId: "postId",
+                privateMessageId: "privateMessageId",
+                extendedData: { key: "value" },
+                createdAt: "createdAt",
+                updatedAt: "updatedAt",
+            },
+        };
         server.mockEndpoint().get("/notifications/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.notifications.getANotification({
             id: "id",
         });
         expect(response).toEqual({
-            data: {},
+            data: {
+                id: "id",
+                userId: "userId",
+                notifierId: "notifierId",
+                type: "type",
+                description: "description",
+                status: "status",
+                threadId: "threadId",
+                postId: "postId",
+                privateMessageId: "privateMessageId",
+                extendedData: {
+                    key: "value",
+                },
+                createdAt: "createdAt",
+                updatedAt: "updatedAt",
+            },
         });
     });
 
@@ -414,7 +509,22 @@ describe("NotificationsClient", () => {
         const server = mockServerPool.createServer();
         const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = {};
-        const rawResponseBody = { data: {} };
+        const rawResponseBody = {
+            data: {
+                id: "id",
+                userId: "userId",
+                notifierId: "notifierId",
+                type: "type",
+                description: "description",
+                status: "status",
+                threadId: "threadId",
+                postId: "postId",
+                privateMessageId: "privateMessageId",
+                extendedData: { key: "value" },
+                createdAt: "createdAt",
+                updatedAt: "updatedAt",
+            },
+        };
         server
             .mockEndpoint()
             .patch("/notifications/id")
@@ -428,7 +538,22 @@ describe("NotificationsClient", () => {
             id: "id",
         });
         expect(response).toEqual({
-            data: {},
+            data: {
+                id: "id",
+                userId: "userId",
+                notifierId: "notifierId",
+                type: "type",
+                description: "description",
+                status: "status",
+                threadId: "threadId",
+                postId: "postId",
+                privateMessageId: "privateMessageId",
+                extendedData: {
+                    key: "value",
+                },
+                createdAt: "createdAt",
+                updatedAt: "updatedAt",
+            },
         });
     });
 

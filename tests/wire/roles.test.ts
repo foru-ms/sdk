@@ -18,6 +18,8 @@ describe("RolesClient", () => {
                     color: "color",
                     extendedData: { key: "value" },
                     id: "id",
+                    createdAt: "createdAt",
+                    updatedAt: "updatedAt",
                 },
             ],
             meta: { total: 1, page: 1, limit: 1 },
@@ -36,6 +38,8 @@ describe("RolesClient", () => {
                         key: "value",
                     },
                     id: "id",
+                    createdAt: "createdAt",
+                    updatedAt: "updatedAt",
                 },
             ],
             meta: {
@@ -106,6 +110,8 @@ describe("RolesClient", () => {
                 color: "color",
                 extendedData: { key: "value" },
                 id: "id",
+                createdAt: "createdAt",
+                updatedAt: "updatedAt",
             },
         };
         server
@@ -130,6 +136,8 @@ describe("RolesClient", () => {
                     key: "value",
                 },
                 id: "id",
+                createdAt: "createdAt",
+                updatedAt: "updatedAt",
             },
         });
     });
@@ -251,6 +259,8 @@ describe("RolesClient", () => {
                 color: "color",
                 extendedData: { key: "value" },
                 id: "id",
+                createdAt: "createdAt",
+                updatedAt: "updatedAt",
             },
         };
         server.mockEndpoint().get("/roles/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
@@ -268,6 +278,8 @@ describe("RolesClient", () => {
                     key: "value",
                 },
                 id: "id",
+                createdAt: "createdAt",
+                updatedAt: "updatedAt",
             },
         });
     });
@@ -439,6 +451,8 @@ describe("RolesClient", () => {
                 color: "color",
                 extendedData: { key: "value" },
                 id: "id",
+                createdAt: "createdAt",
+                updatedAt: "updatedAt",
             },
         };
         server
@@ -463,6 +477,8 @@ describe("RolesClient", () => {
                     key: "value",
                 },
                 id: "id",
+                createdAt: "createdAt",
+                updatedAt: "updatedAt",
             },
         });
     });

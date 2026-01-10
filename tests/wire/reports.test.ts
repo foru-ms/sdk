@@ -20,6 +20,9 @@ describe("ReportsClient", () => {
                     postId: "postId",
                     privateMessageId: "privateMessageId",
                     id: "id",
+                    status: "status",
+                    createdAt: "createdAt",
+                    updatedAt: "updatedAt",
                 },
             ],
             meta: { total: 1, page: 1, limit: 1 },
@@ -38,6 +41,9 @@ describe("ReportsClient", () => {
                     postId: "postId",
                     privateMessageId: "privateMessageId",
                     id: "id",
+                    status: "status",
+                    createdAt: "createdAt",
+                    updatedAt: "updatedAt",
                 },
             ],
             meta: {
@@ -110,6 +116,9 @@ describe("ReportsClient", () => {
                 postId: "postId",
                 privateMessageId: "privateMessageId",
                 id: "id",
+                status: "status",
+                createdAt: "createdAt",
+                updatedAt: "updatedAt",
             },
         };
         server
@@ -134,6 +143,9 @@ describe("ReportsClient", () => {
                 postId: "postId",
                 privateMessageId: "privateMessageId",
                 id: "id",
+                status: "status",
+                createdAt: "createdAt",
+                updatedAt: "updatedAt",
             },
         });
     });
@@ -257,6 +269,9 @@ describe("ReportsClient", () => {
                 postId: "postId",
                 privateMessageId: "privateMessageId",
                 id: "id",
+                status: "status",
+                createdAt: "createdAt",
+                updatedAt: "updatedAt",
             },
         };
         server.mockEndpoint().get("/reports/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
@@ -274,6 +289,9 @@ describe("ReportsClient", () => {
                 postId: "postId",
                 privateMessageId: "privateMessageId",
                 id: "id",
+                status: "status",
+                createdAt: "createdAt",
+                updatedAt: "updatedAt",
             },
         });
     });

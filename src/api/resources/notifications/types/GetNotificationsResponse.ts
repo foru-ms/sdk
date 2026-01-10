@@ -9,7 +9,31 @@ export namespace GetNotificationsResponse {
     export type Data = Data.Item[];
 
     export namespace Data {
-        export type Item = {};
+        export interface Item {
+            id: string;
+            /** Recipient user ID */
+            userId: string;
+            /** User ID who triggered the notification */
+            notifierId: string;
+            /** Notification type */
+            type: string | null;
+            /** Notification text content */
+            description: string | null;
+            /** Notification status (read, unread, dismissed, archived) */
+            status: string | null;
+            /** Related thread ID */
+            threadId: string | null;
+            /** Related post ID */
+            postId: string | null;
+            /** Related private message ID */
+            privateMessageId: string | null;
+            /** Additional notification data */
+            extendedData: Record<string, unknown> | null;
+            /** Notification creation timestamp */
+            createdAt: string;
+            /** Notification last update timestamp */
+            updatedAt: string;
+        }
     }
 
     export interface Meta {

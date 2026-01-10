@@ -1,5 +1,13 @@
+export type { DeletePostsIdPostsSubIdRequest } from "./DeletePostsIdPostsSubIdRequest.js";
+export type { DeletePostsIdReactionsRequest } from "./DeletePostsIdReactionsRequest.js";
+export type { DeletePostsIdReactionsSubIdRequest } from "./DeletePostsIdReactionsSubIdRequest.js";
 export type { DeletePostsIdRequest } from "./DeletePostsIdRequest.js";
+export type { GetPostsIdPostsRequest } from "./GetPostsIdPostsRequest.js";
+export type { GetPostsIdPostsSubIdRequest } from "./GetPostsIdPostsSubIdRequest.js";
+export type { GetPostsIdReactionsRequest } from "./GetPostsIdReactionsRequest.js";
+export type { GetPostsIdReactionsSubIdRequest } from "./GetPostsIdReactionsSubIdRequest.js";
 export type { GetPostsIdRequest } from "./GetPostsIdRequest.js";
 export type { GetPostsRequest } from "./GetPostsRequest.js";
 export type { PatchPostsIdRequest } from "./PatchPostsIdRequest.js";
+export type { PostPostsIdReactionsRequest } from "./PostPostsIdReactionsRequest.js";
 export type { PostPostsRequest } from "./PostPostsRequest.js";

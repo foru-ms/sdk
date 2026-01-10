@@ -391,4 +391,387 @@ export class PrivateMessagesClient {
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "DELETE", "/private-messages/{id}");
     }
+
+    /**
+     * @param {Forum.GetPrivateMessagesIdRepliesRequest} request
+     * @param {PrivateMessagesClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.NotFoundError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
+     * @example
+     *     await client.privateMessages.listPrivateMessageReplies({
+     *         id: "id"
+     *     })
+     */
+    public listPrivateMessageReplies(
+        request: Forum.GetPrivateMessagesIdRepliesRequest,
+        requestOptions?: PrivateMessagesClient.RequestOptions,
+    ): core.HttpResponsePromise<Forum.GetPrivateMessagesIdRepliesResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__listPrivateMessageReplies(request, requestOptions));
+    }
+
+    private async __listPrivateMessageReplies(
+        request: Forum.GetPrivateMessagesIdRepliesRequest,
+        requestOptions?: PrivateMessagesClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Forum.GetPrivateMessagesIdRepliesResponse>> {
+        const { id, cursor, limit } = request;
+        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
+        if (cursor != null) {
+            _queryParams.cursor = cursor;
+        }
+
+        if (limit != null) {
+            _queryParams.limit = limit.toString();
+        }
+
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ForumEnvironment.Production,
+                `private-messages/${core.url.encodePathParam(id)}/replies`,
+            ),
+            method: "GET",
+            headers: _headers,
+            queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Forum.GetPrivateMessagesIdRepliesResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Forum.NotFoundError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "GET",
+            "/private-messages/{id}/replies",
+        );
+    }
+
+    /**
+     * @param {Forum.PostPrivateMessagesIdRepliesRequest} request
+     * @param {PrivateMessagesClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Forum.BadRequestError}
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.NotFoundError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
+     * @example
+     *     await client.privateMessages.createAReplieInPrivateMessage({
+     *         id: "id",
+     *         recipientId: "recipientId",
+     *         body: "body"
+     *     })
+     */
+    public createAReplieInPrivateMessage(
+        request: Forum.PostPrivateMessagesIdRepliesRequest,
+        requestOptions?: PrivateMessagesClient.RequestOptions,
+    ): core.HttpResponsePromise<Forum.PostPrivateMessagesIdRepliesResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__createAReplieInPrivateMessage(request, requestOptions));
+    }
+
+    private async __createAReplieInPrivateMessage(
+        request: Forum.PostPrivateMessagesIdRepliesRequest,
+        requestOptions?: PrivateMessagesClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Forum.PostPrivateMessagesIdRepliesResponse>> {
+        const { id, ..._body } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ForumEnvironment.Production,
+                `private-messages/${core.url.encodePathParam(id)}/replies`,
+            ),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
+            requestType: "json",
+            body: _body,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Forum.PostPrivateMessagesIdRepliesResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Forum.BadRequestError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Forum.NotFoundError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "POST",
+            "/private-messages/{id}/replies",
+        );
+    }
+
+    /**
+     * @param {Forum.GetPrivateMessagesIdRepliesSubIdRequest} request
+     * @param {PrivateMessagesClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.NotFoundError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
+     * @example
+     *     await client.privateMessages.getAReplieFromPrivateMessage({
+     *         id: "id",
+     *         subId: "subId"
+     *     })
+     */
+    public getAReplieFromPrivateMessage(
+        request: Forum.GetPrivateMessagesIdRepliesSubIdRequest,
+        requestOptions?: PrivateMessagesClient.RequestOptions,
+    ): core.HttpResponsePromise<Forum.GetPrivateMessagesIdRepliesSubIdResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__getAReplieFromPrivateMessage(request, requestOptions));
+    }
+
+    private async __getAReplieFromPrivateMessage(
+        request: Forum.GetPrivateMessagesIdRepliesSubIdRequest,
+        requestOptions?: PrivateMessagesClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Forum.GetPrivateMessagesIdRepliesSubIdResponse>> {
+        const { id, subId } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ForumEnvironment.Production,
+                `private-messages/${core.url.encodePathParam(id)}/replies/${core.url.encodePathParam(subId)}`,
+            ),
+            method: "GET",
+            headers: _headers,
+            queryParameters: requestOptions?.queryParams,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Forum.GetPrivateMessagesIdRepliesSubIdResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Forum.NotFoundError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "GET",
+            "/private-messages/{id}/replies/{subId}",
+        );
+    }
+
+    /**
+     * @param {Forum.DeletePrivateMessagesIdRepliesSubIdRequest} request
+     * @param {PrivateMessagesClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Forum.UnauthorizedError}
+     * @throws {@link Forum.NotFoundError}
+     * @throws {@link Forum.TooManyRequestsError}
+     * @throws {@link Forum.InternalServerError}
+     *
+     * @example
+     *     await client.privateMessages.deleteAReplieFromPrivateMessage({
+     *         id: "id",
+     *         subId: "subId"
+     *     })
+     */
+    public deleteAReplieFromPrivateMessage(
+        request: Forum.DeletePrivateMessagesIdRepliesSubIdRequest,
+        requestOptions?: PrivateMessagesClient.RequestOptions,
+    ): core.HttpResponsePromise<Forum.DeletePrivateMessagesIdRepliesSubIdResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__deleteAReplieFromPrivateMessage(request, requestOptions));
+    }
+
+    private async __deleteAReplieFromPrivateMessage(
+        request: Forum.DeletePrivateMessagesIdRepliesSubIdRequest,
+        requestOptions?: PrivateMessagesClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Forum.DeletePrivateMessagesIdRepliesSubIdResponse>> {
+        const { id, subId } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ForumEnvironment.Production,
+                `private-messages/${core.url.encodePathParam(id)}/replies/${core.url.encodePathParam(subId)}`,
+            ),
+            method: "DELETE",
+            headers: _headers,
+            queryParameters: requestOptions?.queryParams,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Forum.DeletePrivateMessagesIdRepliesSubIdResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Forum.UnauthorizedError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Forum.NotFoundError(_response.error.body as Forum.ErrorResponse, _response.rawResponse);
+                case 429:
+                    throw new Forum.TooManyRequestsError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Forum.InternalServerError(
+                        _response.error.body as Forum.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ForumError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "DELETE",
+            "/private-messages/{id}/replies/{subId}",
+        );
+    }
 }

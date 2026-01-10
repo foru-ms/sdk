@@ -12,4 +12,8 @@ export interface TagResponse {
     /** Extended data */
     extendedData?: Record<string, unknown>;
     id: string;
+    /** Tag creation timestamp */
+    createdAt: string;
+    /** Tag last update timestamp */
+    updatedAt: string;
 }

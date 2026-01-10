@@ -16,5 +16,11 @@ export namespace PostPostsResponse {
         parentId?: string;
         extendedData?: Record<string, unknown>;
         id: string;
+        /** Nesting level for threaded replies */
+        depth: number | null;
+        /** Post creation timestamp */
+        createdAt: string;
+        /** Post last update timestamp */
+        updatedAt: string;
     }
 }
