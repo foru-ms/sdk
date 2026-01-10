@@ -634,7 +634,7 @@ describe("PrivateMessagesClient", () => {
         }).rejects.toThrow(Forum.InternalServerError);
     });
 
-    test("createAReplieInPrivateMessage (1)", async () => {
+    test("createAReplyInPrivateMessage (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { recipientId: "recipientId", body: "body" };
@@ -648,7 +648,7 @@ describe("PrivateMessagesClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.privateMessages.createAReplieInPrivateMessage({
+        const response = await client.privateMessages.createAReplyInPrivateMessage({
             id: "id",
             recipientId: "recipientId",
             body: "body",
@@ -658,7 +658,7 @@ describe("PrivateMessagesClient", () => {
         });
     });
 
-    test("createAReplieInPrivateMessage (2)", async () => {
+    test("createAReplyInPrivateMessage (2)", async () => {
         const server = mockServerPool.createServer();
         const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { recipientId: "recipientId", body: "x" };
@@ -673,7 +673,7 @@ describe("PrivateMessagesClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.privateMessages.createAReplieInPrivateMessage({
+            return await client.privateMessages.createAReplyInPrivateMessage({
                 id: "id",
                 recipientId: "recipientId",
                 body: "x",
@@ -681,7 +681,7 @@ describe("PrivateMessagesClient", () => {
         }).rejects.toThrow(Forum.BadRequestError);
     });
 
-    test("createAReplieInPrivateMessage (3)", async () => {
+    test("createAReplyInPrivateMessage (3)", async () => {
         const server = mockServerPool.createServer();
         const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { recipientId: "recipientId", body: "x" };
@@ -696,7 +696,7 @@ describe("PrivateMessagesClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.privateMessages.createAReplieInPrivateMessage({
+            return await client.privateMessages.createAReplyInPrivateMessage({
                 id: "id",
                 recipientId: "recipientId",
                 body: "x",
@@ -704,7 +704,7 @@ describe("PrivateMessagesClient", () => {
         }).rejects.toThrow(Forum.UnauthorizedError);
     });
 
-    test("createAReplieInPrivateMessage (4)", async () => {
+    test("createAReplyInPrivateMessage (4)", async () => {
         const server = mockServerPool.createServer();
         const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { recipientId: "recipientId", body: "x" };
@@ -719,7 +719,7 @@ describe("PrivateMessagesClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.privateMessages.createAReplieInPrivateMessage({
+            return await client.privateMessages.createAReplyInPrivateMessage({
                 id: "id",
                 recipientId: "recipientId",
                 body: "x",
@@ -727,7 +727,7 @@ describe("PrivateMessagesClient", () => {
         }).rejects.toThrow(Forum.NotFoundError);
     });
 
-    test("createAReplieInPrivateMessage (5)", async () => {
+    test("createAReplyInPrivateMessage (5)", async () => {
         const server = mockServerPool.createServer();
         const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { recipientId: "recipientId", body: "x" };
@@ -742,7 +742,7 @@ describe("PrivateMessagesClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.privateMessages.createAReplieInPrivateMessage({
+            return await client.privateMessages.createAReplyInPrivateMessage({
                 id: "id",
                 recipientId: "recipientId",
                 body: "x",
@@ -750,7 +750,7 @@ describe("PrivateMessagesClient", () => {
         }).rejects.toThrow(Forum.TooManyRequestsError);
     });
 
-    test("createAReplieInPrivateMessage (6)", async () => {
+    test("createAReplyInPrivateMessage (6)", async () => {
         const server = mockServerPool.createServer();
         const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { recipientId: "recipientId", body: "x" };
@@ -765,7 +765,7 @@ describe("PrivateMessagesClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.privateMessages.createAReplieInPrivateMessage({
+            return await client.privateMessages.createAReplyInPrivateMessage({
                 id: "id",
                 recipientId: "recipientId",
                 body: "x",
@@ -773,7 +773,7 @@ describe("PrivateMessagesClient", () => {
         }).rejects.toThrow(Forum.InternalServerError);
     });
 
-    test("getAReplieFromPrivateMessage (1)", async () => {
+    test("getAReplyFromPrivateMessage (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
@@ -786,7 +786,7 @@ describe("PrivateMessagesClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.privateMessages.getAReplieFromPrivateMessage({
+        const response = await client.privateMessages.getAReplyFromPrivateMessage({
             id: "id",
             subId: "subId",
         });
@@ -795,7 +795,7 @@ describe("PrivateMessagesClient", () => {
         });
     });
 
-    test("getAReplieFromPrivateMessage (2)", async () => {
+    test("getAReplyFromPrivateMessage (2)", async () => {
         const server = mockServerPool.createServer();
         const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
@@ -809,14 +809,14 @@ describe("PrivateMessagesClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.privateMessages.getAReplieFromPrivateMessage({
+            return await client.privateMessages.getAReplyFromPrivateMessage({
                 id: "id",
                 subId: "subId",
             });
         }).rejects.toThrow(Forum.UnauthorizedError);
     });
 
-    test("getAReplieFromPrivateMessage (3)", async () => {
+    test("getAReplyFromPrivateMessage (3)", async () => {
         const server = mockServerPool.createServer();
         const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
@@ -830,14 +830,14 @@ describe("PrivateMessagesClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.privateMessages.getAReplieFromPrivateMessage({
+            return await client.privateMessages.getAReplyFromPrivateMessage({
                 id: "id",
                 subId: "subId",
             });
         }).rejects.toThrow(Forum.NotFoundError);
     });
 
-    test("getAReplieFromPrivateMessage (4)", async () => {
+    test("getAReplyFromPrivateMessage (4)", async () => {
         const server = mockServerPool.createServer();
         const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
@@ -851,14 +851,14 @@ describe("PrivateMessagesClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.privateMessages.getAReplieFromPrivateMessage({
+            return await client.privateMessages.getAReplyFromPrivateMessage({
                 id: "id",
                 subId: "subId",
             });
         }).rejects.toThrow(Forum.TooManyRequestsError);
     });
 
-    test("getAReplieFromPrivateMessage (5)", async () => {
+    test("getAReplyFromPrivateMessage (5)", async () => {
         const server = mockServerPool.createServer();
         const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
@@ -872,14 +872,14 @@ describe("PrivateMessagesClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.privateMessages.getAReplieFromPrivateMessage({
+            return await client.privateMessages.getAReplyFromPrivateMessage({
                 id: "id",
                 subId: "subId",
             });
         }).rejects.toThrow(Forum.InternalServerError);
     });
 
-    test("deleteAReplieFromPrivateMessage (1)", async () => {
+    test("deleteAReplyFromPrivateMessage (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
@@ -892,7 +892,7 @@ describe("PrivateMessagesClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.privateMessages.deleteAReplieFromPrivateMessage({
+        const response = await client.privateMessages.deleteAReplyFromPrivateMessage({
             id: "id",
             subId: "subId",
         });
@@ -901,7 +901,7 @@ describe("PrivateMessagesClient", () => {
         });
     });
 
-    test("deleteAReplieFromPrivateMessage (2)", async () => {
+    test("deleteAReplyFromPrivateMessage (2)", async () => {
         const server = mockServerPool.createServer();
         const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
@@ -915,14 +915,14 @@ describe("PrivateMessagesClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.privateMessages.deleteAReplieFromPrivateMessage({
+            return await client.privateMessages.deleteAReplyFromPrivateMessage({
                 id: "id",
                 subId: "subId",
             });
         }).rejects.toThrow(Forum.UnauthorizedError);
     });
 
-    test("deleteAReplieFromPrivateMessage (3)", async () => {
+    test("deleteAReplyFromPrivateMessage (3)", async () => {
         const server = mockServerPool.createServer();
         const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
@@ -936,14 +936,14 @@ describe("PrivateMessagesClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.privateMessages.deleteAReplieFromPrivateMessage({
+            return await client.privateMessages.deleteAReplyFromPrivateMessage({
                 id: "id",
                 subId: "subId",
             });
         }).rejects.toThrow(Forum.NotFoundError);
     });
 
-    test("deleteAReplieFromPrivateMessage (4)", async () => {
+    test("deleteAReplyFromPrivateMessage (4)", async () => {
         const server = mockServerPool.createServer();
         const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
@@ -957,14 +957,14 @@ describe("PrivateMessagesClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.privateMessages.deleteAReplieFromPrivateMessage({
+            return await client.privateMessages.deleteAReplyFromPrivateMessage({
                 id: "id",
                 subId: "subId",
             });
         }).rejects.toThrow(Forum.TooManyRequestsError);
     });
 
-    test("deleteAReplieFromPrivateMessage (5)", async () => {
+    test("deleteAReplyFromPrivateMessage (5)", async () => {
         const server = mockServerPool.createServer();
         const client = new ForumClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
@@ -978,7 +978,7 @@ describe("PrivateMessagesClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.privateMessages.deleteAReplieFromPrivateMessage({
+            return await client.privateMessages.deleteAReplyFromPrivateMessage({
                 id: "id",
                 subId: "subId",
             });

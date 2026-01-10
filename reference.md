@@ -2588,7 +2588,7 @@ await client.privateMessages.listPrivateMessageReplies({
 </dl>
 </details>
 
-<details><summary><code>client.privateMessages.<a href="/src/api/resources/privateMessages/client/Client.ts">createAReplieInPrivateMessage</a>({ ...params }) -> Forum.PostPrivateMessagesIdRepliesResponse</code></summary>
+<details><summary><code>client.privateMessages.<a href="/src/api/resources/privateMessages/client/Client.ts">createAReplyInPrivateMessage</a>({ ...params }) -> Forum.PostPrivateMessagesIdRepliesResponse</code></summary>
 <dl>
 <dd>
 
@@ -2601,7 +2601,7 @@ await client.privateMessages.listPrivateMessageReplies({
 <dd>
 
 ```typescript
-await client.privateMessages.createAReplieInPrivateMessage({
+await client.privateMessages.createAReplyInPrivateMessage({
     id: "id",
     recipientId: "recipientId",
     body: "body"
@@ -2641,7 +2641,7 @@ await client.privateMessages.createAReplieInPrivateMessage({
 </dl>
 </details>
 
-<details><summary><code>client.privateMessages.<a href="/src/api/resources/privateMessages/client/Client.ts">getAReplieFromPrivateMessage</a>({ ...params }) -> Forum.GetPrivateMessagesIdRepliesSubIdResponse</code></summary>
+<details><summary><code>client.privateMessages.<a href="/src/api/resources/privateMessages/client/Client.ts">getAReplyFromPrivateMessage</a>({ ...params }) -> Forum.GetPrivateMessagesIdRepliesSubIdResponse</code></summary>
 <dl>
 <dd>
 
@@ -2654,7 +2654,7 @@ await client.privateMessages.createAReplieInPrivateMessage({
 <dd>
 
 ```typescript
-await client.privateMessages.getAReplieFromPrivateMessage({
+await client.privateMessages.getAReplyFromPrivateMessage({
     id: "id",
     subId: "subId"
 });
@@ -2693,7 +2693,7 @@ await client.privateMessages.getAReplieFromPrivateMessage({
 </dl>
 </details>
 
-<details><summary><code>client.privateMessages.<a href="/src/api/resources/privateMessages/client/Client.ts">deleteAReplieFromPrivateMessage</a>({ ...params }) -> Forum.DeletePrivateMessagesIdRepliesSubIdResponse</code></summary>
+<details><summary><code>client.privateMessages.<a href="/src/api/resources/privateMessages/client/Client.ts">deleteAReplyFromPrivateMessage</a>({ ...params }) -> Forum.DeletePrivateMessagesIdRepliesSubIdResponse</code></summary>
 <dl>
 <dd>
 
@@ -2706,7 +2706,7 @@ await client.privateMessages.getAReplieFromPrivateMessage({
 <dd>
 
 ```typescript
-await client.privateMessages.deleteAReplieFromPrivateMessage({
+await client.privateMessages.deleteAReplyFromPrivateMessage({
     id: "id",
     subId: "subId"
 });
@@ -4226,7 +4226,7 @@ await client.webhooks.listWebhookDeliveries({
 </dl>
 </details>
 
-<details><summary><code>client.webhooks.<a href="/src/api/resources/webhooks/client/Client.ts">getADeliverieFromWebhook</a>({ ...params }) -> Forum.GetWebhooksIdDeliveriesSubIdResponse</code></summary>
+<details><summary><code>client.webhooks.<a href="/src/api/resources/webhooks/client/Client.ts">getADeliveryFromWebhook</a>({ ...params }) -> Forum.GetWebhooksIdDeliveriesSubIdResponse</code></summary>
 <dl>
 <dd>
 
@@ -4239,7 +4239,7 @@ await client.webhooks.listWebhookDeliveries({
 <dd>
 
 ```typescript
-await client.webhooks.getADeliverieFromWebhook({
+await client.webhooks.getADeliveryFromWebhook({
     id: "id",
     subId: "subId"
 });
@@ -4278,7 +4278,7 @@ await client.webhooks.getADeliverieFromWebhook({
 </dl>
 </details>
 
-<details><summary><code>client.webhooks.<a href="/src/api/resources/webhooks/client/Client.ts">deleteADeliverieFromWebhook</a>({ ...params }) -> Forum.DeleteWebhooksIdDeliveriesSubIdResponse</code></summary>
+<details><summary><code>client.webhooks.<a href="/src/api/resources/webhooks/client/Client.ts">deleteADeliveryFromWebhook</a>({ ...params }) -> Forum.DeleteWebhooksIdDeliveriesSubIdResponse</code></summary>
 <dl>
 <dd>
 
@@ -4291,7 +4291,7 @@ await client.webhooks.getADeliverieFromWebhook({
 <dd>
 
 ```typescript
-await client.webhooks.deleteADeliverieFromWebhook({
+await client.webhooks.deleteADeliveryFromWebhook({
     id: "id",
     subId: "subId"
 });

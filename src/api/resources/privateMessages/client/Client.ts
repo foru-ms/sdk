@@ -503,20 +503,20 @@ export class PrivateMessagesClient {
      * @throws {@link Forum.InternalServerError}
      *
      * @example
-     *     await client.privateMessages.createAReplieInPrivateMessage({
+     *     await client.privateMessages.createAReplyInPrivateMessage({
      *         id: "id",
      *         recipientId: "recipientId",
      *         body: "body"
      *     })
      */
-    public createAReplieInPrivateMessage(
+    public createAReplyInPrivateMessage(
         request: Forum.PostPrivateMessagesIdRepliesRequest,
         requestOptions?: PrivateMessagesClient.RequestOptions,
     ): core.HttpResponsePromise<Forum.PostPrivateMessagesIdRepliesResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__createAReplieInPrivateMessage(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__createAReplyInPrivateMessage(request, requestOptions));
     }
 
-    private async __createAReplieInPrivateMessage(
+    private async __createAReplyInPrivateMessage(
         request: Forum.PostPrivateMessagesIdRepliesRequest,
         requestOptions?: PrivateMessagesClient.RequestOptions,
     ): Promise<core.WithRawResponse<Forum.PostPrivateMessagesIdRepliesResponse>> {
@@ -601,19 +601,19 @@ export class PrivateMessagesClient {
      * @throws {@link Forum.InternalServerError}
      *
      * @example
-     *     await client.privateMessages.getAReplieFromPrivateMessage({
+     *     await client.privateMessages.getAReplyFromPrivateMessage({
      *         id: "id",
      *         subId: "subId"
      *     })
      */
-    public getAReplieFromPrivateMessage(
+    public getAReplyFromPrivateMessage(
         request: Forum.GetPrivateMessagesIdRepliesSubIdRequest,
         requestOptions?: PrivateMessagesClient.RequestOptions,
     ): core.HttpResponsePromise<Forum.GetPrivateMessagesIdRepliesSubIdResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__getAReplieFromPrivateMessage(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__getAReplyFromPrivateMessage(request, requestOptions));
     }
 
-    private async __getAReplieFromPrivateMessage(
+    private async __getAReplyFromPrivateMessage(
         request: Forum.GetPrivateMessagesIdRepliesSubIdRequest,
         requestOptions?: PrivateMessagesClient.RequestOptions,
     ): Promise<core.WithRawResponse<Forum.GetPrivateMessagesIdRepliesSubIdResponse>> {
@@ -693,19 +693,19 @@ export class PrivateMessagesClient {
      * @throws {@link Forum.InternalServerError}
      *
      * @example
-     *     await client.privateMessages.deleteAReplieFromPrivateMessage({
+     *     await client.privateMessages.deleteAReplyFromPrivateMessage({
      *         id: "id",
      *         subId: "subId"
      *     })
      */
-    public deleteAReplieFromPrivateMessage(
+    public deleteAReplyFromPrivateMessage(
         request: Forum.DeletePrivateMessagesIdRepliesSubIdRequest,
         requestOptions?: PrivateMessagesClient.RequestOptions,
     ): core.HttpResponsePromise<Forum.DeletePrivateMessagesIdRepliesSubIdResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__deleteAReplieFromPrivateMessage(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__deleteAReplyFromPrivateMessage(request, requestOptions));
     }
 
-    private async __deleteAReplieFromPrivateMessage(
+    private async __deleteAReplyFromPrivateMessage(
         request: Forum.DeletePrivateMessagesIdRepliesSubIdRequest,
         requestOptions?: PrivateMessagesClient.RequestOptions,
     ): Promise<core.WithRawResponse<Forum.DeletePrivateMessagesIdRepliesSubIdResponse>> {

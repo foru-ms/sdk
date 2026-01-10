@@ -10,6 +10,6 @@
 export interface DeleteWebhooksIdDeliveriesSubIdRequest {
     /** Webhook ID */
     id: string;
-    /** Deliverie ID */
+    /** Delivery ID */
     subId: string;
 }

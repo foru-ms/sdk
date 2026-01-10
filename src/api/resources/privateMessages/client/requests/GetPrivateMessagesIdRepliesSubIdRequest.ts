@@ -10,6 +10,6 @@
 export interface GetPrivateMessagesIdRepliesSubIdRequest {
     /** Private Message ID */
     id: string;
-    /** Replie ID */
+    /** Reply ID */
     subId: string;
 }

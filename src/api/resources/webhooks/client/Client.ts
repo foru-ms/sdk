@@ -495,19 +495,19 @@ export class WebhooksClient {
      * @throws {@link Forum.InternalServerError}
      *
      * @example
-     *     await client.webhooks.getADeliverieFromWebhook({
+     *     await client.webhooks.getADeliveryFromWebhook({
      *         id: "id",
      *         subId: "subId"
      *     })
      */
-    public getADeliverieFromWebhook(
+    public getADeliveryFromWebhook(
         request: Forum.GetWebhooksIdDeliveriesSubIdRequest,
         requestOptions?: WebhooksClient.RequestOptions,
     ): core.HttpResponsePromise<Forum.GetWebhooksIdDeliveriesSubIdResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__getADeliverieFromWebhook(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__getADeliveryFromWebhook(request, requestOptions));
     }
 
-    private async __getADeliverieFromWebhook(
+    private async __getADeliveryFromWebhook(
         request: Forum.GetWebhooksIdDeliveriesSubIdRequest,
         requestOptions?: WebhooksClient.RequestOptions,
     ): Promise<core.WithRawResponse<Forum.GetWebhooksIdDeliveriesSubIdResponse>> {
@@ -587,19 +587,19 @@ export class WebhooksClient {
      * @throws {@link Forum.InternalServerError}
      *
      * @example
-     *     await client.webhooks.deleteADeliverieFromWebhook({
+     *     await client.webhooks.deleteADeliveryFromWebhook({
      *         id: "id",
      *         subId: "subId"
      *     })
      */
-    public deleteADeliverieFromWebhook(
+    public deleteADeliveryFromWebhook(
         request: Forum.DeleteWebhooksIdDeliveriesSubIdRequest,
         requestOptions?: WebhooksClient.RequestOptions,
     ): core.HttpResponsePromise<Forum.DeleteWebhooksIdDeliveriesSubIdResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__deleteADeliverieFromWebhook(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__deleteADeliveryFromWebhook(request, requestOptions));
     }
 
-    private async __deleteADeliverieFromWebhook(
+    private async __deleteADeliveryFromWebhook(
         request: Forum.DeleteWebhooksIdDeliveriesSubIdRequest,
         requestOptions?: WebhooksClient.RequestOptions,
     ): Promise<core.WithRawResponse<Forum.DeleteWebhooksIdDeliveriesSubIdResponse>> {
